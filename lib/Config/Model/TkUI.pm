@@ -171,6 +171,14 @@ sub Populate {
     $loc_frame->Label(-text => 'location :') -> pack ( -side => 'left');
     $loc_frame->Label(-textvariable => \$cw->{location}) -> pack ( -side => 'left');
 
+    # create 'show only custom values'
+    $cw->{show_only_custom} = 0;
+    $loc_frame->Checkbutton(
+        -variable => \$cw->{show_only_custom},
+        -command => sub {$cw->reload} ,
+    ) -> pack (-side => 'right') ;
+    $loc_frame->Label(-text => 'show only custom values') ->pack(-side => 'right') ;
+
     # add bottom frame
     my $bottom_frame = $cw->Frame
       ->pack  (qw/-pady 0 -fill both -expand 1/ ) ;
@@ -815,10 +823,11 @@ sub disp_leaf {
     my $value = $leaf_object->fetch(check => 'no', silent => 1) ;
     my $tkt = $cw->{tktree} ;
 
-    my $img ;
+    my ($is_customised, $img) ;
     {
 	no warnings qw/uninitialized/ ;
-	$img = $cust_img if (defined $value and $std_v ne $value) ;
+        $is_customised = ! ( $std_v eq $value)  ;
+	$img = $cust_img if $is_customised ;
 	$img = $warn_img if $leaf_object->warning_msg ;
 	$img = $error_img if $leaf_object->error_msg;
     }
@@ -837,6 +846,9 @@ sub disp_leaf {
     $tkt->itemCreate($path,2, -text => $cw->trim_value($value)) ;
 
     $tkt->itemCreate($path,3, -text => $cw->trim_value($std_v)) ;
+    
+    my $meth = ($cw->{show_only_custom} and not $is_customised) ? 'hide' : 'show' ;
+    $tkt->$meth(entry => $path) ; 
 }
 
 sub disp_node {
