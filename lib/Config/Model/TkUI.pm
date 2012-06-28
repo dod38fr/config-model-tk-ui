@@ -1080,6 +1080,13 @@ sub setup_wizard {
       ) ;
 }
 
+# FIXME: need to be able to search different types.
+# 2 choices
+# - destroy and re-create the searcher when it's modified
+# - change the searcher (TreeSearcher) to accept type modif
+# For the latter: it would be better to accept a set of types instead of
+# all or just one type (to implement a set of check buttons)
+
 sub create_find_widget {
     my $cw = shift ;
     my $f = $cw -> Frame(-relief => 'ridge', -borderwidth => 1 , ) ;
