@@ -1,3 +1,10 @@
+2012-05-29  Dominique Dumont  <domi.dumont@free.fr> 1.337
+
+  * TkUI: 
+    * added 'show only custom values' check button in main panel
+    * Bound 'Return' (aka Enter) key to begin search in the find widget
+      (the one in 'Edit -> Find' menu)
+
 2012-05-29  Dominique Dumont  <domi.dumont@free.fr> 1.336
 
   * replace deprecated get_all_indexes with fetch_all_indexes 
