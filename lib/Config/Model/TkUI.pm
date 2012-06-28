@@ -1116,6 +1116,12 @@ sub create_find_widget {
         ) -> pack(-side => 'left');
     }
     
+    # bind Return (or Enter) key 
+    $e->bind( 
+        '<Key-Return>',
+        sub { $cw -> find_item('next', $searcher,\$search, \@result) ;}
+    ) ;
+    
     return $f ;
 }
 
