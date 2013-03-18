@@ -6,6 +6,11 @@ use ExtUtils::testlib;
 use Test::More tests => 52 ;
 use Test::Warn ;
 use Tk;
+
+# see cme comments for the sad story
+use AnyEvent ;
+require AnyEvent::Impl::Tk ;
+
 use Config::Model::TkUI;
 use Config::Model ;
 use Log::Log4perl qw(:easy) ;
@@ -102,10 +107,13 @@ $root->fetch_element('ordered_hash_of_mandatory')->fetch_with_id('foo') ;
 
 # use Tk::ObjScanner; Tk::ObjScanner::scan_object($root) ;
 
-# TBD eval this and skip test in case of failure.
+# skip test in case of Tk window problem
 SKIP: {
 
-    my $mw = eval {MainWindow-> new ; };
+    my $mw = eval {
+        no warnings 'once' ;
+        $AnyEvent::Impl::Tk::mw ;
+    };
 
     # cannot create Tk window
     skip "Cannot create Tk window",47 unless $mw;
