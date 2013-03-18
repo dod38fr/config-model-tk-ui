@@ -240,18 +240,30 @@ sub store {
 
     print "Storing '$v'\n";
 
-    eval {$cw->{leaf}->store($v); } ;
+    $cw->{leaf}->store(
+        value => $v,
+        callback => sub { $cw->store_cb(@_) ;},
+    );
 
-    if ($@) {
-        $cw -> Dialog ( -title => 'Value error',
-                        -text  => $@->as_string,
-                      )
-            -> Show ;
-    }
-    else {
+}
+
+sub store_cb {
+    my $cw = shift;
+    my %args = @_ ;
+
+    my ($value, $check, $silent, $notify_change, $ok, $callback)
+        = @args{qw/value check silent notify_change ok callback/} ;
+
+    if ($ok) {
         # trigger redraw of Tk Tree
         $cw->{store_cb}->() ;
         $cw->update_warning($cw->{leaf}) ;
+    }
+    else {
+        $cw -> Dialog (
+            -title => 'Value error',
+            -text  => $cw->{leaf}->error_msg,
+        ) -> Show ;
     }
 }
 
