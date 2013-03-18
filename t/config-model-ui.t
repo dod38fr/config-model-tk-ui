@@ -3,7 +3,7 @@
 use warnings FATAL => qw(all);
 
 use ExtUtils::testlib;
-use Test::More tests => 52 ;
+use Test::More tests => 53 ;
 use Test::Warn ;
 use Tk;
 
@@ -197,7 +197,7 @@ SKIP: {
 	       [ ( qr/warn_unless/ ) x 2 ] ,"warn test warn_unless ".$idx++ ;
 	     },
 	 sub { $root->load('warn_unless=foo2') ; $cmu->reload ;; ok(1,"test fix warn_unless ".$idx++)},
-         sub { $cmu ->show_changes ;} ,
+         sub { $cmu ->show_changes ; ok(1,"test show_changes ".$idx++)} ,
 
 	 sub { $mw->destroy; },
         unless $show;
