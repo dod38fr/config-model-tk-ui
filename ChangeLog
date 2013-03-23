@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+2013-03-23 - 1.339
+
+    * LeafEditor: Th tree on the left side of the window is
+      refreshed only once the async store is done.
+    * requires Config::Model 2.030.
+    * test: avoid AnyEvent and Tk lockup
+    * build requires AnyEvent
+
 2013-03-15 - 1.338
 
   * LeafEditor: fixed external editor invocation to deal with utf-8
