@@ -115,6 +115,7 @@ sub Populate {
     $cw->add_summary($leaf)->pack(@fx) ;
     $cw->add_description($leaf)->pack(@fx) ;
     my ($help_frame, $help_widget) = $cw->add_help('help on value' => '',1);
+    $help_frame->pack(@fx) ;
 
     $cw->Advertise( value_help_widget  => $help_widget );
     $cw->Advertise( value_help_frame   => $help_frame  );
