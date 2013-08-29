@@ -1,5 +1,16 @@
 {{$NEXT}}
 
+1.340 2013-08-29
+
+    This release fixes some long standing bug where warning and
+    online help were not displayed in the GUI.
+
+	In more details:
+    * TkUi: reload tree when async store is finished
+    * ListEditor: show warnings
+    * LeafEditor: forgot to pack help frame
+    * AnyViewer: lock pod help widget to 5 lines
+
 1.339 2013-03-23
 
     * LeafEditor: Th tree on the left side of the window is
