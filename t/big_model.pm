@@ -313,6 +313,14 @@ things.
                 description =>
                   'my_plain_check_list nto so helpfull description',
             },
+            enum_with_help_and_long_desc => {
+                type   => 'leaf',
+                value_type => 'enum' ,
+                choice => [ 'AA' .. 'AE' ],
+                help   => { map { ( $_ => "$_ help") ;} ('AA' .. 'AE') },
+                description =>
+                  "my_plain_check_list not so helpful\n even if long description",
+            },
            my_ref_check_list => {
                 type     => 'check_list',
                 refer_to => '- hash_a + ! hash_b',
