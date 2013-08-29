@@ -540,7 +540,7 @@ sub on_cut_buffer_dump {
 
     if ($obj->isa('Config::Model::Value')) {
 	# if leaf store content
-	$obj->store($sel)
+	$obj->store(value => $sel, callback => sub {$cw->reload;}) ;
     }
     elsif ($obj->isa('Config::Model::HashId')) {
 	# if hash create keys
