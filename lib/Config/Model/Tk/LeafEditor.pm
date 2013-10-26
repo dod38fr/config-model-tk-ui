@@ -115,6 +115,7 @@ sub Populate {
     $cw->add_summary($leaf)->pack(@fx) ;
     $cw->add_description($leaf)->pack(@fx) ;
     my ($help_frame, $help_widget) = $cw->add_help('help on value' => '',1);
+    $help_frame->pack(@fx) ;
 
     $cw->Advertise( value_help_widget  => $help_widget );
     $cw->Advertise( value_help_frame   => $help_frame  );
@@ -240,18 +241,30 @@ sub store {
 
     print "Storing '$v'\n";
 
-    eval {$cw->{leaf}->store($v); } ;
+    $cw->{leaf}->store(
+        value => $v,
+        callback => sub { $cw->store_cb(@_) ;},
+    );
 
-    if ($@) {
-        $cw -> Dialog ( -title => 'Value error',
-                        -text  => $@->as_string,
-                      )
-            -> Show ;
-    }
-    else {
+}
+
+sub store_cb {
+    my $cw = shift;
+    my %args = @_ ;
+
+    my ($value, $check, $silent, $notify_change, $ok, $callback)
+        = @args{qw/value check silent notify_change ok callback/} ;
+
+    if ($ok) {
         # trigger redraw of Tk Tree
         $cw->{store_cb}->() ;
         $cw->update_warning($cw->{leaf}) ;
+    }
+    else {
+        $cw -> Dialog (
+            -title => 'Value error',
+            -text  => $cw->{leaf}->error_msg,
+        ) -> Show ;
     }
 }
 
@@ -318,7 +331,7 @@ sub exec_external_editor {
     
     $cw->grabRelease; 
     
-    my $new_v = read_file($fh->filename) ;
+    my $new_v = read_file($fh->filename, binmode => ':utf8') ;
     print "exec_external_editor done with '$new_v'\n";
     $cw->store($new_v);
     $cw->reset_value ;

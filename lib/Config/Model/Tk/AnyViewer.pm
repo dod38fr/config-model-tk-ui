@@ -119,8 +119,8 @@ sub add_help {
     chomp $help ;
 #    if (  $force_text_widget eq 'pod' or $help =~ /\n=\w+|[A-Z]</ ) {
     if ($force_text_widget or $help =~ /\n/ or length($help) > 50) {
-        $widget = $help_frame->PodText;
-        $widget ->pack( @fbe1 ) ;
+        $widget = $help_frame->PodText(-height => 5, -scrollbars  => 'oe');
+        $widget ->pack( @fxe1 ) ;
         $cw->update_help($widget, $help) ;
     }
     # elsif ($force_text_widget or $help =~ /\n/ or length($help) > 50) {

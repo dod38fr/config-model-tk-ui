@@ -7,3 +7,4 @@ _build
 dist.ini
 blib
 wr_data
+README.build-from-git
