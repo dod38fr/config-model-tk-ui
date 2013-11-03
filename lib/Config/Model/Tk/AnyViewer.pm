@@ -136,7 +136,7 @@ sub add_help {
         # $widget
           # ->tagConfigure(qw/help -lmargin1 2 -lmargin2 2 -rmargin 2/);
     # }
-    else {
+    elsif ($help =~ /\w/) {
         $widget = $help_frame->Label( -text => $help,
                                       -justify => 'left',
                                       -font => $text_font ,
