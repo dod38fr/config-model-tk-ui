@@ -431,11 +431,12 @@ sub save_if_yes {
 				 -buttons => [ qw/yes no cancel/, 'show changes'],
 				 -default_button => 'yes',
 				)->Show ;
-	given ($answer) {
-            when ('yes') { $cw->save; $ok_to_quit = 1 ;}
-            when ('no')  {            $ok_to_quit = 1 ;}
-            when ('cancel')  {            $ok_to_quit = 0 ;}
-            when (/show/)  { $cw->show_changes(sub{$cw -> save_if_yes}) ;  $ok_to_quit = 0 ;}
+	if    ($answer eq 'yes')    { $cw->save; $ok_to_quit = 1 ;}
+	elsif ($answer eq 'no')     {            $ok_to_quit = 1 ;}
+	elsif ($answer eq 'cancel') {            $ok_to_quit = 0 ;}
+	elsif ($answer =~ /show/)   {
+            $cw->show_changes(sub{$cw -> save_if_yes}) ;
+            $ok_to_quit = 0 ;
 	}
     }
 
