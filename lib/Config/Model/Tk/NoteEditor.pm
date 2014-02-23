@@ -38,29 +38,41 @@ sub Populate {
 
     my $label = 'Edit Note' ;
     my $status = $label;
-    $cw->Label( -textvariable => \$status )->pack() ;
-    my $note_w = $cw->Scrolled ( 'Text',
-				 -height => 5 ,
-				 -scrollbars => 'ow',
-			       )
-      ->pack(@fbe1);
+    my $note_w ;
 
-    my $balloon = $cw->Balloon(-state => 'balloon') ;
-    $balloon->attach($note_w, 
-		     -msg => 'You may enter a comment here');
+    my $save_cb = sub { $obj->annotation($note_w-> Contents ) ; $status = $label ;} ;
+    my $del_cb  = sub {
+        # FIXME: remove hack once C::M 2.049 is out
+        $obj->can('clear_annotation') ? $obj->clear_annotation : $obj->{annotation} = '';
+        $note_w -> Contents('');
+        $status = $label ;
+    } ;
+    my $updated_cb =  sub {
+        my $k = Ev('k') ;
+	$status = $label.'*' ;
+    };
+
+    my $ed_frame = $cw->Frame->pack();
+    my $ctrl_frame = $ed_frame->Frame->pack(-side => 'left') ;
+    $ctrl_frame->Label(  -textvariable => \$status )->pack( ) ;
+    $ctrl_frame->Button( -text => 'save note', -command => $save_cb )->pack(-fill => 'x') ;
+    $ctrl_frame->Button( -text => 'del note',  -command => $del_cb  )->pack(-fill => 'x') ;
+
+    $note_w = $ed_frame->Scrolled (
+        'Text',
+        -height => 5 ,
+        -scrollbars => 'ow',
+    ) ->pack(@fbe1, -anchor => 's', -side => 'bottom');
+
+    my $balloon = $ed_frame->Balloon(-state => 'balloon') ;
+    $balloon->attach($note_w, -msg => 'You may enter a comment here');
 
 
     # read annotation and set up a callback to save user's entry at
     # every return
-    $note_w ->  Contents($obj->annotation);
-    $note_w -> bind('<Return>',
-		       sub { $obj->annotation($note_w-> Contents ) ; $status = $label ;}
-		      );
-    $note_w -> bind ('<KeyPress>', 
-		     sub { my $k = Ev('k') ; 
-			   $status = $label.'(* hit enter to save)' if $k =~/\w/ ;},
-		    );
-    #$cw->Button(label=>'ok');
+    $note_w -> Contents($obj->annotation);
+    $note_w -> bind ('<KeyPress>', $updated_cb);
+    $note_w->bind('<Button-2>', $updated_cb) ;
 }
-1;
 
+1;
