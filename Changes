@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+1.341 2014-03-02
+
+    * annotation editor: 
+      + add save/del button (requires Config::Model 2.050)
+    * TkUI: 
+      * removed experimental given/when
+      * also show items with warning or error when showing only customized items.
+
 1.340 2013-08-29
 
     This release fixes some long standing bug where warning and
