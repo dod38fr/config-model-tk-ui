@@ -42,8 +42,7 @@ sub Populate {
 
     my $save_cb = sub { $obj->annotation($note_w-> Contents ) ; $status = $label ;} ;
     my $del_cb  = sub {
-        # FIXME: remove hack once C::M 2.049 is out
-        $obj->can('clear_annotation') ? $obj->clear_annotation : $obj->{annotation} = '';
+        $obj->clear_annotation ;
         $note_w -> Contents('');
         $status = $label ;
     } ;
