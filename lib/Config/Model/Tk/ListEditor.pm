@@ -235,20 +235,12 @@ sub push_entry {
 
     $logger->debug("push_entry: $add");
 
-    my $cargo_type = $list->cargo_type ;
-    my $value_type = $list->get_cargo_info('value_type') ; # may be undef
-    if ($cargo_type eq 'leaf' and $value_type ne 'enum' and $value_type ne 'reference') {
-	return unless length($add);
-	eval {$list->push($add) ;};
-    }
-    else {
-	# create new item in list (may auto create node object)
-	my @idx = $list -> get_all_indexes ;
-	eval {$list->fetch_with_id(scalar @idx)} ;
-    }
+    # create new item in list (may auto create node object)
+    my @idx = $list -> get_all_indexes ;
+    eval {$list->fetch_with_id(scalar @idx)} ;
 
     if ($@) {
-	$cw -> Dialog ( -title => "List index error with type $cargo_type",
+	$cw -> Dialog ( -title => "List index error",
 			-text  => $@->as_string,
 		      )
 	  -> Show ;
