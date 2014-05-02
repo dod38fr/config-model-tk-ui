@@ -192,7 +192,7 @@ sub add_set_entry {
     my $set_sub = sub { $cw->set_entry($$user_value_r); };
 
     my $set_b = $frame->Button(
-        -text    => "set selected item",
+        -text    => "set selected",
         -command => $set_sub,
     )->pack( -side => 'left', @fxe1 );
 
