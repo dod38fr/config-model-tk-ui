@@ -303,18 +303,23 @@ sub add_insort_entry {
 sub insort_entry {
     my $cw = shift;
     my $add = shift;
-    my $tklist = $cw->{tklist} ;
-    my $list = $cw->{list};
 
     $logger->debug("insort_entry: $add");
 
-    my $cargo_type = $list->cargo_type ;
-    my $value_type = $list->get_cargo_info('value_type') ; # may be undef
     return unless length($add);
-    eval {$list->insort($add) ;};
+    $cw->try_and_redraw( sub {$cw->{list}->insort($add) ;})
+}
+
+sub try_and_redraw {
+    my $cw = shift;
+    my $to_try = shift;
+    my $tklist = $cw->{tklist} ;
+    my $list = $cw->{list};
+
+    eval {$to_try->() ;};
 
     if ($@) {
-	$cw -> Dialog ( -title => "List index error with type $cargo_type",
+	$cw -> Dialog ( -title => "List index error",
 			-text  => $@->as_string,
 		      )
 	  -> Show ;
