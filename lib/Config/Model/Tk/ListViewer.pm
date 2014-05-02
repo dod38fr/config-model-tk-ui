@@ -42,7 +42,7 @@ sub Populate {
 				   ) ->pack(@fbe1) ;
 
     my @insert = $list->cargo_type eq 'leaf' ? $list->fetch_all_values (check => 'no')
-               :                         $list->get_all_indexes ;
+               :                         $list->fetch_all_indexes ;
     foreach my $c (@insert) {
 	my $line = defined $c ? $c : '<undef>' ;
 	$rt->insert('end', $line."\n" ) ;

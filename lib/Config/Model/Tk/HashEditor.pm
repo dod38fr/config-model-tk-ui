@@ -294,7 +294,7 @@ sub add_entry {
         $logger->debug("add_entry on ordered hash: swap $idx and $add");
         $hash->move_after( $add, $idx );
         $logger->debug(
-            "new hash idx: " . join( ',', $hash->get_all_indexes ) );
+            "new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
         my $new_idx = $selected[0] + 1;
         $tklist->insert( $new_idx, $add );
         $tklist->selectionSet($new_idx);
@@ -468,7 +468,7 @@ sub move_selected_up {
     my $hash = $cw->{hash};
     $hash->move_up($name);
     $logger->debug(
-        "move_up new hash idx: " . join( ',', $hash->get_all_indexes ) );
+        "move_up new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
 
     $cw->reload_tree;
 }
@@ -478,7 +478,7 @@ sub move_selected_down {
     my $tklist = $cw->Subwidget('tklist');
     my @idx    = $tklist->curselection();
     my $hash   = $cw->{hash};
-    my @h_idx  = $hash->get_all_indexes;
+    my @h_idx  = $hash->fetch_all_indexes;
 
     return unless @idx and $idx[0] < $#h_idx;
 
@@ -493,7 +493,7 @@ sub move_selected_down {
 
     $hash->move_down($name);
     $logger->debug(
-        "move_down new hash idx: " . join( ',', $hash->get_all_indexes ) );
+        "move_down new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
 
     $cw->reload_tree;
 }

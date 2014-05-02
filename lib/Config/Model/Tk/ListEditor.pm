@@ -180,7 +180,7 @@ sub reset_value {
     my @insert =
         $cargo_type eq 'leaf'
       ? $list->fetch_all_values( check => 'no' )
-      : $list->get_all_indexes;
+      : $list->fetch_all_indexes;
     map { $_ = '<undef>' unless defined $_ } @insert;
     $cw->{tklist}->insert( end => @insert );
 
@@ -236,7 +236,7 @@ sub push_entry {
     $logger->debug("push_entry: $add");
 
     # create new item in list (may auto create node object)
-    my @idx = $list -> get_all_indexes ;
+    my @idx = $list -> fetch_all_indexes ;
     eval {$list->fetch_with_id(scalar @idx)} ;
 
     if ($@) {
@@ -249,7 +249,7 @@ sub push_entry {
 	# trigger redraw of Tk Tree
 	$cw->{store_cb}->();
 
-        my @new_idx = $list->get_all_indexes ;
+        my @new_idx = $list->fetch_all_indexes ;
         $logger->debug("new list idx: ". join(',',@new_idx));
 
         my $insert = length($add) ? $add : $#new_idx ;
@@ -497,7 +497,7 @@ sub remove_selection {
     $tklist -> delete(0,'end') ;
     my $cargo_type = $list->cargo_type ;
     my @insert = $cargo_type eq 'leaf' ? $list->fetch_all_values (check => 'no')
-               :                         $list->get_all_indexes ;
+               :                         $list->fetch_all_indexes ;
     map { $_ = '<undef>' unless defined $_ } @insert ;
     $tklist->insert( end => @insert ) ;
     $cw->update_warning($list) ;
