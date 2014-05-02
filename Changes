@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+1.342 2014-05-02
+
+    * List editor:
+      * sort button calls list->sort() (requires Config::Model 2.052)
+      * replaced push button with insert at selection (for list of leaves)
+      * added insort button (for list of leaves)
+    * removed asynchronous code
+    * removed dependency on AnyEvent
+
 1.341 2014-03-02
 
     * annotation editor: 
