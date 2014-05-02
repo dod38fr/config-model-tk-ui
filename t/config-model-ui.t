@@ -102,7 +102,7 @@ $root->fetch_element('ordered_hash_of_mandatory')->fetch_with_id('foo') ;
 
 # use Tk::ObjScanner; Tk::ObjScanner::scan_object($root) ;
 
-# TBD eval this and skip test in case of failure.
+# eval this and skip test in case of failure.
 SKIP: {
 
     my $mw = eval {MainWindow-> new ; };
