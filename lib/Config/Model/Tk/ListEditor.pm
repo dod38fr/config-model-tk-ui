@@ -138,9 +138,10 @@ sub Populate {
 
         my $set_push_b_frame = $set_push_b_entry_frame->Frame ->pack(@fxe1) ;
 
-        $cw->add_set_entry ( $set_push_b_frame, $balloon, $tklist,\$user_value )->pack(@fxe1);
-        $cw->add_push_entry( $set_push_b_frame, $balloon ,\$user_value)->pack(@fxe1);
-        $cw->add_set_all_b ( $set_push_b_entry_frame, $set_push_b_frame, $balloon ,\$user_value)
+        $cw->add_set_entry   ( $set_push_b_frame, $balloon, $tklist,\$user_value )->pack(@fxe1);
+        $cw->add_insort_entry( $set_push_b_frame, $balloon, \$user_value )->pack(@fxe1);
+        $cw->add_push_entry  ( $set_push_b_frame, $balloon ,\$user_value)->pack(@fxe1);
+        $cw->add_set_all_b   ( $set_push_b_entry_frame, $set_push_b_frame, $balloon ,\$user_value)
             ->pack(@fxe1);
 
 	$value_entry -> pack  (@fxe1) ;
@@ -282,6 +283,53 @@ sub set_entry {
     $tklist->selectionSet($idx ) ;
     $cw->{list}->fetch_with_id($idx)->store($data) ;
     $cw->{store_cb}->() ;
+}
+
+sub add_insort_entry {
+    my ( $cw, $frame, $balloon, $user_value_r ) = @_;
+
+    my $insort_sub  = sub { $cw->insort_entry($$user_value_r); $$user_value_r = ''; };
+    my $insort_b    = $frame->Button(
+        -text    => "insort",
+        -command => $insort_sub,
+    )->pack( -side => 'left', @fxe1 );
+
+    $balloon->attach( $insort_b,
+        -msg => 'enter a value, and click the insort button to insert '
+          . 'this value while keeping the list sorted' );
+    return $insort_b;
+}
+
+sub insort_entry {
+    my $cw = shift;
+    my $add = shift;
+    my $tklist = $cw->{tklist} ;
+    my $list = $cw->{list};
+
+    $logger->debug("insort_entry: $add");
+
+    my $cargo_type = $list->cargo_type ;
+    my $value_type = $list->get_cargo_info('value_type') ; # may be undef
+    return unless length($add);
+    eval {$list->insort($add) ;};
+
+    if ($@) {
+	$cw -> Dialog ( -title => "List index error with type $cargo_type",
+			-text  => $@->as_string,
+		      )
+	  -> Show ;
+    }
+    else {
+	# trigger redraw of Tk Tree
+	$cw->{store_cb}->();
+
+        my @list = $list->fetch_all_values ;
+
+        $tklist->delete(0,'end') ;
+        $tklist->insert(0, @list) ;
+    }
+
+    return 1 ;
 }
 
 sub add_set_all_b {
