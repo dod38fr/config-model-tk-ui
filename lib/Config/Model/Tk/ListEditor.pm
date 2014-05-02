@@ -140,7 +140,7 @@ sub Populate {
 
         $cw->add_set_entry   ( $set_push_b_frame, $balloon, $tklist,\$user_value )->pack(@fxe1);
         $cw->add_insort_entry( $set_push_b_frame, $balloon, \$user_value )->pack(@fxe1);
-        $cw->add_push_entry  ( $set_push_b_frame, $balloon ,\$user_value)->pack(@fxe1);
+        $cw->add_insert_entry( $set_push_b_frame, $balloon, \$user_value)->pack(@fxe1);
         $cw->add_set_all_b   ( $set_push_b_entry_frame, $set_push_b_frame, $balloon ,\$user_value)
             ->pack(@fxe1);
 
@@ -265,6 +265,39 @@ sub push_entry {
     }
 
     return 1 ;
+}
+
+sub add_insert_entry {
+    my ( $cw, $frame, $balloon, $user_value_r ) = @_;
+
+    my $insert_sub  = sub { $cw->insert_entry($$user_value_r); $$user_value_r = ''; };
+    my $insert_b    = $frame->Button(
+        -text    => "insert item",
+        -command => $insert_sub,
+    )->pack( -side => 'left', @fxe1 );
+
+    $balloon->attach( $insert_b,
+        -msg => 'enter a value, and click the insert button to add '
+          . 'this value before the selected item or at the end of the list (push)' );
+    return $insert_b;
+}
+
+sub insert_entry {
+    my $cw = shift;
+    my $add = shift;
+    my $tklist = $cw->{tklist} ;
+    my $list = $cw->{list};
+
+    my $idx_ref = $tklist->curselection || [];
+    my $idx = $idx_ref->[0] ;
+
+    $logger->debug("insert_entry: $add insert at index ", $idx || 'end');
+    print("insert_entry: $add insert at index ", $idx || 'end',"\n");
+
+    return unless length($add);
+    my $try_sub = defined $idx ? sub {$list->insert_at($idx,$add) ;} : sub {$list->push($add)} ;
+    $cw->try_and_redraw( $try_sub );
+
 }
 
 sub set_entry {
