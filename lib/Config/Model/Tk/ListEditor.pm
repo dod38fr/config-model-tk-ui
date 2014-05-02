@@ -336,12 +336,12 @@ sub sort_content {
 
     my $tklist = $cw->{tklist} ;
     my $list = $cw->{list} ;
+    $list->sort ;
 
-    my @list = sort $list->fetch_all_values ;
+    my @list = $list->fetch_all_values ;
 
     $tklist->delete(0,'end') ;
     $tklist->insert(0, @list) ;
-    $list->load_data(\@list) ;
     $cw->{store_cb}->() ;
 }
 
