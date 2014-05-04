@@ -3,7 +3,7 @@
 use warnings FATAL => qw(all);
 
 use ExtUtils::testlib;
-use Test::More tests => 53 ;
+use Test::More ;
 use Test::Warn ;
 use Tk;
 use Config::Model::TkUI;
@@ -108,7 +108,7 @@ SKIP: {
     my $mw = eval {MainWindow-> new ; };
 
     # cannot create Tk window
-    skip "Cannot create Tk window",47 unless $mw;
+    skip "Cannot create Tk window" unless $mw;
 
     $mw->withdraw ;
 
@@ -205,3 +205,5 @@ SKIP: {
 }
 
 ok(1,"All tests are done");
+
+done_testing;
