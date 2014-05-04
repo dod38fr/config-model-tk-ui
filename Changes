@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+1.343 2014-05-04
+
+	* fixed number of tests issue detected by smoke tests
+
 1.342 2014-05-02
 
     * List editor:
