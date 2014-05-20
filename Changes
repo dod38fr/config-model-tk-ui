@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+1.344 2014-05-20
+
+    * LeafEditor: use Path::Tiny instead of File::Slurp (RT #95691)
+    * Removed 'experience' property from interface (which fixes the crash
+      occuring with Config;:Model 2.056)
+
 1.343 2014-05-04
 
 	* fixed number of tests issue detected by smoke tests
