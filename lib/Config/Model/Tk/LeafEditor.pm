@@ -5,8 +5,7 @@ use warnings ;
 use Carp ;
 use Log::Log4perl;
 use Config::Model::Tk::NoteEditor ;
-use File::Temp ;
-use File::Slurp ;
+use Path::Tiny;
 use Tk::Balloon ;
 
 use base qw/Config::Model::Tk::LeafViewer/;
@@ -288,17 +287,15 @@ sub reset_value {
 sub exec_external_editor {
     my $cw = shift ;
 
-    my $fh = File::Temp->new ; ;
-    die "Can't open temp file:$!" unless defined $fh ;
-    binmode($fh,":utf8");
-    $fh->print($cw->{e_widget}->get('1.0','end'));
-    $fh->close ;
+    my $pt = Path::Tiny->tempfile() ;
+    die "Can't create Path::Tiny:$!" unless defined $pt ;
+    $pt->spew_utf8($cw->{e_widget}->get('1.0','end'));
 
     # See mastering Perl/Tk p382
     my $h = $cw->{ed_handle} = IO::Handle->new;
     die "IO::Handle->new failed." unless defined $h;
 
-    my $ed = $ENV{EDITOR}.' '.$fh->filename ;
+    my $ed = $ENV{EDITOR}.' '.$pt->canonpath ;
     $cw->{ed_pid} = open $h, $ed . ' 2>&1 |';
 
     if (not defined $cw->{ed_pid}) {
@@ -319,7 +316,7 @@ sub exec_external_editor {
     
     $cw->grabRelease; 
     
-    my $new_v = read_file($fh->filename, binmode => ':utf8') ;
+    my $new_v = $pt->slurp_utf8() ;
     print "exec_external_editor done with '$new_v'\n";
     $cw->store($new_v);
     $cw->reset_value ;
