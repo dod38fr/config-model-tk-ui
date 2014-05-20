@@ -11,7 +11,7 @@ use base qw/Tk::Toplevel/;
 use vars qw/$icon_path $error_img $warn_img/;
 use subs qw/menu_struct/;
 use Scalar::Util qw/weaken/;
-use Log::Log4perl;
+use Log::Log4perl 1.11;
 
 use Pod::POM;
 use Pod::POM::View::Text;
@@ -23,6 +23,8 @@ use Tk::Adjuster;
 
 use Tk::Pod;
 use Tk::Pod::Text;    # for findpod
+
+use Config::Model 2.052;
 
 use Config::Model::Tk::LeafEditor;
 use Config::Model::Tk::CheckListEditor;

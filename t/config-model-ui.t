@@ -4,7 +4,7 @@ use warnings FATAL => qw(all);
 
 use ExtUtils::testlib;
 use Test::More ;
-use Test::Warn ;
+use Test::Warn 0.11;
 use Tk;
 use Config::Model::TkUI;
 use Config::Model ;
