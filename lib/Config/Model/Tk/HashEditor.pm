@@ -22,10 +22,7 @@ my $logger = Log::Log4perl::get_logger("Tk::HashEditor");
 
 my $entry_width = 15;
 
-my (
-    $up_img,     $down_img,   $add_img, $rm_img,
-    $eraser_img, $remove_img, $rename_img, $copy_img
-);
+my ( $up_img, $down_img, $add_img, $rm_img, $eraser_img, $remove_img, $rename_img, $copy_img );
 *icon_path = *Config::Model::TkUI::icon_path;
 
 sub ClassInit {
@@ -52,10 +49,9 @@ my %widget_activation_table = (
 sub Populate {
     my ( $cw, $args ) = @_;
     my $hash = $cw->{hash} = delete $args->{-item}
-      || die "HashEditor: no -item, got ", keys %$args;
+        || die "HashEditor: no -item, got ", keys %$args;
     delete $args->{-path};
-    $cw->{store_cb} = delete $args->{-store_cb} || die __PACKAGE__,
-      "no -store_cb";
+    $cw->{store_cb} = delete $args->{-store_cb} || die __PACKAGE__, "no -store_cb";
 
     unless ( defined $up_img ) {
         $add_img    = $cw->Photo( -file => $icon_path . 'add.png' );
@@ -72,7 +68,7 @@ sub Populate {
     my $inst = $hash->instance;
 
     # frame for element list
-    my $elt_frame = $cw->Frame(qw/-relief raised -borderwidth 2/) ->pack( @fbe1 );
+    my $elt_frame = $cw->Frame(qw/-relief raised -borderwidth 2/)->pack(@fbe1);
 
     $elt_frame->Label( -text => $hash->element_name . ' elements' )->pack(@fx);
 
@@ -87,17 +83,14 @@ sub Populate {
     $tklist->insert( end => $hash->fetch_all_indexes );
     $cw->Advertise( tklist => $tklist );
 
-    my $item_frame =
-      $cw->Frame(qw/-borderwidth 1 -relief groove/)
-      ->pack( @fx, -anchor => 'n' );
+    my $item_frame = $cw->Frame(qw/-borderwidth 1 -relief groove/)->pack( @fx, -anchor => 'n' );
 
     my $balloon = $cw->Balloon( -state => 'balloon' );
 
     my $label_keep_frame = $item_frame->Frame->pack(@fxe1);
     my $item             = '';
     my $keep             = 0;
-    $label_keep_frame->Label( -text => 'Item:' )
-      ->pack( -side => 'left', -anchor => 'w' );
+    $label_keep_frame->Label( -text => 'Item:' )->pack( -side => 'left', -anchor => 'w' );
 
     # copy selected entry text into item (textvariable) when $keep is set
     my $keep_cb = sub {
@@ -110,14 +103,12 @@ sub Populate {
         -command  => $keep_cb,
         -text     => 'keep'
     )->pack(qw/-side right -anchor e/);
-    $balloon->attach( $keep_b,
-        -msg => 'keep entry in widget after add, move or copy' );
+    $balloon->attach( $keep_b, -msg => 'keep entry in widget after add, move or copy' );
 
     # Entry
     my $entry = $item_frame->Entry( -textvariable => \$item );
     $entry->pack( @fxe1, qw/-side top -anchor n/ );
-    $balloon->attach( $entry,
-        -msg => 'enter item name to add, copy to, or move to' );
+    $balloon->attach( $entry, -msg => 'enter item name to add, copy to, or move to' );
     $cw->Advertise( entry => $entry );
 
     # bind both entries to update correctly the state of all buttons
@@ -127,7 +118,7 @@ sub Populate {
             tklist => $tklist->curselection || 0
         );
     };
-    $entry->bind( '<KeyPress>', $bound_sub );
+    $entry->bind( '<KeyPress>',         $bound_sub );
     $entry->bind( '<B2-ButtonRelease>', $bound_sub );
     $tklist->bind( '<<ListboxSelect>>', $bound_sub );
 
@@ -146,8 +137,7 @@ sub Populate {
     $addb->pack( @fxe1, qw/-side left/ );
     $cw->Advertise( add => $addb );
     my $add_str = $hash->ordered ? " after selection" : '';
-    $balloon->attach( $addb,
-        -msg => "fill field above and click to add new entry" . $add_str );
+    $balloon->attach( $addb, -msg => "fill field above and click to add new entry" . $add_str );
 
     # copy button
     my $cp_b = $button_frame->Button(
@@ -158,7 +148,7 @@ sub Populate {
             &$bound_sub;
         },
     );
-    $cp_b->pack(@fxe1,qw/-side right/);
+    $cp_b->pack( @fxe1, qw/-side right/ );
     $cw->Advertise( @fxe1, cp => $cp_b );
     $balloon->attach( $cp_b, -msg => "copy selected item in entry" );
 
@@ -176,7 +166,7 @@ sub Populate {
     $balloon->attach( $rename_b, -msg => "rename selected key in entry" );
 
     if ( $hash->ordered ) {
-         my $up_b = $button_frame->Button(
+        my $up_b = $button_frame->Button(
             -image   => $up_img,
             -command => sub { $cw->move_selected_up; },
         );
@@ -293,8 +283,7 @@ sub add_entry {
         my $idx = $tklist->get( $selected[0] );
         $logger->debug("add_entry on ordered hash: swap $idx and $add");
         $hash->move_after( $add, $idx );
-        $logger->debug(
-            "new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
+        $logger->debug( "new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
         my $new_idx = $selected[0] + 1;
         $tklist->insert( $new_idx, $add );
         $tklist->selectionSet($new_idx);
@@ -398,9 +387,7 @@ sub copy_selected_in {
     my $hash = $cw->{hash};
 
     my $new_idx = $hash->exists($to_name) ? 0 : 1;
-    $logger->debug(
-        "copy_selected_to: from $from_name to $to_name (is new index: $new_idx)"
-    );
+    $logger->debug( "copy_selected_to: from $from_name to $to_name (is new index: $new_idx)" );
     $hash->copy( $from_name, $to_name );
 
     if ($new_idx) {
@@ -467,8 +454,7 @@ sub move_selected_up {
 
     my $hash = $cw->{hash};
     $hash->move_up($name);
-    $logger->debug(
-        "move_up new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
+    $logger->debug( "move_up new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
 
     $cw->reload_tree;
 }
@@ -492,8 +478,7 @@ sub move_selected_down {
     $tklist->see($new_idx);
 
     $hash->move_down($name);
-    $logger->debug(
-        "move_down new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
+    $logger->debug( "move_down new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
 
     $cw->reload_tree;
 }
