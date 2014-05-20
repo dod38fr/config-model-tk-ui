@@ -104,7 +104,6 @@ sub Populate {
 	$cw->{$attr} = delete $args->{$parm} ;
     }
 
-    $cw->{experience} = delete $args->{'-experience'} || 'beginner' ;
     my $extra_menu = delete $args->{'-extra-menu'} || [] ;
 
     my $title = delete $args->{'-title'}
@@ -150,20 +149,6 @@ sub Populate {
 	 [ command => 'find (Ctrl-F)','-command', sub{ $cw->pack_find_widget; }],
 	];
     $menubar->cascade( -label => 'Edit', -menuitems => $edit_items ) ;
-
-    my $exp_ref = $cw->{scanner}->get_experience_ref ;
-    $cw->{exp_ref} = $exp_ref ;
-    $$exp_ref = $cw->{experience} ;
-
-    my $exp_items = [
-		      map {['radiobutton',$_,'-variable', $exp_ref,
-			    -command => sub{$cw->reload ;}
-			   ] }
-		          qw/master advanced beginner/
-		     ] ;
-    my $opt_items = [[qw/cascade experience -menuitems/, $exp_items ]] ;
-    $menubar->cascade( -label => 'Options', -menuitems => $opt_items ) ;
-
 
     # create frame for location entry
     my $loc_frame = $cw -> Frame (-relief => 'sunken', -borderwidth => 1)
@@ -378,7 +363,7 @@ sub check {
 
     my $wiz = $cw->setup_wizard(sub{ $cw->check_end($show,@_) ;});
 
-    $wiz->start_wizard(experience => $cw->{experience}, stop_on_warning => $check_warnings ) ;
+    $wiz->start_wizard(stop_on_warning => $check_warnings ) ;
 }
 
 sub check_end {
@@ -874,7 +859,6 @@ sub setup_scanner {
       (
 
        fallback => 'node',
-       experience => 'master', #'beginner',
        check => 'no',
 
        # node callback
@@ -971,16 +955,6 @@ sub create_element_widget {
     return $cw->{editor} ;
 }
 
-sub get_perm {
-    carp "get_perm is deprecated";
-    goto &get_experience ;
-}
-
-sub get_experience {
-    my $cw = shift ;
-    return $ {$cw->{exp_ref}} ;
-}
-
 sub edit_copy {
     my $cw = shift ;
     my $tkt = $cw->{tktree} ;
@@ -1067,7 +1041,7 @@ sub wizard {
     # end_cb callback will raise the main window
     $cw->withdraw ;
 
-    $wiz->prepare_wizard(experience => $cw->{experience}) ;
+    $wiz->prepare_wizard() ;
 }
 
 sub setup_wizard {
@@ -1198,9 +1172,6 @@ This class provides a GUI for L<Config::Model>.
 With this class, L<Config::Model> and an actual configuration
 model (like L<Config::Model::Xorg>), you get a tool to
 edit configuration files (e.g. C</etc/X11/xorg.conf>).
-
-Be default, only items with C<beginner> experience are shown. You can
-change the C<experience> level in C<< Options -> experience >> menu.
 
 =head1 USAGE
 

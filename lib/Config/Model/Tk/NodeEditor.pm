@@ -79,15 +79,13 @@ sub fill_pane {
     my $node = $cw->{node} ;
     my $elt_pane = $cw->{pane} ;
 
-    my $exp = $cw->parent->parent->parent->parent->get_experience ;
-
     my %is_elt_drawn = map { ($_ => 1) } keys %{$cw->{elt_widgets}|| {} } ;
 
     my %values;
     my %modified ;
     my $prev_elt ;
 
-    foreach my $c ($node->get_element_name(for => $exp)) {
+    foreach my $c ($node->get_element_name()) {
 	if (delete $is_elt_drawn{$c}) { 
 	    $prev_elt = $c ;
 	    next;

@@ -88,7 +88,7 @@ my_plain_check_list=AA,AC
 warp warp2 aa2="foo bar"
 !;
 
-ok( $root->load( step => $step, experience => 'advanced' ),
+ok( $root->load( step => $step ),
   "set up data in tree");
 
 my $load_fix = "a_mandatory_string=foo1 another_mandatory_string=foo2 
@@ -96,7 +96,7 @@ my $load_fix = "a_mandatory_string=foo1 another_mandatory_string=foo2
                 warp a_string=warpfoo a_long_string=longfoo another_string=anotherfoo -
                 slave_y a_string=slave_y_foo a_long_string=sylongfoo another_string=sy_anotherfoo" ;
 
-#$root->load(step => "tree_macro=XZ", experience => 'advanced') ;
+#$root->load(step => "tree_macro=XZ") ;
 
 $root->fetch_element('ordered_hash_of_mandatory')->fetch_with_id('foo') ;
 

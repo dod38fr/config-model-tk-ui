@@ -147,8 +147,6 @@ sub check_list_element_cb {
 sub prepare_wizard {
     my ($cw,%args) = @_ ;
     
-    my $exp = $args{experience} || 'beginner' ;
-
     my $text = 'The wizard will scan all configuration items and stop on '
     . '"important" items or on error (like missing mandatory values). If no '
     . '"important" item and no error are found, the wizard will exit immediately' ;
@@ -163,22 +161,11 @@ sub prepare_wizard {
     $textw -> pack(qw/-side top -anchor n/, @fxe1) ;
 
 
-    $edf->Label(-text => 'Choose experience for the wizard :'.$exp)
-      ->pack(qw/-side top -anchor w/);
-
-    map {
-        $edf->Radiobutton(
-            -text     => $_,
-            -variable => \$exp,
-            -value    => $_
-        )->pack(qw/-side top -anchor w/);
-    } qw/master advanced beginner/;
-      
     my $stop_on_warn = 0 ;
     $edf->Checkbutton (-text => 'stop on warning', -variable => \$stop_on_warn )->pack(qw/-side top -anchor w/);
 
     $edf->Button(-text => 'OK',
-		 -command => sub {$cw->start_wizard($exp,$stop_on_warn)}
+		 -command => sub {$cw->start_wizard($stop_on_warn)}
 		) -> pack (qw/-side right -anchor e/) ;
     $edf->Button(-text => 'cancel',
 		 -command => sub {$cw->destroy_wizard()}
@@ -262,7 +249,6 @@ sub start_wizard {
     }
 
     my @wiz_args = (
-        experience             => $args{experience} || 'beginner',
         %cb_table
     );
 

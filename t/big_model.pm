@@ -104,7 +104,6 @@
 
     [
         name              => 'Master',
-        experience        => [ [qw/warp/] => 'advanced' ],
         class_description => "
 
 =head1 coucou

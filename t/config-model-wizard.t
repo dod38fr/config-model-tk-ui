@@ -80,7 +80,7 @@ my_plain_check_list=AA,AC
 warp warp2 aa2="foo bar"
 !;
 
-ok( $root->load( step => $step, experience => 'advanced' ),
+ok( $root->load( step => $step ),
   "set up data in tree");
 
 # use Tk::ObjScanner; Tk::ObjScanner::scan_object($root) ;

@@ -77,13 +77,12 @@ sub Populate {
 sub reload {
     my $cw = shift ;
 
-    my $exp = $cw->parent->parent->parent->parent->get_experience ;
     my $node = $cw->{node};
     my $hl=$cw->{hlist} ;
 
     my %old_elt = %{$cw->{elt_path}|| {} } ;
 
-    foreach my $c ($node->get_element_name(for => $exp)) {
+    foreach my $c ($node->get_element_name()) {
 	my $type = $node->element_type($c) ;
 
 	unless (delete $old_elt{$c}) {
