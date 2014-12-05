@@ -243,19 +243,28 @@ sub store {
     return unless defined $v;
 
     print "Storing '$v'\n";
+    my $leaf = $cw->{leaf};
 
-    eval { $cw->{leaf}->store($v); };
+    eval { $leaf->store($v); };
 
     if ($@) {
-        $cw->Dialog(
+        $cw->Dialog (
             -title => 'Value error',
             -text  => $@->as_string,
         )->Show;
+        $cw->reset_value;
+    }
+    elsif ($leaf->has_error) {
+        $cw->Dialog (
+            -title => 'Value error',
+            -text  => "Cannot store the value:\n* ".join("\n* ",$leaf->all_errors),
+        )->Show;
+        $cw->reset_value;
     }
     else {
         # trigger redraw of Tk Tree
         $cw->{store_cb}->();
-        $cw->update_warning( $cw->{leaf} );
+        $cw->update_warning( $leaf );
     }
 }
 
