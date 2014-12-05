@@ -239,8 +239,15 @@ sub delete {
 # can be used without parameters to store value from widget into config tree
 sub store {
     my $cw = shift;
-    my $v  = $cw->try(@_);
-    return unless defined $v;
+    my $e_w = $cw->{e_widget};
+
+    # tk widget use a reference
+    my $v = defined $e_w
+            ? $e_w->get( '1.0', 'end' )
+            : $cw->{value};
+
+    $v = '' unless defined $v;
+    chomp $v;
 
     print "Storing '$v'\n";
     my $leaf = $cw->{leaf};
