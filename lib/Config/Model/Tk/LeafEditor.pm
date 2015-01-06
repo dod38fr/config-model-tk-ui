@@ -37,7 +37,7 @@ sub Populate {
     my $inst = $leaf->instance;
     my $vt   = $leaf->value_type;
     $logger->info("Creating leaf editor for value_type $vt");
-    $cw->{value} = $leaf->fetch( check => 'no' );
+    $cw->{value} = $leaf->fetch( check => 'no', mode => 'user' );
     $logger->info( "Creating leaf editor with error " . $leaf->error_msg );
 
     $cw->add_header( Edit => $leaf )->pack(@fx);
