@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+1.345 2015-01-10
+
+    Mostly a small bug fix release:
+    * LeafEditor:
+	  * fix boolean value initialisation
+      * improved error handling and report
+	* updated © year
+
 1.344 2014-05-20
 
     * LeafEditor: use Path::Tiny instead of File::Slurp (RT #95691)
