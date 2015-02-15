@@ -225,7 +225,7 @@ sub delete {
     if ($@) {
         $cw->Dialog(
             -title => 'Delete error',
-            -text  => $@->as_string,
+            -text  => ref($@) ? $@->as_string : $@,
         )->Show;
     }
     else {
