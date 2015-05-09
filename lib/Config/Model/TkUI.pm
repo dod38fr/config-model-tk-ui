@@ -1397,11 +1397,11 @@ If you want to help, please send a mail to:
 
 =item *
 
-L<Config::Model>
+L<Config::Model>, L<cme>
 
 =item *
 
-http://config-model.wiki.sourceforge.net/
+https://github.com/dod38fr/config-model-tkui/wiki
 
 =item *
 
