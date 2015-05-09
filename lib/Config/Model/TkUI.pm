@@ -244,6 +244,16 @@ sub Populate {
 
     my $find_frame = $cw->create_find_widget;
 
+    # create frame for message
+    my $msg_label = $cw->Label(
+        -textvariable => \$cw->{message},
+        -font => '-*-Helvetica-normal-R-Normal-*-*-120-*-*-*-*-*-*',
+        -relief => 'sunken',
+        -borderwidth => 1,
+        -anchor =>'w',
+    );
+    $msg_label->pack( -pady => 0, -fill => 'x' );
+
     $args->{-title} = $title;
     $cw->SUPER::Populate($args);
 
@@ -265,8 +275,21 @@ sub Populate {
     $cw->Advertise( right_frame => $eh_frame );
     $cw->Advertise( ed_frame    => $e_frame );
     $cw->Advertise( find_frame  => $find_frame );
+    $cw->Advertise( msg_label   => $msg_label );
 
     $cw->Delegates;
+}
+
+sub show_message {
+    my ( $cw, $msg ) = @_;
+    # $cw->Subwidget('msg_label')->configure(-background => "red"); # does not work
+    $cw->{message} = $msg;
+    my $unshow = sub {
+        my $id = delete $cw->{id};
+        $cw->afterCancel($id) if $id;
+        $cw->{message} = '';
+    } ;
+    $cw->{id} = $cw->after(5000,$unshow) ;
 }
 
 sub tree_width {

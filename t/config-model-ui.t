@@ -25,7 +25,6 @@ my $arg = shift || '';
 my ($log,$show) = (0) x 2 ;
 
 my $trace = $arg =~ /t/ ? 1 : 0 ;
-$::debug            = 1 if $arg =~ /d/;
 $log                = 1 if $arg =~ /l/;
 $show               = 1 if $arg =~ /s|i/;
 
@@ -46,18 +45,20 @@ Config::Model::Exception::Any->Trace(1) if $arg =~ /e/;
 ok(1,"Compilation done");
 
 my $model = Config::Model -> new () ;
+my $cmu ;
 
-my $inst = $model->instance (root_class_name => 'Master',
-                             model_file => 't/big_model.pm',
-			     instance_name => 'test1',
-			     root_dir   => 'wr_data',
-			    );
+my $inst = $model->instance (
+    root_class_name => 'Master',
+    model_file => 't/big_model.pm',
+    instance_name => 'test1',
+    root_dir   => 'wr_data',
+    on_message_cb => sub { $cmu->show_message(@_) ;}
+);
 
 ok($inst,"created dummy instance") ;
 
 my $root = $inst -> config_root ;
 ok($root,"Config root created") ;
-
 
 my $step = qq!
 #"class comment\nbig\nreally big"
@@ -112,10 +113,10 @@ SKIP: {
 
     $mw->withdraw ;
 
-    my $cmu = $mw->ConfigModelUI (-root => $root, ) ;
+    $cmu = $mw->ConfigModelUI (-root => $root, ) ;
 
     my $delay = 200 ;
-    
+
     my $tktree= $cmu->Subwidget('tree') ;
     my $mgr   = $cmu->Subwidget('multi_mgr') ;
     my $widget ; # ugly global variable. Use with care
@@ -127,7 +128,8 @@ SKIP: {
 	) ;
 
     push @test,  
-	 sub { $cmu->create_element_widget('edit','test1'); ok(1,"test ".$idx++)},
+     sub { $cmu->create_element_widget('edit','test1'); ok(1,"test ".$idx++)},
+     sub { $inst->show_message("Hello World")},
 	 sub { $cmu->force_element_display($root->grab('std_id:dd DX')) ; ok(1,"test ".$idx++)},
 	 sub { $cmu->edit_copy('test1.std_id'); ok(1,"test ".$idx++)},
 	 sub { $cmu->force_element_display($root->grab('hash_a:titi')) ; ok(1,"test ".$idx++)},
