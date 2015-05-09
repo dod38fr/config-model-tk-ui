@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+1.346 2015-05-09
+
+   Added new feature:
+   * TkUI: add show_message methid to display message at the bottom of
+     the main widget for 5 seconds.
+
 1.345 2015-01-10
 
     Mostly a small bug fix release:
