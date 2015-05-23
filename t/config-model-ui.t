@@ -141,6 +141,7 @@ SKIP: {
 	 sub { $tktree->open('test1.std_id') ; ok(1,"test ".$idx++)},
 	 sub { $cmu->reload; ok(1,"test reload ".$idx++)} ,
 	 sub { $cmu->create_element_widget('view','test1.std_id'); ok(1,"test ".$idx++)},
+     sub { $inst->show_message("Hello again World")},
 	 sub { $cmu->create_element_widget('edit','test1.std_id'); ok(1,"test ".$idx++)},
 	 sub { $tktree->open('test1.std_id.ab') ; ok(1,"test ".$idx++)},
 	 sub { $cmu->create_element_widget('view','test1.std_id.ab.Z'); ok(1,"test ".$idx++)},

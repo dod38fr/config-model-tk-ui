@@ -284,9 +284,13 @@ sub show_message {
     my ( $cw, $msg ) = @_;
     # $cw->Subwidget('msg_label')->configure(-background => "red"); # does not work
     $cw->{message} = $msg;
+
+    if (my $id = $cw->{id}) {
+        $cw->afterCancel($id) ;
+    } ;
+
     my $unshow = sub {
-        my $id = delete $cw->{id};
-        $cw->afterCancel($id) if $id;
+        delete $cw->{id};
         $cw->{message} = '';
     } ;
     $cw->{id} = $cw->after(5000,$unshow) ;
