@@ -1,5 +1,19 @@
 {{$NEXT}}
 
+1.347 2015-06-14
+
+  Mostly a not so small bug fix release:
+    * UI:
+      * Increased font size used to render description of elements
+      * Fix display of messages that were cancelled too fast
+      * show "saving..." and "save done" message
+    * LeafEditor:
+      * fix regression where change done with external editor was not saved
+      * Add .pod suffix to tmp file to let external editor use pod mode
+    * meta info:
+      * switch bug tracker to github
+      * fixed repo url (Tx gregoa)
+
 1.346 2015-05-09
 
    Added new feature:
