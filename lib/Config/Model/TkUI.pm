@@ -430,22 +430,34 @@ sub save {
     my $trace_dir = defined $dir ? $dir : 'default';
     my @wb_args   = defined $dir ? ( config_dir => $dir ) : ();
 
-    $cw->check();
+    my $save_job = sub {
+        $cw->check(); # may be long
 
-    if ( defined $cw->{store_sub} ) {
-        $logger->info("Saving data in $trace_dir directory with store call-back");
-        $cw->{store_sub}->($dir);
-    }
-    else {
-        $logger->info("Saving data in $trace_dir directory with instance write_back");
-        eval { $cw->{root}->instance->write_back(@wb_args); };
+        if ( defined $cw->{store_sub} ) {
+            $logger->info("Saving data in $trace_dir directory with store call-back");
+            eval { $cw->{store_sub}->($dir) };
+        }
+        else {
+            $logger->info("Saving data in $trace_dir directory with instance write_back");
+            eval { $cw->{root}->instance->write_back(@wb_args); };
+        }
+
         if ($@) {
             $cw->Dialog(
                 -title => 'Save error',
                 -text  => ref($@) ? $@->as_string : $@,
             )->Show;
         }
-    }
+        else {
+            $cw->show_message("Save done ...");
+        }
+    };
+
+    $cw->show_message("Saving... please wait ...");
+
+    # use a short to let tk show the message above and then save
+    $cw->after(100, $save_job) ;
+
 }
 
 sub save_if_yes {
