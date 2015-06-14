@@ -309,7 +309,8 @@ sub reset_value {
 sub exec_external_editor {
     my $cw = shift;
 
-    my $pt = Path::Tiny->tempfile();
+    # the .pod suffix let the editor use the correct mode
+    my $pt = Path::Tiny->tempfile(SUFFIX => '.pod');
     die "Can't create Path::Tiny:$!" unless defined $pt;
     $pt->spew_utf8( $cw->{e_widget}->get( '1.0', 'end' ) );
 
