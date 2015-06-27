@@ -1,5 +1,15 @@
 {{$NEXT}}
 
+1.348 2015-06-27
+
+  Important bug fix release:
+  
+  * Data was not saved when quitting with version 1.347.
+    (e.g. menu: quit -> save changed data? -> yes -> oops, sorry, not done ) 
+    This is now fixed, data is saved *then* cme exits
+
+  * fixed home page in dist.ini and META (Thanks Axel)
+
 1.347 2015-06-14
 
   Mostly a not so small bug fix release:
@@ -17,7 +27,7 @@
 1.346 2015-05-09
 
    Added new feature:
-   * TkUI: add show_message methid to display message at the bottom of
+   * TkUI: add show_message method to display message at the bottom of
      the main widget for 5 seconds.
 
 1.345 2015-01-10
