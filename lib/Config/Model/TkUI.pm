@@ -425,6 +425,7 @@ sub check_end {
 
 sub save {
     my $cw = shift;
+    my $cb = shift || sub {};
 
     my $dir       = $cw->{save_dir};
     my $trace_dir = defined $dir ? $dir : 'default';
@@ -451,6 +452,7 @@ sub save {
         else {
             $cw->show_message("Save done ...");
         }
+        $cb->();
     };
 
     $cw->show_message("Saving... please wait ...");
@@ -460,11 +462,10 @@ sub save {
 
 }
 
-sub save_if_yes {
+sub quit {
     my $cw = shift;
     my $text = shift || "Save data ?";
 
-    my $ok_to_quit = 1;
     if ( $cw->{root}->instance->needs_save ) {
         my $answer = $cw->Dialog(
             -title          => "quit",
@@ -472,22 +473,23 @@ sub save_if_yes {
             -buttons        => [ qw/yes no cancel/, 'show changes' ],
             -default_button => 'yes',
         )->Show;
-        if ( $answer eq 'yes' ) { $cw->save; $ok_to_quit = 1; }
-        elsif ( $answer eq 'no' )     { $ok_to_quit = 1; }
-        elsif ( $answer eq 'cancel' ) { $ok_to_quit = 0; }
+
+        if ( $answer eq 'yes' ) {
+            $cw->save( sub {$cw->self_destroy;});
+        }
+        elsif ( $answer eq 'no' ) {
+            $cw->self_destroy;
+        }
         elsif ( $answer =~ /show/ ) {
-            $cw->show_changes( sub { $cw->save_if_yes } );
-            $ok_to_quit = 0;
+            $cw->show_changes( sub { $cw->quit } );
         }
     }
 
-    return $ok_to_quit;
 }
 
-sub quit {
-    my $cw = shift;
 
-    $cw->save_if_yes || return;
+sub self_destroy {
+    my $cw = shift;
 
     if ( defined $cw->{quit} and $cw->{quit} eq 'soft' ) {
         $cw->destroy;
