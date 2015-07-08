@@ -484,6 +484,9 @@ sub quit {
             $cw->show_changes( sub { $cw->quit } );
         }
     }
+    else {
+        $cw->self_destroy;
+    }
 
 }
 
