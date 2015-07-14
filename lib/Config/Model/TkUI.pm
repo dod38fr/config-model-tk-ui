@@ -561,7 +561,7 @@ sub update_loc_bar {
     #$cw->{path}=$path ;
     my $datar = $cw->{tktree}->infoData($path);
     my $obj   = $datar->[1];
-    $cw->{location} = $obj->location;
+    $cw->{location} = $obj->location_short;
 }
 
 sub on_select {
@@ -771,7 +771,7 @@ sub disp_hash {
             my @data = ( $scan_sub, $sub_elt );
             weaken( $data[1] );
             $tkt->add( $newpath, -data => \@data, @opt );
-            $tkt->itemCreate( $newpath, 0, -text => $idx );
+            $tkt->itemCreate( $newpath, 0, -text => $node->shorten_idx($idx) );
             $tkt->setmode( $newpath => $eltmode );
         }
 

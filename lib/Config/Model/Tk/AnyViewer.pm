@@ -63,7 +63,7 @@ sub add_header {
     $cw->{config_class_name} = $class;
 
     my $label = "$type: ";
-    $label .= $item->location || "Class $class";
+    $label .= $item->location_short || "Class $class";
     my $f = $cw->Frame;
 
     $f->Label( -image => $img{ lc($type) }, -anchor => 'w' )->pack( -side => 'left' );

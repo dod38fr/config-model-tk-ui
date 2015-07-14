@@ -34,7 +34,7 @@ sub Populate {
 
     my $elt_frame = $cw->Frame(qw/-relief flat/)->pack(@fbe1);
 
-    $elt_frame->Label( -text => $node->composite_name . ' node elements' )->pack();
+    $elt_frame->Label( -text => $node->composite_name_short . ' node elements' )->pack();
 
     my $hl = $elt_frame->Scrolled(
         'HList',
