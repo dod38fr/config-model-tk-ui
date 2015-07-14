@@ -314,8 +314,8 @@ sub add_and_sort_item {
     my $added  = 0;
 
     $tklist->selectionClear( 0, 'end' );
-    foreach ( $tklist->get( 0, 'end' ) ) {
-        if ( $add lt $_ ) {
+    foreach my $item ( $tklist->get( 0, 'end' ) ) {
+        if ( $add lt $item ) {
             $tklist->insert( $idx, $add );
             $tklist->selectionSet($idx);
             $tklist->see($idx);
