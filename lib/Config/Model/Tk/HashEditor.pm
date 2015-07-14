@@ -92,18 +92,29 @@ sub Populate {
     my $keep             = 0;
     $label_keep_frame->Label( -text => 'Item:' )->pack( -side => 'left', -anchor => 'w' );
 
-    # copy selected entry text into item (textvariable) when $keep is set
-    my $keep_cb = sub {
+    # clear entry
+    my $clear_b = $label_keep_frame->Button(
+        -command  => sub { $item = ''; },
+        -text     => 'clear'
+    )->pack(qw/-side right -anchor e/);
+    $balloon->attach( $clear_b, -msg => 'clear entry below' );
+
+    # copy select entry
+    my $copy_cb = sub {
         my $sel = $tklist->curselection;
-        $item = $keep && $sel ? $tklist->get($sel) : '';
+        $item = $tklist->get($sel) if $sel;
     };
+    my $copy_b = $label_keep_frame->Button(
+        -command  => $copy_cb,
+        -text     => 'copy'
+    )->pack(qw/-side right -anchor e/);
+    $balloon->attach( $copy_b, -msg => 'copy selected item in entry below' );
 
     my $keep_b = $label_keep_frame->Checkbutton(
         -variable => \$keep,
-        -command  => $keep_cb,
         -text     => 'keep'
     )->pack(qw/-side right -anchor e/);
-    $balloon->attach( $keep_b, -msg => 'keep entry in widget after add, move or copy' );
+    $balloon->attach( $keep_b, -msg => 'keep content of entry below after add, move or copy' );
 
     # Entry
     my $entry = $item_frame->Entry( -textvariable => \$item );
