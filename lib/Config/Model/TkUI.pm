@@ -779,6 +779,7 @@ sub disp_hash {
         $elt_loc .= ' ' if $elt_loc;
 
         # need to keep regexp identical to the one from C::M::Anything:composite_name
+        # so that force_display_path (aka fd_path may work)
         $elt_loc .= $element_name . ':' . ( $idx =~ /\W/ ? '"' . $idx . '"' : $idx );
 
         # hide new entry if hash is not yet opened
