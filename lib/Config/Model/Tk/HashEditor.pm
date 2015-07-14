@@ -80,8 +80,8 @@ sub Populate {
         -height     => 6,
     );
     $tklist->pack( @fbe1, -side => 'left' );
-    $tklist->insert( end => $hash->fetch_all_indexes );
     $cw->Advertise( tklist => $tklist );
+    $cw->insert( end => $hash->fetch_all_indexes );
 
     my $item_frame = $cw->Frame(qw/-borderwidth 1 -relief groove/)->pack( @fx, -anchor => 'n' );
 
@@ -224,6 +224,24 @@ sub Populate {
     $cw->Tk::Frame::Populate($args);
 }
 
+# the following function is used to make multi-line keys (like Files
+# entries in Debian copyright files) more manageable: LF are replaced
+# by \n to enable editing a multi line entry in a Tk::Entry.
+sub insert {
+    my $cw = shift ;
+    my $where = shift ;
+    my @what = map { s/\n/\\n/g; $_; }
+        #map { $hash->shorten_idx($_); }
+        @_ ;
+    $cw->Subwidget('tklist')->insert($where => @what);
+}
+
+# this function (not a method) restore the LF in a multi line key
+# (reverse the operation done above
+sub restore_keys {
+    return map { s/\\n/\n/g; $_; } @_ ;
+}
+
 sub remove_all_elements {
     my $cw     = shift;
     my $dialog = $cw->Dialog(
@@ -264,7 +282,7 @@ sub add_entry {
 
     $logger->debug("add_entry: $add");
 
-    if ( $hash->exists($add) ) {
+    if ( $hash->exists(restore_keys($add)) ) {
         $cw->Dialog(
             -title => "Add item error",
             -text  => "Entry $add already exists",
@@ -273,7 +291,7 @@ sub add_entry {
     }
 
     # add entry in hash
-    eval { $hash->fetch_with_id($add) };
+    eval { $hash->fetch_with_id(restore_keys($add)) };
 
     if ($@) {
         $cw->Dialog(
@@ -293,17 +311,17 @@ sub add_entry {
     if ( @selected and $hash->ordered ) {
         my $idx = $tklist->get( $selected[0] );
         $logger->debug("add_entry on ordered hash: swap $idx and $add");
-        $hash->move_after( $add, $idx );
+        $hash->move_after( restore_keys($add, $idx) );
         $logger->debug( "new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
         my $new_idx = $selected[0] + 1;
-        $tklist->insert( $new_idx, $add );
+        $cw->insert( $new_idx, $add );
         $tklist->selectionSet($new_idx);
         $tklist->see($new_idx);
     }
     elsif ( $hash->ordered ) {
 
         # without selection on ordered hash, items are simply pushed
-        $tklist->insert( 'end', $add );
+        $cw->insert( 'end', $add );
         $tklist->selectionSet('end');
         $tklist->see('end');
     }
@@ -327,7 +345,7 @@ sub add_and_sort_item {
     $tklist->selectionClear( 0, 'end' );
     foreach my $item ( $tklist->get( 0, 'end' ) ) {
         if ( $add lt $item ) {
-            $tklist->insert( $idx, $add );
+            $cw->insert( $idx, $add );
             $tklist->selectionSet($idx);
             $tklist->see($idx);
             $added = 1;
@@ -337,7 +355,7 @@ sub add_and_sort_item {
     }
 
     if ( not $added ) {
-        $tklist->insert( 'end', $add );    # last entry
+        $cw->insert( 'end', $add );    # last entry
         $tklist->selectionSet('end');
         $tklist->see('end');
     }
@@ -354,7 +372,7 @@ sub add_item {
     if ( $hash->ordered ) {
         $logger->debug("add_item: adding $add in ordered hash");
         $tklist->selectionClear( 0, 'end' );
-        $tklist->insert( 'end', $add );
+        $cw->insert( 'end', $add );
         $tklist->selectionSet('end');
         $tklist->see('end');
     }
@@ -397,9 +415,9 @@ sub copy_selected_in {
 
     my $hash = $cw->{hash};
 
-    my $new_idx = $hash->exists($to_name) ? 0 : 1;
+    my $new_idx = $hash->exists(restore_keys($to_name)) ? 0 : 1;
     $logger->debug( "copy_selected_to: from $from_name to $to_name (is new index: $new_idx)" );
-    $hash->copy( $from_name, $to_name );
+    $hash->copy( restore_keys($from_name, $to_name) );
 
     if ($new_idx) {
         $logger->debug("copy_selected_to: add_item $to_name");
@@ -428,13 +446,13 @@ sub move_selected_to {
     my $hash = $cw->{hash};
     $tklist->delete(@from_idx);
 
-    my $new_idx = $hash->exists($to_name) ? 0 : 1;
-    $hash->move( $from_name, $to_name );
+    my $new_idx = $hash->exists(restore_keys($to_name)) ? 0 : 1;
+    $hash->move( restore_keys($from_name, $to_name) );
 
     if ($new_idx) {
         if ( $hash->ordered ) {
             $tklist->selectionClear( 0, 'end' );
-            $tklist->insert( $from_idx[0], $to_name );
+            $cw->insert( $from_idx[0], $to_name );
             $tklist->selectionSet( $from_idx[0] );
         }
         else {
@@ -459,12 +477,12 @@ sub move_selected_up {
     $logger->debug("move_selected_up: $name (@idx)");
     $tklist->delete(@idx);
     my $new_idx = $idx[0] - 1;
-    $tklist->insert( $new_idx, $name );
+    $cw->insert( $new_idx, $name );
     $tklist->selectionSet($new_idx);
     $tklist->see($new_idx);
 
     my $hash = $cw->{hash};
-    $hash->move_up($name);
+    $hash->move_up(restore_keys($name));
     $logger->debug( "move_up new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
 
     $cw->reload_tree;
@@ -484,11 +502,11 @@ sub move_selected_down {
     $logger->debug("move_selected_down: $name (@idx)");
     $tklist->delete(@idx);
     my $new_idx = $idx[0] + 1;
-    $tklist->insert( $new_idx, $name );
+    $cw->insert( $new_idx, $name );
     $tklist->selectionSet($new_idx);
     $tklist->see($new_idx);
 
-    $hash->move_down($name);
+    $hash->move_down(restore_keys($name));
     $logger->debug( "move_down new hash idx: " . join( ',', $hash->fetch_all_indexes ) );
 
     $cw->reload_tree;
@@ -501,7 +519,7 @@ sub delete_selection {
 
     foreach ( $tklist->curselection() ) {
         my $idx = $tklist->get($_);
-        $hash->delete($idx);
+        $hash->delete(restore_keys($idx));
         $tklist->delete($_);
         $cw->reload_tree;
     }
