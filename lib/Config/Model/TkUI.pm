@@ -611,7 +611,6 @@ sub on_cut_buffer_dump {
 
 # replace dot in str by _|_
 sub to_path   { my $str  = shift; $str =~ s/\./_|_/g; return $str; }
-sub from_path { my $path = shift; $path =~ s/_|_/./g; return $path; }
 
 sub force_element_display {
     my $cw      = shift;
