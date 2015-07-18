@@ -1,5 +1,16 @@
 {{$NEXT}}
 
+1.349 2015-07-18
+
+  Bug fix release:
+    * fixed quit to  work even if no data was modified (regression
+      in 1.348)
+    * HashEditor: added 'clear' and 'copy' entry button. simplified
+      'keep' checkbutton behavior.
+    * Reworked UI to avoid being messed up with multiline hash keys. This
+      will improve the UI when editing debian/copyroght files (e.g. with
+      "cme edit dpkg-copyright" done on nqp package)
+
 1.348 2015-06-27
 
   Important bug fix release:
