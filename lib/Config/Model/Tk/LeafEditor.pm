@@ -51,7 +51,7 @@ sub Populate {
         or $vt eq 'reference';
 
     my $ed_frame = $cw->Frame(qw/-relief raised -borderwidth 2/)->pack(@pack_args);
-    $ed_frame->Label( -text => 'Value' )->pack();
+    $ed_frame->Label( -text => 'Edit value' )->pack();
 
     my $balloon = $cw->Balloon( -state => 'balloon' );
 
