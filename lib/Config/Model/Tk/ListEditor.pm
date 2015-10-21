@@ -60,7 +60,7 @@ sub Populate {
 
     my $elt_button_frame = $cw->Frame(qw/-relief raised -borderwidth 2/)->pack(@fbe1);
     my $frame_title      = $list->element_name;
-    $frame_title .= ( defined $value_type and $value_type =~ /node/ ) ? 'elements' : 'values';
+    $frame_title .= ( defined $value_type and $value_type =~ /node/ ) ? ' elements' : ' list';
     $elt_button_frame->Label( -text => $frame_title )->pack();
 
     my $tklist = $elt_button_frame->Scrolled(
