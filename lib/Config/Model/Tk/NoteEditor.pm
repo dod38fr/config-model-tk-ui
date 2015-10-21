@@ -37,6 +37,7 @@ sub Populate {
         || croak "NoteEditor: no -object option, got ",
         join( ',', keys %$args );
 
+    return unless $obj->backend_support_annotation ;
     my $label  = 'Edit Note';
     my $status = $label;
     my $note_w;
