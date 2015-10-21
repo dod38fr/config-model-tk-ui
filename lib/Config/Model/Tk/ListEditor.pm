@@ -70,8 +70,10 @@ sub Populate {
         -height     => 8,
     )->pack(@fbe1);
 
-    $balloon->attach( $tklist,
-        -msg => 'select an element and perform ' . 'an action on the right' );
+    $balloon->attach(
+        $tklist,
+        -msg => 'select an element and perform an action with one of the buttons below'
+    );
 
     my $right_frame = $elt_button_frame->Frame->pack( @fxe1, qw/-side right -anchor n/ );
 
