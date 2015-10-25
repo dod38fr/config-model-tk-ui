@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+1.350 2015-10-25
+
+  Improved usability:
+    * Use double-click instead of rgith-click in tree to open
+      item editor. Right-click is still working.
+    * show note editor only when supported by backend
+      (requires Config::Model >= 2.074)
+    * improved balloon help message of list editor
+
 1.349 2015-07-18
 
   Bug fix release:
