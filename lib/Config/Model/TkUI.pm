@@ -16,6 +16,8 @@ use Log::Log4perl 1.11;
 use Pod::POM;
 use Pod::POM::View::Text;
 
+use Tk::DoubleClick;
+
 use Tk::Photo;
 use Tk::PNG;    # required for Tk::Photo to be able to load pngs
 use Tk::DialogBox;
@@ -185,8 +187,6 @@ sub Populate {
         qw/Tree/,
         -columns   => 4,
         -header    => 1,
-        -browsecmd => sub { $cw->on_browse(@_); },
-        -command   => sub { $cw->on_select(@_); },
         -opencmd   => sub { $cw->open_item(@_); },
     )->pack(qw/-fill both -expand 1 -side left/);
     $cw->{tktree} = $tree;
@@ -216,15 +216,18 @@ sub Populate {
         -text    => "Run Wizard !",
         -command => sub { $cw->wizard } )->pack( -side => 'bottom' );
 
-    # bind button3 as double-button-1 does not work
+    my $b1_sub = sub {
+        my $item = $tree->nearest( $tree->pointery - $tree->rooty );
+        $cw->on_browse($item);
+    };
     my $b3_sub = sub {
         my $item = $tree->nearest( $tree->pointery - $tree->rooty );
         $cw->on_select($item);
     };
-    $cw->bind( '<Button-3>', $b3_sub );
 
-    # pb: rapid click outside the hlist will trigger $b3_sub
-    #$tree->bind('<Double-Button-1>', $b3_sub) ;
+    $cw->bind( '<Return>', $b3_sub );
+    $cw->bind( '<Button-3>', $b3_sub );
+    bind_clicks($tree,$b1_sub, $b3_sub);
 
     # bind button2 to get cut buffer content and try to store cut buffer content
     my $b2_sub = sub {
@@ -1257,7 +1260,7 @@ Left-click on item to open a viewer widget.
 
 =item *
 
-Right-click on any item to open an editor widget
+Double-click or hit "return" on any item to open an editor widget
 
 =item *
 
