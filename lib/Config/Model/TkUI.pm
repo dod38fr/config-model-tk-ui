@@ -26,7 +26,7 @@ use Tk::Adjuster;
 use Tk::Pod;
 use Tk::Pod::Text;    # for findpod
 
-use Config::Model 2.052;
+use Config::Model 2.074;
 
 use Config::Model::Tk::LeafEditor;
 use Config::Model::Tk::CheckListEditor;
