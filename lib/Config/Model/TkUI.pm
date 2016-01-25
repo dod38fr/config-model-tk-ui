@@ -454,8 +454,8 @@ sub save {
         }
         else {
             $cw->show_message("Save done ...");
+            $cb->();
         }
-        $cb->();
     };
 
     $cw->show_message("Saving... please wait ...");
@@ -1328,6 +1328,14 @@ or with C<Run Wizard> button.
 The wizard will scan the configuration tree and stop on all items
 flagged as important in the model. It will also stop on all erroneous
 items (mostly missing mandatory values).
+
+=head1 Methods
+
+=head2 save(callback)
+
+Save modified data in configuration file. The callback function is
+called only if the save was done without error. The callback is called
+without parameters.
 
 =head1 TODO
 
