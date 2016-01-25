@@ -1345,10 +1345,6 @@ without parameters.
   can be used for some config Class (Could be handy for
   Xorg::ServerLayout)
 
-=head1 AUTHOR
-
-Dominique Dumont, (ddumont at cpan dot org)
-
 =head1 More information
 
 =over
@@ -1366,27 +1362,6 @@ Or L<Author's blog|http://ddumont.wordpress.com> where you can find many post ab
 Send a mail to Config::Model user mailing list: config-model-users at lists.sourceforge.net
 
 =back
-
-=head1 LICENSE
-
-    Copyright (c) 2008-2012 Dominique Dumont.
-
-    This file is part of Config-Model.
-
-    Config-Model is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-
-    Config-Model is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public License
-    along with Config-Model; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA
 
 =head1 FEEDBACK and HELP wanted
 
