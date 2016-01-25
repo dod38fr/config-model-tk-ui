@@ -460,7 +460,7 @@ sub save {
 
     $cw->show_message("Saving... please wait ...");
 
-    # use a short to let tk show the message above and then save
+    # use a short delay to let tk show the message above and then save
     $cw->after(100, $save_job) ;
 
 }
