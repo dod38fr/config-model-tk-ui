@@ -1,5 +1,18 @@
 {{$NEXT}}
 
+1.351 2016-01-26
+
+  New functionality:
+  * The leaf value viewer now show a diff of current value
+    compared to standard value (only for value_type string).
+    This will be useful with "cme edit dpkg-copyright) to check
+    the difference of license text. This requires Text::Diff
+  
+  Important bug fix:
+  * TkUI: Let <return> reach the text editor (Closes github #2).
+    This avoids loosing data: hitting return no longer closes 
+    the text editor.
+
 1.350 2015-10-25
 
   Improved usability:
