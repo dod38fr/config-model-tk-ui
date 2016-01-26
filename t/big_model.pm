@@ -276,6 +276,16 @@ things.
                 type       => 'leaf',
                 value_type => 'string'
             },
+            [qw/a_very_long_string/] => {
+                type       => 'leaf',
+                value_type => 'string',
+                default => "    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of the
+    License, or (at your option) any later version.
+    On Debian GNU/Linux systems, the complete text of version 2.1 of the GNU
+    Lesser General Public License can be found in `/usr/share/common-licenses/LGPL-2.1'"
+            },
             [qw/a_mandatory_string another_mandatory_string/] => {
                 type       => 'leaf',
                 mandatory  => 1,

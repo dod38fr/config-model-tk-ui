@@ -89,6 +89,8 @@ my_plain_check_list=AA,AC
 warp warp2 aa2="foo bar"
 !;
 
+$step .= '! a_very_long_string=~"s/\s*general\s*/ /ig"';
+
 ok( $root->load( step => $step ),
   "set up data in tree");
 
@@ -149,6 +151,7 @@ SKIP: {
 	 sub { $tktree->open('test1.std_id.ab') ; ok(1,"test ".$idx++)},
 	 sub { $cmu->create_element_widget('edit','test1.std_id.ab.DX'); ok(1,"test ".$idx++)},
 	 sub { $root->load(step => "std_id:ab3") ; $cmu->reload ;; ok(1,"test load ".$idx++)} ,
+	 sub { $cmu->create_element_widget('view','test1.a_very_long_string'); ok(1,"test diff view ".$idx++)},
 	 sub { $cmu->create_element_widget('view','test1.string_with_def'); ok(1,"test ".$idx++)},
 	 sub { $cmu->create_element_widget('edit','test1.string_with_def'); ok(1,"test ".$idx++)},
 	 sub { $cmu->create_element_widget('view','test1.a_long_string'); ok(1,"test ".$idx++)},
@@ -168,7 +171,7 @@ SKIP: {
 	 sub { $widget->Subwidget('notebook')->raise('order') ;; ok(1,"test notebook raise 2 ".$idx++)},
 	 sub { $widget->{order_list}->selectionSet(1,1) ;; ok(1,"test selectionSet ".$idx++)}, # Z
 	 sub { $widget->move_selected_down ; ok(1,"test move_selected_down ".$idx++)},
-	 # cannot save with pernding errors sub { $cmu->save(); ok(1,"test save 1 ".$idx++)},
+	 # cannot save with pending errors sub { $cmu->save(); ok(1,"test save 1 ".$idx++)},
 	 sub {
 	     #for ($cmu->children) { $_->destroy if $_->name =~ /dialog/i; } ;
 	     $root->load($load_fix);; ok(1,"test load_fix ".$idx++)},
