@@ -225,8 +225,8 @@ sub Populate {
         $cw->on_select($item);
     };
 
-    $cw->bind( '<Return>', $b3_sub );
-    $cw->bind( '<Button-3>', $b3_sub );
+    $tree->bind( '<Return>', $b3_sub );
+    $tree->bind( '<Button-3>', $b3_sub );
     bind_clicks($tree,$b1_sub, $b3_sub);
 
     # bind button2 to get cut buffer content and try to store cut buffer content
@@ -236,9 +236,9 @@ sub Populate {
     };
     $tree->bind( '<Button-2>', $b2_sub );
 
-    $cw->bind( '<Control-c>', sub { $cw->edit_copy } );
-    $cw->bind( '<Control-v>', sub { $cw->edit_paste } );
-    $cw->bind( '<Control-f>', sub { $cw->pack_find_widget } );
+    $tree->bind( '<Control-c>', sub { $cw->edit_copy } );
+    $tree->bind( '<Control-v>', sub { $cw->edit_paste } );
+    $tree->bind( '<Control-f>', sub { $cw->pack_find_widget } );
 
     # bind button2 to get cut buffer content and try to store cut buffer content
     #my $key_sub = sub{my $item = $tree->nearest($tree->pointery - $tree->rooty) ;
