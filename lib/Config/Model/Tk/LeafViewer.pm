@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Carp;
 use Log::Log4perl;
+use Text::Diff;
 
 use base qw/Tk::Frame Config::Model::Tk::AnyViewer/;
 
@@ -53,6 +54,23 @@ sub Populate {
         )->pack(@fbe1);
         $cw->{e_widget}->insert( 'end', $v, 'value' );
         $cw->{e_widget}->tagConfigure(qw/value -lmargin1 2 -lmargin2 2 -rmargin 2/);
+
+        $lv_frame->Label( -text => 'Diff compared to standard value' )->pack();
+        $cw->{diff_widget} = $lv_frame->Scrolled(
+            'ROText',
+            -height     => 5,
+            -scrollbars => 'ow',
+        )->pack(@fbe1);
+
+        my $std = $cw->{leaf}->fetch_standard // '';
+        # Text::Diff does not handle well files without trailing \n
+        $std .= "\n" unless $std =~ /\n$/;
+        my $new = $v // '';
+        $new .= "\n" unless $new =~ /\n$/;
+
+        my $diff = diff( \$std, \$new , { STYLE => "Unified" } );
+        $cw->{diff_widget}->insert( 'end', $diff, 'value' );
+        $cw->{diff_widget}->tagConfigure(qw/value -lmargin1 2 -lmargin2 2 -rmargin 2/);
     }
     else {
         my $v_frame = $lv_frame->Frame(qw/-relief sunken -borderwidth 1/)->pack(@fxe1);
