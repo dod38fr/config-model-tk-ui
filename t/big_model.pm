@@ -342,6 +342,29 @@ things.
                 summary => 'will checklist be served ? ;-) ',
             },
 
+            'check_list_with_upstream_default', => {
+                # from OpenSsh Ssh model (KexAlgorithms)
+                'choice' => [
+                    'ecdh-sha2-nistp256',
+                    'ecdh-sha2-nistp384',
+                    'ecdh-sha2-nistp521',
+                    'diffie-hellman-group-exchange-sha256',
+                    'diffie-hellman-group-exchange-sha1',
+                    'diffie-hellman-group14-sha1',
+                    'diffie-hellman-group1-sha1'
+                ],
+                'description' => 'Specifies the available KEX (Key Exchange) algorithms.',
+                'type' => 'check_list',
+                'upstream_default_list' => [
+                    'diffie-hellman-group-exchange-sha1',
+                    'diffie-hellman-group-exchange-sha256',
+                    'diffie-hellman-group1-sha1',
+                    'diffie-hellman-group14-sha1',
+                    'ecdh-sha2-nistp256',
+                    'ecdh-sha2-nistp384',
+                    'ecdh-sha2-nistp521'
+                ]
+            },
             my_reference => {
                 type       => 'leaf',
                 value_type => 'reference',
