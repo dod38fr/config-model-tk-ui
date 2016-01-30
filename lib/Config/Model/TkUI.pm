@@ -451,6 +451,7 @@ sub save {
                 -title => 'Save error',
                 -text  => ref($@) ? $@->as_string : $@,
             )->Show;
+            $cb->($@); # indicate failure
         }
         else {
             $cw->show_message("Save done ...");
@@ -863,10 +864,19 @@ sub disp_check_list {
 
     my $value = $leaf_object->fetch;
 
-    $cw->{tktree}->itemCreate( $path, 2, -text => $cw->trim_value($value) );
+    my $tkt = $cw->{tktree};
+    $tkt->itemCreate( $path, 2, -text => $cw->trim_value($value) );
 
     my $std_v = $leaf_object->fetch('standard');
-    $cw->{tktree}->itemCreate( $path, 3, -text => $cw->trim_value($std_v) );
+    $tkt->itemCreate( $path, 3, -text => $cw->trim_value($std_v) );
+
+    if ( $std_v ne $value ) {
+        $tkt->itemCreate( $path, 1, -itemtype => 'image', -image => $cust_img );
+    }
+    else {
+        # remove image when value is identical to standard value
+        $tkt->itemDelete( $path, 1 ) if $tkt->itemExists( $path, 1 );
+    }
 }
 
 sub disp_leaf {
@@ -1335,7 +1345,7 @@ items (mostly missing mandatory values).
 
 Save modified data in configuration file. The callback function is
 called only if the save was done without error. The callback is called
-without parameters.
+with C<$@> in case of failed save.
 
 =head1 TODO
 
