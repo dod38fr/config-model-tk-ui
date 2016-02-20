@@ -45,7 +45,8 @@ sub Populate {
     my $lv_frame = $cw->Frame(qw/-relief raised -borderwidth 2/)->pack(@pack_args);
     $lv_frame->Label( -text => 'Value' )->pack();
 
-    if ( $vt eq 'string' ) {
+    my $std = $cw->{leaf}->fetch_standard ;
+    if ( $vt eq 'string' and $std) {
         require Tk::ROText;
         $cw->{e_widget} = $lv_frame->Scrolled(
             'ROText',
@@ -62,7 +63,6 @@ sub Populate {
             -scrollbars => 'ow',
         )->pack(@fbe1);
 
-        my $std = $cw->{leaf}->fetch_standard // '';
         # Text::Diff does not handle well files without trailing \n
         $std .= "\n" unless $std =~ /\n$/;
         my $new = $v // '';
