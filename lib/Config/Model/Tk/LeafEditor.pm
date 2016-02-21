@@ -232,7 +232,7 @@ sub delete {
         # trigger redraw of Tk Tree
         $cw->reset_value;
         $cw->update_warning( $cw->{leaf} );
-        $cw->parent->parent->parent->parent->reload();
+        $cw->{store_cb}->();
     }
 }
 
