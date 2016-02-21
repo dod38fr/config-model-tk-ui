@@ -145,6 +145,8 @@ sub fill_pane {
         # add button to launch dedicated editor
         my $obj      = $node->fetch_element($c);
         my $edit_sub = sub {
+            # it would be better for tkui ui to pass this as a callback
+            # note that storing tkui object in a sub widget creates issues with tk
             $cw->parent->parent->parent->parent->create_element_widget( 'edit', $elt_path, $obj );
         };
         my $edb = $f->Button(
