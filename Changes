@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+1.352 2016-02-21
+
+  Improved diff functionality:
+    * Show value diff only when standard value is not null
+    * TkUI: show when a checklist is different from standard
+
+  Bug fix:
+    * Leaf editor: avoid error when using delete within wizard (gh #5)
+
 1.351 2016-01-26
 
   New functionality:
