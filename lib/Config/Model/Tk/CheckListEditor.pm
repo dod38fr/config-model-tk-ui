@@ -172,7 +172,7 @@ sub move_selected_up {
 
     $cw->{leaf}->move_up($name);
 
-    $cw->reload_tree;
+    $cw->{store_cb}->();
 }
 
 sub move_selected_down {
@@ -195,7 +195,7 @@ sub move_selected_down {
 
     $cw->{leaf}->move_down($name);
 
-    $cw->reload_tree;
+    $cw->{store_cb}->();
 }
 
 sub store {
@@ -234,9 +234,5 @@ sub reset_value {
     $cw->{help} = '';
 }
 
-sub reload_tree {
-    my $cw = shift;
-    $cw->parent->parent->parent->parent->reload();
-}
 
 1;
