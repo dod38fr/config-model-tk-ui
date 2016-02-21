@@ -39,11 +39,12 @@ ok(1,"Compilation done");
 
 my $model = Config::Model -> new () ;
 
-my $inst = $model->instance (root_class_name => 'Master',
-                             model_file => 't/big_model.pm',
-			     instance_name => 'test1',
-			     root_dir   => 'wr_data',
-			    );
+my $inst = $model->instance (
+    root_class_name => 'Master',
+    model_file => 't/big_model.pm',
+    instance_name => 'test1',
+    root_dir   => 'wr_data',
+);
 
 ok($inst,"created dummy instance") ;
 
@@ -79,8 +80,7 @@ my_plain_check_list=AA,AC
 warp warp2 aa2="foo bar"
 !;
 
-ok( $root->load( step => $step ),
-  "set up data in tree");
+ok( $root->load( step => $step ), "set up data in tree");
 
 # use Tk::ObjScanner; Tk::ObjScanner::scan_object($root) ;
 
@@ -98,8 +98,8 @@ SKIP: {
     $mw->withdraw ;
 
     my $cmw = $mw->ConfigModelWizard (-root => $root, 
-				      -store_cb => sub{},
-				     ) ;
+                                      -store_cb => sub{},
+                                  ) ;
 
     my $delay = 1000 ;
 
@@ -107,22 +107,22 @@ SKIP: {
 
     my @test ;
     foreach (1 .. 4 ) {
-	push @test, sub {$cmw->{keep_wiz_editor} = 0 ; $cmw->{wizard}->go_forward; } ;
+        push @test, sub {$cmw->{keep_wiz_editor} = 0 ; $cmw->{wizard}->go_forward; } ;
     }
     foreach (1 .. 2 ) {
-	push @test, sub {$cmw->{keep_wiz_editor} = 0 ; $cmw->{wizard}->go_backward;} ;
+        push @test, sub {$cmw->{keep_wiz_editor} = 0 ; $cmw->{wizard}->go_backward;} ;
     }
     # no problem if too many subs are defined: programs will exit
     foreach (1 .. 100 ) {
-	push @test, sub {$cmw->{keep_wiz_editor} = 0 ; $cmw->{wizard}->go_forward; } ;
+        push @test, sub {$cmw->{keep_wiz_editor} = 0 ; $cmw->{wizard}->go_forward; } ;
     }
 
 
     unless ($show) {
- 	foreach my $t (@test) {
- 	    $mw->after($delay, $t);
- 	    inc_d ;
- 	}
+        foreach my $t (@test) {
+            $mw->after($delay, $t);
+            inc_d ;
+        }
     }
 
     $cmw->start_wizard('master',1) ;
