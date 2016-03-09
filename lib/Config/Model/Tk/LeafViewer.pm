@@ -2,6 +2,7 @@ package Config::Model::Tk::LeafViewer;
 
 use strict;
 use warnings;
+use 5.10.1;
 use Carp;
 use Log::Log4perl;
 use Text::Diff;
@@ -45,8 +46,7 @@ sub Populate {
     my $lv_frame = $cw->Frame(qw/-relief raised -borderwidth 2/)->pack(@pack_args);
     $lv_frame->Label( -text => 'Value' )->pack();
 
-    my $std = $cw->{leaf}->fetch_standard ;
-    if ( $vt eq 'string' and $std) {
+    if ( $vt eq 'string') {
         require Tk::ROText;
         $cw->{e_widget} = $lv_frame->Scrolled(
             'ROText',
@@ -56,21 +56,24 @@ sub Populate {
         $cw->{e_widget}->insert( 'end', $v, 'value' );
         $cw->{e_widget}->tagConfigure(qw/value -lmargin1 2 -lmargin2 2 -rmargin 2/);
 
-        $lv_frame->Label( -text => 'Diff compared to standard value' )->pack();
-        $cw->{diff_widget} = $lv_frame->Scrolled(
-            'ROText',
-            -height     => 5,
-            -scrollbars => 'ow',
-        )->pack(@fbe1);
+        my $std = $cw->{leaf}->fetch_standard ;
+        if ($std) {
+            $lv_frame->Label( -text => 'Diff compared to standard value' )->pack();
+            $cw->{diff_widget} = $lv_frame->Scrolled(
+                'ROText',
+                -height     => 5,
+                -scrollbars => 'ow',
+            )->pack(@fbe1);
 
-        # Text::Diff does not handle well files without trailing \n
-        $std .= "\n" unless $std =~ /\n$/;
-        my $new = $v // '';
-        $new .= "\n" unless $new =~ /\n$/;
+            # Text::Diff does not handle well files without trailing \n
+            $std .= "\n" unless $std =~ /\n$/;
+            my $new = $v // '';
+            $new .= "\n" unless $new =~ /\n$/;
 
-        my $diff = diff( \$std, \$new , { STYLE => "Unified" } );
-        $cw->{diff_widget}->insert( 'end', $diff, 'value' );
-        $cw->{diff_widget}->tagConfigure(qw/value -lmargin1 2 -lmargin2 2 -rmargin 2/);
+            my $diff = diff( \$std, \$new , { STYLE => "Unified" } );
+            $cw->{diff_widget}->insert( 'end', $diff, 'value' );
+            $cw->{diff_widget}->tagConfigure(qw/value -lmargin1 2 -lmargin2 2 -rmargin 2/);
+        }
     }
     else {
         my $v_frame = $lv_frame->Frame(qw/-relief sunken -borderwidth 1/)->pack(@fxe1);
