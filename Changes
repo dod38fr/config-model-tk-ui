@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+1.353 2016-03-09
+
+  Bug fix:
+  * Fixed broken display of string value when standard value
+    is null (broken in 1.352)
+
 1.352 2016-02-21
 
   Improved diff functionality:
