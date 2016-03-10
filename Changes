@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+1.354 2016-03-10
+
+  Fixed skipped test count to avoid smoke test failures
+  on freebsd
+
 1.353 2016-03-09
 
   Bug fix:
