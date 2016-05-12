@@ -919,7 +919,10 @@ sub disp_leaf {
         ( $cw->{show_only_custom} and not( $is_customised or $has_error or $has_warning ) )
         ? 'hide'
         : 'show';
-    $tkt->$meth( entry => $path );
+
+    # unfortunately, hide does not work right after creating a new
+    # item, so the actual hide must be done in an immediate callback.
+    $tkt->after(1,sub { $tkt->$meth( entry => $path )});
 }
 
 sub disp_node {
