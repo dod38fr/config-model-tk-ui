@@ -658,6 +658,23 @@ sub disp_obj_elt {
     my ( $path,    $cw,       $opening, $fd_path )      = @$data_ref;
     my $tkt  = $cw->{tktree};
     my $mode = $tkt->getmode($path);
+
+    if ($cw->{show_only_custom}) {
+        my @new_element_list;
+        foreach my $elt ( @element_list ) {
+            my $elt_type = $node->element_type($elt);
+            my $obj= $node->fetch_element($elt);
+            if ($elt_type eq 'leaf') {
+                next unless defined $obj->fetch(qw/mode custom check no silent 1/) ;
+            }
+            if ($elt_type eq 'check_list') {
+                next unless $obj->get_checked_list(qw/mode custom/) ;
+            }
+            push @new_element_list, $elt;
+        }
+        @element_list = @new_element_list;
+    }
+
     $logger->trace( "disp_obj_elt path $path mode $mode opening $opening " . "(@element_list)" );
 
     $cw->prune( $path, @element_list );
@@ -914,15 +931,6 @@ sub disp_leaf {
     $tkt->itemCreate( $path, 2, -text => $cw->trim_value($value) );
 
     $tkt->itemCreate( $path, 3, -text => $cw->trim_value($std_v) );
-
-    my $meth =
-        ( $cw->{show_only_custom} and not( $is_customised or $has_error or $has_warning ) )
-        ? 'hide'
-        : 'show';
-
-    # unfortunately, hide does not work right after creating a new
-    # item, so the actual hide must be done in an immediate callback.
-    $tkt->after(1,sub { $tkt->$meth( entry => $path )});
 }
 
 sub disp_node {
