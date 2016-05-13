@@ -610,7 +610,7 @@ sub on_cut_buffer_dump {
 
     # display result
     $cw->reload;
-    $cw->create_element_widget('view');
+    $cw->create_element_widget($cw->{current_mode}, $tree_path);
 }
 
 # replace dot in str by _|_
@@ -1041,6 +1041,8 @@ sub create_element_widget {
     my $widget = $widget_table{$mode}{$type}
         || die "Cannot find $mode widget for type $type";
     my @store = $mode eq 'edit' ? ( -store_cb => sub { $cw->reload(@_) } ) : ();
+    $cw->{current_mode} = $mode;
+
     $cw->{editor} = $e_frame->$widget(
         -item => $obj,
         -path => $tree_path,
@@ -1125,6 +1127,7 @@ sub edit_paste {
     }
 
     $cw->reload() if @$cut_buf;
+    $cw->create_element_widget($cw->{current_mode}, $selection);
 }
 
 sub wizard {
