@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+1.355 2016-05-14
+
+  Improved functionality:
+    * added Ctrl-q and Ctrl-s bindings (gh #3)
+
+  Bug fixes:
+    * update editor/viewer when pasting content. (gh #4)
+    * fix show only custom value when opening a branch (gh #6)
+
 1.354 2016-03-10
 
   Fixed skipped test count to avoid smoke test failures
