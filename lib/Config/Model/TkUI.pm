@@ -136,7 +136,7 @@ sub Populate {
         [ command => 'check for errors',     -command => sub { $cw->check(1) } ],
         [ command => 'check for warnings',   -command => sub { $cw->check( 1, 1 ) } ],
         [ command => 'show unsaved changes', -command => sub { $cw->show_changes; } ],
-        [ qw/command save   -command/, sub { $cw->save } ],
+        [ command => 'save (Ctrl-s)', -command => sub { $cw->save } ],
         [
             command  => 'save in dir ...',
             -command => sub { $cw->save_in_dir; }
@@ -149,18 +149,21 @@ sub Populate {
                 Tk::ObjScanner::scan_object( $cw->{root} );
                 }
         ],
-        [ qw/command quit   -command/, sub { $cw->quit } ],
+        [ command => 'quit (Ctrl-q)', -command => sub { $cw->quit } ],
     ];
     $menubar->cascade( -label => 'File', -menuitems => $file_items );
 
     $cw->add_help_menu($menubar);
 
+    $cw->bind( '<Control-s>', sub { $cw->save } );
+    $cw->bind( '<Control-q>', sub { $cw->quit } );
+
     my $edit_items = [
 
         # [ qw/command cut   -command/, sub{ $cw->edit_cut }],
-        [ command => 'copy (Ctrl-C)',  '-command', sub { $cw->edit_copy } ],
-        [ command => 'paste (Ctrl-V)', '-command', sub { $cw->edit_paste } ],
-        [ command => 'find (Ctrl-F)',  '-command', sub { $cw->pack_find_widget; } ],
+        [ command => 'copy (Ctrl-c)',  '-command', sub { $cw->edit_copy } ],
+        [ command => 'paste (Ctrl-v)', '-command', sub { $cw->edit_paste } ],
+        [ command => 'find (Ctrl-f)',  '-command', sub { $cw->pack_find_widget; } ],
     ];
     $menubar->cascade( -label => 'Edit', -menuitems => $edit_items );
 
