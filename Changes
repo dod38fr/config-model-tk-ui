@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+1.356 2016-05-29
+
+  Improved functionality:
+    * "show only custom value" feature can now hide list and
+      hash elements. This reduces clutter when viewing systemd
+      config
+
 1.355 2016-05-14
 
   Improved functionality:
