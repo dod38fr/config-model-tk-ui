@@ -26,7 +26,7 @@ use Tk::Adjuster;
 use Tk::Pod;
 use Tk::Pod::Text;    # for findpod
 
-use Config::Model 2.074;
+use Config::Model 2.084;
 
 use Config::Model::Tk::LeafEditor;
 use Config::Model::Tk::CheckListEditor;
@@ -666,14 +666,7 @@ sub disp_obj_elt {
         my @new_element_list;
         foreach my $elt ( @element_list ) {
             my $elt_type = $node->element_type($elt);
-            my $obj= $node->fetch_element($elt);
-            if ($elt_type eq 'leaf') {
-                next unless defined $obj->fetch(qw/mode custom check no silent 1/) ;
-            }
-            if ($elt_type eq 'check_list') {
-                next unless $obj->get_checked_list(qw/mode custom/) ;
-            }
-            push @new_element_list, $elt;
+            push @new_element_list, $elt if $node->fetch_element($elt)->has_data;
         }
         @element_list = @new_element_list;
     }
