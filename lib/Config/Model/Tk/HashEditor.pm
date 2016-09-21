@@ -81,7 +81,8 @@ sub Populate {
     );
     $tklist->pack( @fbe1, -side => 'left' );
     $cw->Advertise( tklist => $tklist );
-    $cw->insert( end => $hash->fetch_all_indexes );
+
+    $cw->reset_value;
 
     my $item_frame = $cw->Frame(qw/-borderwidth 1 -relief groove/)->pack( @fx, -anchor => 'n' );
 
@@ -223,6 +224,13 @@ sub Populate {
 
     $cw->Tk::Frame::Populate($args);
 }
+
+sub reset_value {
+    my $cw = shift ;
+    $cw->Subwidget('tklist')->delete( 0, 'end' );
+    $cw->insert( end => $cw->{hash}->fetch_all_indexes );
+}
+
 
 # the following function is used to make multi-line keys (like Files
 # entries in Debian copyright files) more manageable: LF are replaced
