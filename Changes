@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+1.357 2016-09-24
+
+  Bug fix:
+    * fix crash after click on "apply fix" on a hash element
+
 1.356 2016-05-29
 
   Improved functionality:
