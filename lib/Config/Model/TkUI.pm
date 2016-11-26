@@ -712,6 +712,12 @@ sub disp_obj_elt {
             $cw->update_hash_image( $node->fetch_element($elt), $newpath );
         }
 
+        if ($elt_type eq 'hash' or $elt_type eq 'list') {
+            my @idx = $node->fetch_element($elt)->fetch_all_indexes();
+            my $size = scalar @idx;
+            $tkt->entryconfigure($newpath, -text => "$elt [$size]");
+        }
+
         $prevpath = $newpath;
     }
 }
