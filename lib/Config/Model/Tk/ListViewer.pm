@@ -51,7 +51,7 @@ sub Populate {
     $cw->add_annotation($list)->pack(@fx);
     $cw->add_warning( $list, 'view' )->pack(@fx);
     $cw->add_summary($list)->pack(@fx);
-    $cw->add_description($list)->pack(@fx);
+    $cw->add_description($list)->pack(@fbe1);
 
     $cw->add_info_button()->pack( -side => 'left', @fxe1 );
     $cw->add_editor_button($path)->pack( -side => 'right', @fxe1 );

@@ -79,7 +79,7 @@ sub Populate {
 
     $cw->ConfigModelNoteEditor( -object => $list )->pack;
     $cw->add_summary($list)->pack(@fx);
-    $cw->add_description($list)->pack(@fx);
+    $cw->add_description($list)->pack(@fbe1);
     $cw->add_warning( $list, 'edit' )->pack(@fx);
     $cw->add_info_button($cw)->pack(@fx);
 

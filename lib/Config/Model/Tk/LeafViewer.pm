@@ -82,7 +82,7 @@ sub Populate {
 
     $cw->add_annotation($leaf)->pack(@fx);
     $cw->add_summary($leaf)->pack(@fx);
-    $cw->add_description($leaf)->pack(@fx);
+    $cw->add_description($leaf)->pack(@fbe1);
     $cw->add_warning( $leaf, 'view' )->pack(@fx);
     $cw->add_help( 'value help' => $leaf->get_help( $cw->{value} ) )->pack(@fx);
     $cw->add_info_button()->pack( @fxe1, -side => 'left', -anchor => 'n' );

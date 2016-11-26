@@ -220,7 +220,7 @@ sub Populate {
     $cw->add_warning( $hash, 'edit' )->pack(@fx);
     $cw->add_info_button()->pack( @fx, qw/-anchor n/ );
     $cw->add_summary($hash)->pack(@fx);
-    $cw->add_description($hash)->pack(@fx);
+    $cw->add_description($hash)->pack(@fbe1);
 
     $cw->Tk::Frame::Populate($args);
 }

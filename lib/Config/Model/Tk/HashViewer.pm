@@ -50,7 +50,7 @@ sub Populate {
     $cw->add_annotation($hash)->pack(@fx);
     $cw->add_warning( $hash, 'view' )->pack(@fx);
     $cw->add_summary($hash)->pack(@fx);
-    $cw->add_description($hash)->pack(@fx);
+    $cw->add_description($hash)->pack(@fbe1);
 
     $cw->add_info_button()->pack( -side => 'left', @fxe1 );
     $cw->add_editor_button($path)->pack( -side => 'right', @fxe1 );

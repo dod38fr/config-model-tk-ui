@@ -112,7 +112,7 @@ sub Populate {
     $cw->add_warning( $leaf, 'edit' )->pack(@fx);
     $cw->add_info_button()->pack( @fx, qw/-anchor n/ );
     $cw->add_summary($leaf)->pack(@fx);
-    $cw->add_description($leaf)->pack(@fx);
+    $cw->add_description($leaf)->pack(@fbe1);
     my ( $help_frame, $help_widget ) = $cw->add_help( 'help on value' => '', 1 );
     $help_frame->pack(@fx);
 

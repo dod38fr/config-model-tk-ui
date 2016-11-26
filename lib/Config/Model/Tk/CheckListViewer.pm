@@ -55,7 +55,7 @@ sub Populate {
     $cw->{value_help_widget} = $help_widget;
     $cw->set_value_help( $leaf->get_checked_list );
 
-    $cw->add_description($leaf)->pack(@fx);
+    $cw->add_description($leaf)->pack(@fbe1);
 
     $cw->add_info_button()->pack( @fxe1, -side => 'left' );
     $cw->add_editor_button($path)->pack( @fxe1, -side => 'right' );

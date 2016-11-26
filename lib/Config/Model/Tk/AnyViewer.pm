@@ -100,7 +100,7 @@ sub add_help {
     if ( $force_text_widget or $help =~ /\n/ or length($help) > 50 ) {
         $widget = $help_frame->PodText( -height => 6, -scrollbars => 'oe' );
         $widget->base_font_size(12);
-        $widget->pack(@fxe1);
+        $widget->pack(@fbe1);
         $cw->update_help( $widget, $help );
     }
 

@@ -96,7 +96,7 @@ sub Populate {
 
     $cw->ConfigModelNoteEditor( -object => $leaf )->pack(@fbe1);
     $cw->add_summary($leaf)->pack(@fx);
-    $cw->add_description($leaf)->pack(@fx);
+    $cw->add_description($leaf)->pack(@fbe1);
     my ( $help_frame, $help_widget ) = $cw->add_help( value => '', 1 );
     $help_frame->pack(@fx);
     $cw->{value_help_widget} = $help_widget;

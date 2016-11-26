@@ -58,7 +58,7 @@ sub Populate {
 
     if ( $node->parent ) {
         $cw->add_summary($node)->pack(@fx);
-        $cw->add_description($node)->pack(@fx);
+        $cw->add_description($node)->pack(@fbe1);
     }
     else {
         $cw->add_help( class => $node->get_help )->pack(@fx);
