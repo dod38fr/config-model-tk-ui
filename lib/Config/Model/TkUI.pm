@@ -181,6 +181,14 @@ sub Populate {
     )->pack( -side => 'right' );
     $loc_frame->Label( -text => 'show only custom values' )->pack( -side => 'right' );
 
+    # create 'hide empty values'
+    $cw->{hide_empty_values} = 0;
+    $loc_frame->Checkbutton(
+        -variable => \$cw->{hide_empty_values},
+        -command  => sub { $cw->reload },
+    )->pack( -side => 'right' );
+    $loc_frame->Label( -text => 'hide empty values' )->pack( -side => 'right' );
+
     # add bottom frame
     my $bottom_frame = $cw->Frame->pack(qw/-pady 0 -fill both -expand 1/);
 
@@ -662,15 +670,26 @@ sub disp_obj_elt {
     my $tkt  = $cw->{tktree};
     my $mode = $tkt->getmode($path);
 
-    if ($cw->{show_only_custom}) {
+    if ($cw->{show_only_custom} or $cw->{hide_empty_values}) {
         my @new_element_list;
         foreach my $elt ( @element_list ) {
-            my $elt_type = $node->element_type($elt);
-            push @new_element_list, $elt if $node->fetch_element($elt)->has_data;
+            my $obj = $node->fetch_element($elt);
+            if ($cw->{show_only_custom}) {
+                push @new_element_list, $elt if $node->fetch_element($elt)->has_data;
+            }
+            elsif ($cw->{hide_empty_values}) {
+                my $elt_type = $obj->get_type;
+                my $show
+                    = $elt_type eq 'hash'       ? $obj->has_data
+                    : $elt_type eq 'list'       ? $obj->has_data
+                    : $elt_type eq 'leaf'       ? length($obj->fetch(qw/mode user check no/) // '')
+                    : $elt_type eq 'check_list' ? $obj->fetch(mode => 'user')
+                    :                             1 ;
+                push @new_element_list, $elt if $show;
+            }
         }
         @element_list = @new_element_list;
     }
-
     $logger->trace( "disp_obj_elt path $path mode $mode opening $opening " . "(@element_list)" );
 
     $cw->prune( $path, @element_list );
