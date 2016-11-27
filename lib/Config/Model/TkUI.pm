@@ -713,8 +713,7 @@ sub disp_obj_elt {
         }
 
         if ($elt_type eq 'hash' or $elt_type eq 'list') {
-            my @idx = $node->fetch_element($elt)->fetch_all_indexes();
-            my $size = scalar @idx;
+            my $size = $node->fetch_element($elt)->fetch_size;
             $tkt->entryconfigure($newpath, -text => "$elt [$size]");
         }
 
