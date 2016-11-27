@@ -385,7 +385,7 @@ sub add_help_menu {
 # Note: this callback is called by Tk::Tree *before* changing the
 # indicator. And the indicator is used by Tk::Tree to store the
 # open/close/none mode. So we can't rely on getmode for path that are
-# opening. HEnce the parameter passed to the sub stored with each
+# opening. Hence the parameter passed to the sub stored with each
 # Tk::Tree item
 sub open_item {
     my ( $cw, $path ) = @_;
