@@ -199,6 +199,7 @@ sub Populate {
         -columns   => 4,
         -header    => 1,
         -opencmd   => sub { $cw->open_item(@_); },
+        -closecmd  => sub { $cw->close_item(@_); },
     )->pack(qw/-fill both -expand 1 -side left/);
     $cw->{tktree} = $tree;
 
@@ -397,9 +398,24 @@ sub open_item {
     # the parameter indicates that we are opening this path
     $data->[0]->(1);
 
+    $cw->show_single_list_value ($tktree, $data->[1], $path, 0);
+
     my @children = $tktree->infoChildren($path);
     $logger->trace("open_item show @children");
     map { $tktree->show( -entry => $_ ); } @children;
+}
+
+sub close_item {
+    my ( $cw, $path ) = @_;
+    my $tktree = $cw->{tktree};
+    $logger->trace("close_item on $path");
+    my $data = $tktree->infoData($path);
+
+    $cw->show_single_list_value ($tktree, $data->[1], $path, 1);
+
+    my @children = $tktree->infoChildren($path);
+    $logger->trace("close_item hide @children");
+    map { $tktree->hide( -entry => $_ ); } @children;
 }
 
 sub save_in_dir {
@@ -727,16 +743,32 @@ sub disp_obj_elt {
 
         $cw->setmode( 'node', $newpath, $eltmode, $elt_loc, $fd_path, $opening, $scan_sub );
 
+        my $obj = $node->fetch_element($elt);
         if ( $elt_type eq 'hash' ) {
-            $cw->update_hash_image( $node->fetch_element($elt), $newpath );
+            $cw->update_hash_image( $obj, $newpath );
         }
 
         if ($elt_type eq 'hash' or $elt_type eq 'list') {
-            my $size = $node->fetch_element($elt)->fetch_size;
+            my $size = $obj->fetch_size;
             $tkt->entryconfigure($newpath, -text => "$elt [$size]");
         }
 
+        $cw->show_single_list_value ($tkt, $obj, $newpath,  $tkt->getmode($newpath) eq 'open' ? 1 : 0);
+
         $prevpath = $newpath;
+    }
+}
+
+# show a list like a leaf value when the list contains *one* item
+sub show_single_list_value {
+    my ($cw, $tkt, $obj, $path, $show) = @_;
+    my $elt_type = $obj->get_type;
+    $logger->trace("show_single_list_value called on ", $obj->location);
+    if ($elt_type eq 'list' and $obj->get_cargo_type eq 'leaf' and $obj->fetch_size == 1 and $show) {
+        disp_leaf(undef,[ $path, $cw ], $obj->parent, $obj->element_name, 0, $obj->fetch_with_id(0));
+    }
+    else {
+        map {$tkt->itemDelete( $path, $_ ) if $tkt->itemExists($path, $_);} qw/1 2 3/;
     }
 }
 
