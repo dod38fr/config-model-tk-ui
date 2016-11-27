@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+1.358 2016-11-27
+
+  Improved functionality:
+    * show leaf value in a list when it contains *one* item (gh #7)
+    * add "hide empty value" button (gh #9)
+    * Indicate nb of elements in a list or hash (gh #8)
+    * description widget is now expandable
+
 1.357 2016-09-24
 
   Bug fix:
