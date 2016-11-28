@@ -763,8 +763,12 @@ sub disp_obj_elt {
 sub show_single_list_value {
     my ($cw, $tkt, $obj, $path, $show) = @_;
     my $elt_type = $obj->get_type;
+
+    # leave alone element that is not a list of leaf
+    return unless $elt_type eq 'list' and $obj->get_cargo_type eq 'leaf';
+
     $logger->trace("show_single_list_value called on ", $obj->location);
-    if ($elt_type eq 'list' and $obj->get_cargo_type eq 'leaf' and $obj->fetch_size == 1 and $show) {
+    if ($obj->fetch_size == 1 and $show) {
         disp_leaf(undef,[ $path, $cw ], $obj->parent, $obj->element_name, 0, $obj->fetch_with_id(0));
     }
     else {
