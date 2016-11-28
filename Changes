@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+1.359 2016-11-28
+
+  Bug fix:
+    * TkUI: fix display of leaf element (broke while fixing gh#7)
+
 1.358 2016-11-27
 
   Improved functionality:
