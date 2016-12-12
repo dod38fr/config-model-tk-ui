@@ -3,6 +3,7 @@ package Config::Model::Tk::NodeViewer;
 use strict;
 use warnings;
 use Carp;
+use 5.10.1;
 
 use base qw/Tk::Frame Config::Model::Tk::AnyViewer/;
 use subs qw/menu_struct/;
@@ -83,19 +84,21 @@ sub reload {
 
     my %old_elt = %{ $cw->{elt_path} || {} };
 
-    foreach my $c ( $node->get_element_name() ) {
-        my $type = $node->element_type($c);
+    foreach my $elt_name ( $node->get_element_name() ) {
+        my $hl_name = $elt_name;
+        $hl_name =~ s/\./__/g; # make elt name compatible with Tk::HList
 
-        unless ( delete $old_elt{$c} ) {
+        my $type = $node->element_type($elt_name);
 
+        unless ( delete $old_elt{$hl_name} ) {
             # create item
-            $hl->add($c);
-            $cw->{elt_path}{$c} = 1;
+            $hl->add($hl_name);
+            $cw->{elt_path}{$hl_name} = 1;
 
-            $hl->itemCreate( $c, 0, -text => $c );
-            $hl->itemCreate( $c, 1, -text => $type );
+            $hl->itemCreate( $hl_name, 0, -text => $elt_name );
+            $hl->itemCreate( $hl_name, 1, -text => $type );
             $hl->itemCreate(
-                $c, 2,
+                $hl_name, 2,
                 -itemtype  => 'imagetext',
                 -text      => '',
                 -showimage => 0,
@@ -106,10 +109,10 @@ sub reload {
         if ( $type eq 'leaf' ) {
 
             # update displayed value
-            my $v = eval { $node->fetch_element_value($c) };
+            my $v = eval { $node->fetch_element_value($elt_name) };
             if ($@) {
                 $hl->itemConfigure(
-                    $c, 2,
+                    $hl_name, 2,
                     -showtext  => 0,
                     -showimage => 1,
                 );
@@ -117,7 +120,7 @@ sub reload {
             elsif ( defined $v ) {
                 substr( $v, 15 ) = '...' if length($v) > 15;
                 $hl->itemConfigure(
-                    $c, 2,
+                    $hl_name, 2,
                     -showtext  => 1,
                     -showimage => 0,
                     -text      => $v
