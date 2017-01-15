@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+1.360 2017-01-15
+
+  Bug fix:
+    * handle correctly utf8 in pod text (Debian: #851178)
+    * destroy main window when widget is closed (Debian: 850645)
+    * NodeViewer: fix handling of elt containing a dot in their name
+
 1.359 2016-11-28
 
   Bug fix:
