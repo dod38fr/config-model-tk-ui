@@ -104,7 +104,7 @@ sub fill_pane {
         my $label = $f->Label( -text => $c, -width => 22, -anchor => 'w' );
         $label->pack(qw/-side left -fill x -anchor w/);
 
-        my $help = $node->get_help( summary => $c ) || $node->get_help( description => $c );
+        my $help = $node->get_help_as_text( summary => $c ) || $node->get_help_as_text( description => $c );
         $cw->Balloon( -state => 'balloon' )->attach( $label, -msg => wrap( '', '', $help ) );
 
         if ( $type eq 'leaf' ) {

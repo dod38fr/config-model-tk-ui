@@ -92,6 +92,9 @@ sub set_value_help {
     my $w = $cw->{value_help_widget};
     $w->delete( '0.0', 'end' );
 
+    # in pod text, =encoding must be specified only once
+    $w->insert( 'end', "=encoding utf8\n\n");
+
     foreach my $v (@set) {
         my $value_help = $cw->{leaf}->get_help($v);
         $w->insert( 'end', "$v: " . $value_help . "\n" ) if defined $value_help;

@@ -135,7 +135,7 @@ sub update_help {
 
     # work around RT #67306
     my $t = $cw->toplevel->cget('-title');
-    $w->text("\n\n=pod\n\n\n$help\n\n=cut\n\n");
+    $w->text("\n\n=pod\n\n\n=encoding utf8\n\n$help\n\n=cut\n\n");
     $w->toplevel->title($t);
 }
 
