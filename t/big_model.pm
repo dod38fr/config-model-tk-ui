@@ -1,4 +1,5 @@
 # -*- cperl -*-
+use utf8;
 
 # this file is used by test script
 
@@ -108,7 +109,7 @@
 
 =head1 coucou
 
-Master description . Let's go for a very long description.
+Master description . Let's go for a very long description with utf8 chars: ßéè.
 
 Big class to do:
 
@@ -175,7 +176,7 @@ things.
                     type       => 'leaf',
                     value_type => 'uniline'
                 },
-                summary => 'lista and listb are used to yada yada ',
+                summary => 'lista and listb are used to yada yada with utf8 chars: ßéè',
             },
             [qw/hash_a hash_b/] => {
                 type       => 'hash',
@@ -318,7 +319,7 @@ things.
                 type   => 'leaf',
                 value_type => 'enum' ,
                 choice => [ 'AA' .. 'AE' ],
-                help   => { map { ( $_ => "$_ help") ;} ('AA' .. 'AE') },
+                help   => { map { ( $_ => "$_ help with utf8 ßé²") ;} ('AA' .. 'AE') },
                 description =>
                   'my_plain_check_list nto so helpfull description',
             },
@@ -326,9 +327,9 @@ things.
                 type   => 'leaf',
                 value_type => 'enum' ,
                 choice => [ 'AA' .. 'AE' ],
-                help   => { map { ( $_ => "$_ help") ;} ('AA' .. 'AE') },
+                help   => { map { ( $_ => "$_ help with utf8 ßé²") ;} ('AA' .. 'AE') } ,
                 description =>
-                  "my_plain_check_list not so helpful\n even if long description",
+                  "my_plain_check_list not so helpful\n even if B<long> description 😁",
             },
            my_ref_check_list => {
                 type     => 'check_list',
@@ -393,7 +394,7 @@ things.
         ],
         description => [
             tree_macro    => 'controls behavior of other elements',
-            a_long_string => "long string with \\n in it",
+            a_long_string => "long string with \\n in it and with utf8 chars: ßéè",
             my_reference  => "very long help:\n"
               . "Config::Model enables a project developer to provide an interactive configuration editor to his users. For this he must:
 - describe the structure and constraint of his project's configuration
