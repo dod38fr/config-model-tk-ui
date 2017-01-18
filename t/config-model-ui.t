@@ -168,12 +168,12 @@ SKIP: {
      sub { my $name = "check_list_with_upstream_default";
            my $clwud = $root->grab(step => $name) ;
            $cmu->force_element_display($clwud);
-           ok(1,"show check list with upstream value".$idx++)} ,
+           ok(1,"show check list with upstream value ".$idx++)} ,
      sub { my $name = "check_list_with_upstream_default";
            my $clwud = $root->grab(step => $name) ;
            my @set = $clwud->get_choice; $clwud->check(@set);
            $cmu->force_element_display($clwud);
-           ok(1,"test check list with upstream data".$idx++)} ,
+           ok(1,"test check list with upstream data ".$idx++)} ,
 
 	 sub { $root->load(step => "ordered_checklist=A,Z,G") ; $cmu->reload ;; ok(1,"test load ".$idx++)} ,
 	 sub { $widget = $cmu->create_element_widget('edit','test1.ordered_checklist'); ok(1,"test ".$idx++)},
