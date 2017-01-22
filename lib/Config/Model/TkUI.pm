@@ -292,7 +292,7 @@ sub Populate {
     $cw->Advertise( find_frame  => $find_frame );
     $cw->Advertise( msg_label   => $msg_label );
 
-    $cw->OnDestroy(sub { $cw->Parent->destroy } );
+    $cw->OnDestroy(sub {$cw->Parent->destroy if ref($cw->Parent) eq 'MainWindow'} );
 
     $cw->Delegates;
 }
