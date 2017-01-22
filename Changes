@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+1.361 2017-01-22
+
+  Bug fix:
+    * TkUI: destroy parent only when parent isMainWindow
+      (fix Config::Model::Itself itself-editor test)
+
 1.360 2017-01-15
 
   Bug fix:
