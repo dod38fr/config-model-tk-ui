@@ -121,6 +121,7 @@ sub Populate {
 
     # initialize internal attributes
     $cw->{location} = '';
+    $cw->{current_mode} = 'view';
 
     $cw->setup_scanner();
 
