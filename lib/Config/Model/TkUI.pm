@@ -641,6 +641,7 @@ sub on_cut_buffer_dump {
     # display result
     $cw->reload;
     $cw->create_element_widget($cw->{current_mode}, $tree_path);
+    $cw->open_item($tree_path);
 }
 
 # replace dot in str by _|_
