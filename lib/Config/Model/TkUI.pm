@@ -158,6 +158,9 @@ sub Populate {
 
     $cw->bind( '<Control-s>', sub { $cw->save } );
     $cw->bind( '<Control-q>', sub { $cw->quit } );
+    $cw->bind( '<Control-c>', sub { $cw->edit_copy } );
+    $cw->bind( '<Control-v>', sub { $cw->edit_paste } );
+    $cw->bind( '<Control-f>', sub { $cw->pack_find_widget } );
 
     my $edit_items = [
 
