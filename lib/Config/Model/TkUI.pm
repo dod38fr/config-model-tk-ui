@@ -256,11 +256,6 @@ sub Populate {
     $tree->bind( '<Control-v>', sub { $cw->edit_paste } );
     $tree->bind( '<Control-f>', sub { $cw->pack_find_widget } );
 
-    # bind button2 to get cut buffer content and try to store cut buffer content
-    #my $key_sub = sub{my $item = $tree->nearest($tree->pointery - $tree->rooty) ;
-    #$cw->on_key_press($item)} ;
-    #$tree->bind('<KeyPress>', $key_sub) ;
-
     my $find_frame = $cw->create_find_widget;
 
     # create frame for message
