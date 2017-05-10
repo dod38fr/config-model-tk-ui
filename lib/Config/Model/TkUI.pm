@@ -242,7 +242,7 @@ sub Populate {
     };
 
     $tree->bind( '<Return>', $b3_sub );
-    $tree->bind( '<Button-3>', $b3_sub );
+    $tree->bind( '<ButtonRelease-3>', $b3_sub );
     bind_clicks($tree,$b1_sub, $b3_sub);
 
     # bind button2 to get cut buffer content and try to store cut buffer content
@@ -250,7 +250,7 @@ sub Populate {
         my $item = $tree->nearest( $tree->pointery - $tree->rooty );
         $cw->on_cut_buffer_dump($item);
     };
-    $tree->bind( '<Button-2>', $b2_sub );
+    $tree->bind( '<ButtonRelease-2>', $b2_sub );
 
     $tree->bind( '<Control-c>', sub { $cw->edit_copy } );
     $tree->bind( '<Control-v>', sub { $cw->edit_paste } );
