@@ -312,9 +312,9 @@ sub exec_external_editor {
     my @pt_args;
 
     # ugly hack to use pod mode only for Model description parameter
-    # i.e. for Config::Model::Itself
+    # i.e. for 'cme meta edit;
     my $leaf = $cw->{leaf};
-    if ($leaf->config_class_name =~ /^Itself/ and
+    if ($leaf->parent->config_class_name =~ /^Itself/ and
             $leaf->element_name =~ /description/
         ) {
         # the .pod suffix let the editor use the correct mode
