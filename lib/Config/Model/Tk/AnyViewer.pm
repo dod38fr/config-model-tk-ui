@@ -58,7 +58,6 @@ sub add_header {
 my @top_frame_args = qw/-relief raised -borderwidth 4/;
 my @low_frame_args = qw/-relief sunken -borderwidth 1/;
 my $padx           = 20;
-my $text_font      = [qw/-family Arial -weight normal/];
 
 sub add_info_button {
     my $cw = shift;
@@ -72,7 +71,6 @@ sub add_info_button {
     my $dialog = $cw->Dialog(
         -title => $title,
         -text  => join( "\n", $title, @items ),
-        -font  => $text_font,
     );
     my $button = $frame->Button(
         -text    => "info ...",
@@ -121,7 +119,6 @@ sub add_help {
         $widget = $help_frame->Label(
             -text    => $help,
             -justify => 'left',
-            -font    => $text_font,
             -anchor  => 'w',
             -padx    => $padx,
         )->pack( -fill => 'x' );
@@ -180,7 +177,6 @@ sub add_warning {
         'ROText',
         -scrollbars => 'ow',
         -wrap       => 'word',
-        -font       => $text_font,
         -relief     => 'ridge',
         -height     => 4,
     );
