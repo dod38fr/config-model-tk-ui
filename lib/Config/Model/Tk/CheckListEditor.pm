@@ -39,6 +39,7 @@ sub Populate {
         || die "CheckListEditor: no -item, got ", keys %$args;
     delete $args->{-path};
     $cw->{store_cb} = delete $args->{-store_cb} || die __PACKAGE__, "no -store_cb";
+    my $cme_font = delete $args->{-font};
 
     my $inst = $leaf->instance;
 
@@ -109,6 +110,7 @@ sub Populate {
     }
 
     $cw->Advertise( 'listbox' => $lb );
+    $cw->ConfigSpecs(-font => [['SELF','DESCENDANTS'], 'font','Font', $cme_font ],);
 
     # don't call directly SUPER::Populate as it's CheckListViewer's populate
     $cw->Tk::Frame::Populate($args);

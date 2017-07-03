@@ -29,6 +29,7 @@ sub Populate {
         || die "CheckListViewer: no -item, got ", keys %$args;
     my $path = delete $args->{-path}
         || die "CheckListViewer: no -path, got ", keys %$args;
+    my $cme_font = delete $args->{-font};
 
     my $inst = $leaf->instance;
 
@@ -61,6 +62,7 @@ sub Populate {
     $cw->add_editor_button($path)->pack( @fxe1, -side => 'right' );
 
     $cw->ConfigSpecs(
+        -font => [['SELF','DESCENDANTS'], 'font','Font', $cme_font ],
 
         #-fill   => [ qw/SELF fill Fill both/],
         #-expand => [ qw/SELF expand Expand 1/],

@@ -32,6 +32,7 @@ sub Populate {
         || die "LeafViewer: no -item, got ", keys %$args;
     my $path = delete $args->{-path}
         || die "LeafViewer: no -path, got ", keys %$args;
+    my $cme_font = delete $args->{-font};
 
     my $inst = $leaf->instance;
 
@@ -89,7 +90,7 @@ sub Populate {
     $cw->add_editor_button($path)->pack( @fxe1, -side => 'right', -anchor => 'n' );
 
     $cw->ConfigSpecs(
-
+        -font => [['SELF','DESCENDANTS'], 'font','Font', $cme_font ],
         #-fill   => [ qw/SELF fill Fill both/],
         #-expand => [ qw/SELF expand Expand 1/],
         -relief      => [qw/SELF relief Relief groove/],

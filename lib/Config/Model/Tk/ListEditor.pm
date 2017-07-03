@@ -38,6 +38,7 @@ sub Populate {
         || die "ListEditor: no -item, got ", keys %$args;
 
     delete $args->{-path};
+    my $cme_font = delete $args->{-font};
 
     $cw->{store_cb} = delete $args->{-store_cb}
         or die __PACKAGE__, "no -store_cb";
@@ -158,6 +159,8 @@ sub Populate {
 
     $cw->{tklist} = $tklist;
     $cw->reset_value;
+
+    $cw->ConfigSpecs(-font => [['SELF','DESCENDANTS'], 'font','Font', $cme_font ],);
 
     $cw->Tk::Frame::Populate($args);
 }

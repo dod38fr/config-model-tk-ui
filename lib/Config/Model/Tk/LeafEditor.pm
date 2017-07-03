@@ -33,6 +33,7 @@ sub Populate {
         || die "LeafEditor: no -item, got ", keys %$args;
     delete $args->{-path};
     $cw->{store_cb} = delete $args->{-store_cb} || die __PACKAGE__, "no -store_cb";
+    my $cme_font = delete $args->{-font};
 
     my $inst = $leaf->instance;
     my $vt   = $leaf->value_type;
@@ -122,6 +123,7 @@ sub Populate {
     $cw->set_value_help;
 
     $cw->ConfigSpecs(
+        -font => [['SELF','DESCENDANTS'], 'font','Font', $cme_font ],
 
         #-fill   => [ qw/SELF fill Fill both/],
         #-expand => [ qw/SELF expand Expand 1/],
@@ -207,6 +209,7 @@ sub try {
         $cw->Dialog(
             -title => 'Value error',
             -text  => join( "\n", @errors ),
+            -font => scalar $cw->cget('-font'),
         )->Show;
         $cw->reset_value;
         return;
@@ -259,6 +262,7 @@ sub store {
         $cw->Dialog (
             -title => 'Value error',
             -text  => $@->as_string,
+            -font => scalar $cw->cget('-font'),
         )->Show;
         $cw->reset_value;
     }
@@ -266,6 +270,7 @@ sub store {
         $cw->Dialog (
             -title => 'Value error',
             -text  => "Cannot store the value:\n* ".join("\n* ",$leaf->all_errors),
+            -font => scalar $cw->cget('-font'),
         )->Show;
         $cw->reset_value;
     }
@@ -337,6 +342,7 @@ sub exec_external_editor {
         $cw->Dialog(
             -title => 'External editor error',
             -text  => "'$ed' : $!",
+            -font => scalar $cw->cget('-font'),
         )->Show;
         return;
     }
