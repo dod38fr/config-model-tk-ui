@@ -202,7 +202,7 @@ sub Populate {
     $menubar->cascade( -label => 'Edit', -menuitems => $edit_items );
 
     my $option_items = [
-        [ command => 'main',  '-command', sub { $cw->set_font(); } ],
+        [ command => 'Font',  '-command', sub { $cw->set_font(); } ],
     ];
     $menubar->cascade( -label => 'Options', -menuitems => $option_items );
 
