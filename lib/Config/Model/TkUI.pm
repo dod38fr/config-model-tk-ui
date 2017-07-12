@@ -1426,6 +1426,11 @@ in the hash element.
 
 =back
 
+=head2 Font size and big screens
+
+Font type and size can be adjusted using menu: "Options -> Font" menu. This setup is saved in file
+C<~/.cme/config/tkui.yml>.
+
 =head2 Search
 
 Hit C<Ctrl-F> or use menu C<< Edit -> Search >> to open a search widget at the bottom 
