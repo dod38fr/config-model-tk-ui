@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+1.364 2017-08-23
+
+    * fix font loading in TkUI (also gh #12)
+
 1.363 2017-07-12
 
   Improved functionality:
