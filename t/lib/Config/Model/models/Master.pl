@@ -47,6 +47,7 @@ use utf8;
 
     [
         name    => 'SlaveZ',
+        gist => 'Z:{Z} DX:{DX}',
         element => [
             [qw/Z/] => {
                 type       => 'leaf',
