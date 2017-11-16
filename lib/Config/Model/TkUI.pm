@@ -889,6 +889,10 @@ sub disp_hash {
             $tkt->setmode( $newpath => $eltmode );
         }
 
+        # update the node gist
+        my $gist = $elt_type =~ /node/ ? $elt->fetch_with_id($idx)->fetch_gist : '';
+        $tkt->itemCreate( $newpath, 2, -text => $gist );
+
         my $elt_loc = $node_loc;
         $elt_loc .= ' ' if $elt_loc;
 
