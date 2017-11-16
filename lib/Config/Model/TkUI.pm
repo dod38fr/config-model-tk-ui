@@ -30,7 +30,7 @@ use Tk::FontDialog;
 use Tk::Pod;
 use Tk::Pod::Text;    # for findpod
 
-use Config::Model 2.095; # Node::get_help_as_text
+use Config::Model 2.114; # Node::gist
 
 use Config::Model::Tk::LeafEditor;
 use Config::Model::Tk::CheckListEditor;
