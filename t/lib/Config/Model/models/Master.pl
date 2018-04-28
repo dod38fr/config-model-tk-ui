@@ -87,13 +87,15 @@ use utf8;
             },
             warp2 => {
                 type              => 'warped_node',
-                follow            => '! tree_macro',
                 config_class_name => 'SubSlave',
                 morph             => 1,
-                rules             => [
-                    mXY => { config_class_name => 'SubSlave2' },
-                    XZ  => { config_class_name => 'SubSlave2' }
-                ]
+                warp => {
+                    follow            => '! tree_macro',
+                    rules             => [
+                        mXY => { config_class_name => 'SubSlave2' },
+                        XZ  => { config_class_name => 'SubSlave2' }
+                    ]
+                },
             },
             Y => {
                 type       => 'leaf',
@@ -129,14 +131,13 @@ beautiful
 things.
 ",
         level        => [ [qw/lista hash_a tree_macro int_v/] => 'important' ],
-        write_config => [
-            {
-                backend     => 'cds_file',
-                config_dir  => '/foo',
-                auto_create => 1
-            },
-        ],
-        accept => [ 
+        rw_config => {
+            backend     => 'cds_file',
+            config_dir  => '/foo',
+            file        => 'a_test.cds',
+            auto_create => 1
+        },
+        accept => [
             'foo.*' => { type => 'leaf', value_type => 'uniline'}
         ],
         element => [
@@ -155,7 +156,7 @@ things.
                 level => 'hidden',
                 value_type => 'uniline',
                 default    => 'yada yada',
-                warp => {  
+                warp => {
                     follow            => '! tree_macro',
                     rules             => [
                         XZ => { level => 'normal' },
@@ -230,7 +231,7 @@ things.
                     choice     => [qw/A B C/],
                 }
             },
-            
+
             "list_with_warn_duplicates" => { 
                 type => 'list', 
                 duplicates => 'warn' , 
@@ -244,15 +245,16 @@ things.
             },
            warp => {
                 type              => 'warped_node',
-                follow            => '! tree_macro',
                 config_class_name => 'SlaveY',
                 morph             => 1,
-                rules             => [
-
-                    #XY => { config_class_name => 'SlaveY'},
-                    mXY => { config_class_name => 'SlaveY' },
-                    XZ  => { config_class_name => 'SlaveZ' }
-                ]
+                warp => {
+                    follow            => '! tree_macro',
+                    rules             => [
+                        #XY => { config_class_name => 'SlaveY'},
+                        mXY => { config_class_name => 'SlaveY' },
+                        XZ  => { config_class_name => 'SlaveZ' }
+                    ]
+                }
             },
 
             'slave_y' => {
