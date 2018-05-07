@@ -1,9 +1,10 @@
 #!/usr/bin/perl
 
-# example contributed by 
-# (c) 2009 Alexander Becker <asb_ehb at yahoo.de> 
-# Adapted to Unix and streamlined by
+# (c) 2009 Alexander Becker <asb_ehb at yahoo.de>
 # (c) 2009 Dominique Dumont <ddumont at cpan.org>
+
+# example contributed by Alexander Becker
+# Adapted to Unix and streamlined by Dominique Dumont
 
 # See https://rt.cpan.org/Ticket/Display.html?id=49999
 
