@@ -169,7 +169,7 @@ sub prepare_wizard {
     $edf->Button(
         -text    => 'OK',
         -font => $cw->{font},
-        -command => sub { $cw->start_wizard($stop_on_warn) }
+        -command => sub { $cw->start_wizard(stop_on_warning => $stop_on_warn) }
     )->pack(qw/-side right -anchor e/);
 
     $edf->Button(
