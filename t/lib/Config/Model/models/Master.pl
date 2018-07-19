@@ -6,6 +6,7 @@ use utf8;
 [
     [
         name    => 'SubSlave2',
+        gist => 'subslave2 with aa2:{aa2}',
         element => [
             [qw/aa2 ab2 ac2 ad2 Z/] => {
                 type       => 'leaf',
@@ -16,6 +17,7 @@ use utf8;
 
     [
         name    => 'SubSlave',
+        gist => 'subslave with aa:{aa}',
         element => [
             [qw/aa ab ac ad/] => {
                 type       => 'leaf',
@@ -30,6 +32,7 @@ use utf8;
 
     [
         name    => 'X_base_class2',
+        gist => 'x_base_class2 with X:{X}',
         element => [
             X => {
                 type       => 'leaf',
@@ -42,12 +45,13 @@ use utf8;
 
     [
         name    => 'X_base_class',
+        gist => 'x_base_class with X:{X}',
         include => 'X_base_class2',
     ],
 
     [
         name    => 'SlaveZ',
-        gist => 'Z:{Z} DX:{DX}',
+        gist => 'SlaveZ Z:{Z} DX:{DX}',
         element => [
             [qw/Z/] => {
                 type       => 'leaf',
@@ -67,6 +71,7 @@ use utf8;
 
     [
         name    => 'SlaveY',
+        gist => 'slaveY with Y:{Y}',
         element => [
             std_id => {
                 type       => 'hash',
@@ -137,6 +142,7 @@ things.
             file        => 'a_test.cds',
             auto_create => 1
         },
+        gist => 'M tree_macro:{tree_macro}',
         accept => [
             'foo.*' => { type => 'leaf', value_type => 'uniline'}
         ],
