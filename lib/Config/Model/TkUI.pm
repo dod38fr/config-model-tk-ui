@@ -598,12 +598,15 @@ sub reload {
 
     my $new_drawing = not $tree->infoExists($instance_name);
 
-    my $sub =
-        sub { $cw->{scanner}->scan_node( [ $instance_name, $cw, @_ ], $cw->{root} ); };
+    my $sub = sub {
+        $tree->itemConfigure($instance_name, 2, -text => $cw->{root}->fetch_gist);
+        $cw->{scanner}->scan_node( [ $instance_name, $cw, @_ ], $cw->{root} );
+    };
 
     if ($new_drawing) {
         $tree->add( $instance_name, -data => [ $sub, $cw->{root} ] );
         $tree->itemCreate( $instance_name, 0, -text => $instance_name, );
+        $tree->itemCreate( $instance_name, 2, -text => '' );
         $tree->setmode( $instance_name, 'close' );
         $tree->open($instance_name);
     }
@@ -781,6 +784,11 @@ sub disp_obj_elt {
         $cw->setmode( 'node', $newpath, $eltmode, $elt_loc, $fd_path, $opening, $scan_sub );
 
         my $obj = $node->fetch_element($elt);
+
+        if ($elt_type =~ 'node') {
+            $tkt->itemCreate( $newpath, 2, -text => $obj->fetch_gist );
+        }
+
         if ( $elt_type eq 'hash' ) {
             $cw->update_hash_image( $obj, $newpath );
         }
