@@ -22,7 +22,7 @@ sub test_all {
 
 my ($model, $trace, $args) = init_test('show');
 
-note("You can play with the widget if you run the test with 's' argument");
+note("You can play with the widget if you run this test with '--show' option");
 
 my $wr_root = setup_test_dir;
 my $cmu ;
