@@ -91,16 +91,9 @@ sub set_value_help {
     my $cw  = shift;
     my @set = @_;
 
-    my $w = $cw->{value_help_widget};
-    $w->delete( '0.0', 'end' );
+    my @help = grep {defined $_ } map { $cw->{leaf}->get_help($_) } @set ;
 
-    # in pod text, =encoding must be specified only once
-    $w->insert( 'end', "=encoding utf8\n\n");
-
-    foreach my $v (@set) {
-        my $value_help = $cw->{leaf}->get_help($v);
-        $w->insert( 'end', "$v: " . $value_help . "\n" ) if defined $value_help;
-    }
+    $cw->update_help($cw->{value_help_widget}, join("\n\n", @help));
 }
 
 sub get_info {
