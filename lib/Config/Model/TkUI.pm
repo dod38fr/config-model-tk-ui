@@ -811,9 +811,10 @@ sub show_single_list_value {
 
     # leave alone element that is not a list of leaf
     return unless $elt_type eq 'list' and $obj->get_cargo_type eq 'leaf';
+    my $size = $obj->fetch_size;
 
-    $logger->trace("show_single_list_value called on ", $obj->location);
-    if ($obj->fetch_size == 1 and $show) {
+    $logger->trace("show_single_list_value called on ", $obj->location, " show is $show, size is $size" );
+    if ($size == 1 and $show) {
         disp_leaf(undef,[ $path, $cw ], $obj->parent, $obj->element_name, 0, $obj->fetch_with_id(0));
     }
     else {
