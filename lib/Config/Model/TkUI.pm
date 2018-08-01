@@ -21,6 +21,7 @@ use Pod::POM::View::Text;
 
 use Tk::DoubleClick;
 
+use Tk::Balloon;
 use Tk::Photo;
 use Tk::PNG;    # required for Tk::Photo to be able to load pngs
 use Tk::DialogBox;
@@ -124,8 +125,11 @@ sub Populate {
 
         # snatched from openclipart-png
         $tool_img            = $cw->Photo( -file => $icon_path . 'tools_nicu_buculei_01.png' );
-        $gnome_img{next}     = $cw->Photo( -file => $icon_path . 'gnome-next.png' );
-        $gnome_img{previous} = $cw->Photo( -file => $icon_path . 'gnome-previous.png' );
+
+
+        # snatched from gnome gnome-icon-theme package
+        map {$gnome_img{$_}     = $cw->Photo( -file => $icon_path . "gnome-$_.png"); }
+         qw/next previous window-close gtk-execute/;
     }
 
     foreach my $parm (qw/-root/) {
@@ -252,14 +256,29 @@ sub Populate {
         $cw->reload;
     };
 
-    $tree_frame->Button (-text => 'go', -command => $sub_filter)->pack(-side => 'right');
-    $tree_frame->Button (-text => 'clear', -command => $clear_filter)->pack(-side => 'right');
+    my $filter_go = $tree_frame->Button (
+        -image => $gnome_img{'gtk-execute'},
+        -command => $sub_filter,
+    );
+    $cw->Balloon(-state => 'balloon')->attach($filter_go, -msg => 'apply filter');
+    $filter_go->pack(-side => 'right');
+
+    my $filter_clear = $tree_frame->Button (
+        -image => $gnome_img{'window-close'},
+        -command => $clear_filter
+    );
+    $cw->Balloon(-state => 'balloon')->attach($filter_clear, -msg => 'clear filter');
+    $filter_clear->pack(-side => 'right');
     $tree_frame->Label(-text => 'filter elements',)->pack(-side => 'left');
 
     $cw->{elt_filter_value} = '';
     my $element_filter_w = $tree_frame->Entry(
         -textvariable => \$cw->{elt_filter_value},
     );
+    $cw->Balloon(-state => 'balloon')->attach(
+        $element_filter_w,
+        -msg => 'define a filter applied to element name. At least 3 character long.'
+            .' Can be a Perl regexp. Click on gear button to apply');
     $element_filter_w->pack(qw/-side right -fill x -expand 1/);
 
     # add adjuster
