@@ -230,20 +230,40 @@ sub Populate {
 
     # add bottom frame
     my $bottom_frame = $cw->Frame->pack(qw/-pady 0 -fill both -expand 1/);
+    my $tree_frame = $bottom_frame->Frame->pack(qw/-fill both -expand 1 -side left/);
 
     # create the widget for tree navigation
     require Tk::Tree;
-    my $tree = $bottom_frame->Scrolled(
+    my $tree = $tree_frame->Scrolled(
         qw/Tree/,
         -columns   => 4,
         -header    => 1,
         -opencmd   => sub { $cw->open_item(@_); },
         -closecmd  => sub { $cw->close_item(@_); },
-    )->pack(qw/-fill both -expand 1 -side left/);
+    )->pack(qw/-fill both -expand 1 -side bottom/);
+
     $cw->{tktree} = $tree;
 
+    my $sub_filter = sub {
+        $cw->reload;
+    };
+    my $clear_filter = sub {
+        $cw->{elt_filter_value} = '';
+        $cw->reload;
+    };
+
+    $tree_frame->Button (-text => 'go', -command => $sub_filter)->pack(-side => 'right');
+    $tree_frame->Button (-text => 'clear', -command => $clear_filter)->pack(-side => 'right');
+    $tree_frame->Label(-text => 'filter elements',)->pack(-side => 'left');
+
+    $cw->{elt_filter_value} = '';
+    my $element_filter_w = $tree_frame->Entry(
+        -textvariable => \$cw->{elt_filter_value},
+    );
+    $element_filter_w->pack(qw/-side right -fill x -expand 1/);
+
     # add adjuster
-    $bottom_frame->Adjuster()->packAfter( $tree, -side => 'left' );
+    $bottom_frame->Adjuster()->packAfter( $tree_frame, -side => 'left' );
 
     # add headers
     $tree->headerCreate( 0, -text => "element" );
@@ -726,10 +746,12 @@ sub disp_obj_elt {
     my ( $path,    $cw,       $opening, $fd_path )      = @$data_ref;
     my $tkt  = $cw->{tktree};
     my $mode = $tkt->getmode($path);
+    my $elt_filter = $cw->{elt_filter_value} ;
 
-    if ($cw->{show_only_custom} or $cw->{hide_empty_values}) {
+    if ($cw->{show_only_custom} or $cw->{hide_empty_values} or $elt_filter) {
         my @new_element_list;
         foreach my $elt ( @element_list ) {
+            next if length($elt_filter) > 2 and $elt !~ /$elt_filter/;
             my $obj = $node->fetch_element($elt);
             if ($cw->{show_only_custom}) {
                 push @new_element_list, $elt if $node->fetch_element($elt)->has_data;
@@ -743,6 +765,9 @@ sub disp_obj_elt {
                     : $elt_type eq 'check_list' ? $obj->fetch(mode => 'user')
                     :                             1 ;
                 push @new_element_list, $elt if $show;
+            }
+            else {
+                push @new_element_list, $elt;
             }
         }
         @element_list = @new_element_list;
@@ -941,6 +966,7 @@ sub setmode {
     my $tkt = $cw->{tktree};
 
     my $force_open = ( $fd_path and index( $fd_path, $elt_loc ) == 0 ) ? 1 : 0;
+    $force_open ||= length($cw->{elt_filter_value}) > 2 ? 1 : 0 ;
     my $force_match = ( $fd_path and $fd_path eq $elt_loc ) ? 1 : 0;
 
     $logger->trace( "$type: elt_loc '$elt_loc', opening $opening "
