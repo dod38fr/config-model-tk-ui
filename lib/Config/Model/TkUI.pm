@@ -727,7 +727,14 @@ sub reload {
     $logger->trace( "reloading tk tree"
             . ( defined $force_display_path ? " (force display $force_display_path)" : '' ) );
 
-    my $actions = $cw->apply_filter($force_display_path);
+    my $actions = {};
+    # eval is required to trap bad regexp entered in filter widget
+    $actions = eval { $cw->apply_filter($force_display_path); };
+    if ($@) {
+        my $msg = $@;
+        $msg =~ s/at lib.*//s; # remove file from error message
+        $cw->show_message("filter error: $msg");
+    }
 
     my $tree = $cw->{tktree};
 
