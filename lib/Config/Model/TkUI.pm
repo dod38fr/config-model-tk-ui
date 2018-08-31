@@ -754,7 +754,7 @@ sub reload {
     my $sub = sub {
         my $opening = shift ;
         $tree->itemConfigure($instance_name, 2, -text => $cw->{root}->fetch_gist);
-        $cw->{scanner}->scan_node( [ $instance_name, $cw, $opening, $force_display_path, $actions ], $cw->{root} );
+        $cw->{scanner}->scan_node( [ $instance_name, $cw, $opening, undef, $actions ], $cw->{root} );
     };
 
     if ($new_drawing) {
