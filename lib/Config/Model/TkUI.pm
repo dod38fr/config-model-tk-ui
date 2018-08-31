@@ -626,6 +626,10 @@ sub show_changes {
 sub apply_filter {
     my ($cw, $fd_path) = @_;
 
+    # fd_path: force display path. The show action must be set in the
+    # call back so that the 'show' action can be propagated from the
+    # shown leaf up to the root of the tree.
+
     my $elt_filter = $cw->{elt_filter_value} ;
 
     # 'show' trumps 'hide' which trumps ''
@@ -646,6 +650,7 @@ sub apply_filter {
             my $v = $leaf_object->fetch(qw/mode user check no/);
             $action = 'hide' unless (defined $v and length($v));
         }
+        $action = 'show' if $loc eq $fd_path;
         $data_ref->{return} = $data_ref->{actions}{$loc} = $action ;
     };
 
@@ -656,6 +661,7 @@ sub apply_filter {
         if ( $cw->{hide_empty_values} ) {
              $action = 'hide' unless $obj->fetch(mode => 'user');
         }
+        $action = 'show' if $loc eq $fd_path;
         $data_ref->{return} = $data_ref->{actions}{$loc} = $action ;
     };
 
@@ -676,6 +682,7 @@ sub apply_filter {
             $scanner->scan_hash($inner_ref, $node, $element_name, $_);
             $hash_action = $combine_hash{$hash_action}{$inner_ref->{return}};
         } @keys ;
+        $hash_action = 'show' if $loc eq $fd_path;
         $data_ref->{return} = $data_ref->{actions}{$loc} = $hash_action;
     };
 
@@ -702,6 +709,9 @@ sub apply_filter {
             $data_ref->{actions}{$loc} = $action;
             $node_action = $combine_hash{$node_action}{$action};
         }
+
+        $node_action = 'show' if $node_loc eq $fd_path;
+
         $data_ref->{return} = $data_ref->{actions}{$node_loc} = $node_action;
     };
 
@@ -713,7 +723,6 @@ sub apply_filter {
     ) ;
 
     my %force_display_path = ();
-    $force_display_path{actions}{$fd_path} = 'show' if $fd_path;
     $scan->scan_node(\%force_display_path, $cw->{root}) ;
 
     return $force_display_path{actions};
