@@ -754,7 +754,7 @@ sub reload {
     my $sub = sub {
         my $opening = shift ;
         $tree->itemConfigure($instance_name, 2, -text => $cw->{root}->fetch_gist);
-        $cw->{scanner}->scan_node( [ $instance_name, $cw, $opening, undef, $actions ], $cw->{root} );
+        $cw->{scanner}->scan_node( [ $instance_name, $cw, $opening, $actions ], $cw->{root} );
     };
 
     if ($new_drawing) {
@@ -877,7 +877,7 @@ my %elt_mode = (
 
 sub disp_obj_elt {
     my ( $scanner, $data_ref, $node,    @orig_element_list ) = @_;
-    my ( $path,    $cw,       $opening, $fd_path, $actions )      = @$data_ref;
+    my ( $path,    $cw,       $opening, $actions )      = @$data_ref;
     my $tkt  = $cw->{tktree};
     my $mode = $tkt->getmode($path);
     my $elt_filter = $cw->{elt_filter_value} ;
@@ -902,7 +902,7 @@ sub disp_obj_elt {
     foreach my $elt (@element_list) {
         my $newpath  = "$path." . to_path($elt);
         my $scan_sub = sub {
-            $scanner->scan_element( [ $newpath, $cw,  $opening, $fd_path, $actions ], $node, $elt );
+            $scanner->scan_element( [ $newpath, $cw,  $opening, $actions ], $node, $elt );
         };
         my @data = ( $scan_sub, $node->fetch_element($elt) );
 
@@ -927,7 +927,7 @@ sub disp_obj_elt {
 
         my $elt_loc = $node_loc ? $node_loc . ' ' . $elt : $elt;
 
-        $cw->setmode( 'node', $newpath, $eltmode, $elt_loc, $opening, $fd_path, $actions, $scan_sub );
+        $cw->setmode( 'node', $newpath, $eltmode, $elt_loc, $opening, $actions, $scan_sub );
 
         my $obj = $node->fetch_element($elt);
 
@@ -970,7 +970,7 @@ sub show_single_list_value {
 
 sub disp_hash {
     my ( $scanner, $data_ref, $node, $element_name, @idx ) = @_;
-    my ( $path, $cw, $opening, $fd_path, $actions ) = @$data_ref;
+    my ( $path, $cw, $opening, $actions ) = @$data_ref;
     my $tkt  = $cw->{tktree};
     my $mode = $tkt->getmode($path);
     $logger->trace("disp_hash    path is $path  mode $mode (@idx)");
@@ -997,7 +997,7 @@ sub disp_hash {
     foreach my $idx (@idx) {
         my $newpath  = $path . '.' . to_path($idx);
         my $scan_sub = sub {
-            $scanner->scan_hash( [ $newpath, $cw,  $opening, $fd_path, $actions ], $node, $element_name, $idx );
+            $scanner->scan_hash( [ $newpath, $cw,  $opening, $actions ], $node, $element_name, $idx );
         };
 
         my $eltmode = $elt_mode{$elt_type};
@@ -1052,11 +1052,11 @@ sub disp_hash {
         $elt_loc .= ' ' if $elt_loc;
 
         # need to keep regexp identical to the one from C::M::Anything:composite_name
-        # so that force_display_path (aka fd_path may work)
+        # so that force_display_path (aka force_display_path may work)
         $elt_loc .= $element_name . ':' . ( $idx =~ /\W/ ? '"' . $idx . '"' : $idx );
 
         # hide new entry if hash is not yet opened
-        $cw->setmode( 'hash', $newpath, $eltmode, $elt_loc, $opening, $fd_path, $actions, $scan_sub );
+        $cw->setmode( 'hash', $newpath, $eltmode, $elt_loc, $opening, $actions, $scan_sub );
 
         $prevpath = $newpath;
     }
@@ -1082,18 +1082,15 @@ sub update_hash_image {
 }
 
 sub setmode {
-    my ( $cw, $type, $newpath, $eltmode, $elt_loc, $opening, $fd_path, $actions, $scan_sub ) = @_;
+    my ( $cw, $type, $newpath, $eltmode, $elt_loc, $opening, $actions, $scan_sub ) = @_;
     my $tkt = $cw->{tktree};
 
     $actions->{$elt_loc} //= '';
     my $force_open = $actions->{$elt_loc} eq 'show' ? 1 : 0;
     my $force_close = $actions->{$elt_loc} eq 'hide' ? 1 : 0;
-    my $force_match = ( $fd_path and $fd_path eq $elt_loc ) ? 1 : 0;
 
     $logger->trace( "$type: elt_loc '$elt_loc', opening $opening "
-            . "eltmode $eltmode force_open $force_open "
-            . ( $fd_path ? "on '$fd_path' " : '' )
-            . "force_match $force_match" );
+                        . "eltmode $eltmode force_open $force_open");
 
     if ( not $force_close and ($eltmode ne 'open' or $force_open or $opening )) {
         $tkt->show( -entry => $newpath );
@@ -1107,14 +1104,7 @@ sub setmode {
 
     # counterintuitive but right: scan will be done when the entry
     # is opened. mode can be open, close, none
-    $scan_sub->( $force_open, $fd_path ) if ( ( $eltmode ne 'open' ) or $force_open );
-
-    if ($force_match) {
-        $tkt->see($newpath);
-        $tkt->selectionSet($newpath);
-        $cw->update_loc_bar($newpath);
-        $cw->create_element_widget( 'edit', $newpath );
-    }
+    $scan_sub->( $force_open ) if ( ( $eltmode ne 'open' ) or $force_open );
 }
 
 sub trim_value {
@@ -1130,7 +1120,7 @@ sub trim_value {
 
 sub disp_check_list {
     my ( $scanner, $data_ref, $node, $element_name, $index, $leaf_object ) = @_;
-    my ( $path, $cw, $opening, $fd_path, $actions ) = @$data_ref;
+    my ( $path, $cw, $opening, $actions ) = @$data_ref;
     $logger->trace("disp_check_list    path is $path");
 
     my $value = $leaf_object->fetch;
@@ -1152,7 +1142,7 @@ sub disp_check_list {
 
 sub disp_leaf {
     my ( $scanner, $data_ref, $node, $element_name, $index, $leaf_object ) = @_;
-    my ( $path, $cw, $opening, $fd_path, $actions ) = @$data_ref;
+    my ( $path, $cw, $opening, $actions ) = @$data_ref;
     $logger->trace("disp_leaf    path is $path");
 
     my $std_v = $leaf_object->fetch(qw/mode standard check no silent 1/);
@@ -1189,7 +1179,7 @@ sub disp_leaf {
 
 sub disp_node {
     my ( $scanner, $data_ref, $node, $element_name, $key, $contained_node ) = @_;
-    my ( $path, $cw, $opening, $fd_path, $actions ) = @$data_ref;
+    my ( $path, $cw, $opening, $actions ) = @$data_ref;
     $logger->trace("disp_node    path is $path");
     my $curmode = $cw->{tktree}->getmode($path);
     $cw->{tktree}->setmode( $path, 'open' ) if $curmode eq 'none';
