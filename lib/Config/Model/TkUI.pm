@@ -703,6 +703,8 @@ sub apply_filter {
             }
             my $obj = $node->fetch_element($elt);
             my $loc = $obj->location;
+            # make sure that the hash ref stays attached to $data_ref
+            $data_ref->{actions} //= {};
             my $inner_ref = { actions => $data_ref->{actions} };
             $scanner->scan_element($inner_ref, $node,$elt);
             my $action = $combine_hash{$filter_action}{$inner_ref->{return}};
