@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+1.368 2018-10-25
+
+  Bug fixes:
+    * fix filter for hash elements
+    * require Config::Model 2.123
+
 1.367 2018-09-01
 
   Improvement:
