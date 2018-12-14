@@ -842,7 +842,7 @@ sub on_cut_buffer_dump {
     $cw->reload;
     $cw->create_element_widget($cw->{current_mode}, $tree_path);
     $cw->open_item($tree_path);
-    $cw->{tktree}->setmode( $tree_path => 'close' );
+    $cw->{tktree}->setmode( $tree_path => 'close' ) if $type eq 'list' or $type eq 'hash';
 }
 
 # replace dot in str by _|_
