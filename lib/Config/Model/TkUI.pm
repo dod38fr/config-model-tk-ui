@@ -797,11 +797,11 @@ sub on_select {
 }
 
 sub on_cut_buffer_dump {
-    my ( $cw, $tree_path ) = @_;
+    my ( $cw, $tree_path, $selection_for_test ) = @_;
     $cw->update_loc_bar($tree_path);
 
     # get cut buffer content, See Perl/Tk book p297
-    my $sel = eval { $cw->SelectionGet; };
+    my $sel = $selection_for_test // eval { $cw->SelectionGet; };
 
     return if $@;    # no selection
 
