@@ -806,26 +806,34 @@ sub on_cut_buffer_dump {
     return if $@;    # no selection
 
     my $obj = $cw->{tktree}->infoData($tree_path)->[1];
+    my $type = $obj->get_type;
 
-    if ( $obj->isa('Config::Model::Value') ) {
+    if ( $type eq "leaf" ) {
 
         # if leaf store content
         $obj->store( value => $sel, callback => sub { $cw->reload; } );
     }
-    elsif ( $obj->isa('Config::Model::HashId') ) {
+    elsif ( $type eq 'hash' ) {
 
         # if hash create keys
         my @keys = ( $sel =~ /\n/m ) ? split( /\n/, $sel ) : ($sel);
         map { $obj->fetch_with_id($_) } @keys;
     }
-    elsif ( $obj->isa('Config::Model::ListId') and $obj->get_cargo_type !~ /node/ ) {
-
-        # if array, push values
-        my @v =
-              ( $sel =~ /\n/m ) ? split( /\n/, $sel )
-            : ( $sel =~ /,/ )   ? split( /,/,  $sel )
-            :                     ($sel);
-        $obj->push(@v);
+    elsif ( $type eq 'list') {
+        if ( $obj->get_cargo_type =~ /node/ ) {
+            $cw->show_message("cannot paste on list of node");
+        }
+        else {
+            # if array, push values. Don't mix \n and , separators
+            my @v =
+                ( $sel =~ /\n/m ) ? split( /\n/, $sel )
+                : ( $sel =~ /,/ ) ? split( /,/,  $sel )
+                :                     ($sel);
+            $obj->push(@v);
+        }
+    }
+    else {
+        $cw->show_message("cannot paste on $type parameter");
     }
 
     # else ignore
