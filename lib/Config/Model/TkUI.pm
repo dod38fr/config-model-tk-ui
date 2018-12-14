@@ -1639,21 +1639,12 @@ See L<Config::Model home page|https://github.com/dod38fr/config-model/wiki>
 
 Or L<Author's blog|http://ddumont.wordpress.com> where you can find many post about L<Config::Model>.
 
-=item *
-
-Send a mail to Config::Model user mailing list: config-model-users at lists.sourceforge.net
-
 =back
 
 =head1 FEEDBACK and HELP wanted
 
 This project needs feedback from its users. Please send your
-feedbacks, comments and ideas to :
-
-  config-mode-users at lists.sourceforge.net
-
-
-This projects also needs help to improve its user interfaces:
+feedbacks, comments and ideas to the author.
 
 =over
 
@@ -1676,10 +1667,6 @@ Desktop
 
 =back
 
-If you want to help, please send a mail to:
-
-  config-mode-devel at lists.sourceforge.net
-
 =head1 SEE ALSO
 
 =over
@@ -1691,10 +1678,6 @@ L<Config::Model>, L<cme>
 =item *
 
 https://github.com/dod38fr/config-model-tkui/wiki
-
-=item *
-
-Config::Model mailing lists on http://sourceforge.net/mail/?group_id=155650
 
 =back
 
