@@ -546,11 +546,14 @@ sub save {
         }
 
         if ($@) {
-            $cw->Dialog(
+            my $answer = $cw->Dialog(
                 -title => 'Save error',
-                -text  => ref($@) ? $@->as_string : $@,
+                -text  => "Cannot save: " . (ref($@) ? $@->as_string : $@),
+                -buttons        => [ qw/quit cancel/ ],
+                -default_button => 'cancel',
             )->Show;
-            $cb->($@); # indicate failure
+            my $err = $@ ;
+            $cb->($err) if $answer eq 'quit'; # indicate failure
         }
         else {
             $cw->show_message("Save done ...");
