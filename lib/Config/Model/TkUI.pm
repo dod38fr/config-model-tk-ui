@@ -274,7 +274,7 @@ sub Populate {
     $cw->Balloon(-state => 'balloon')->attach(
         $element_filter_w,
         -msg => 'define a filter applied to element name. At least 3 character long.'
-            .' Can be a Perl regexp. Click on gear button to apply');
+            .' This can be a Perl regexp.');
     $element_filter_w->pack(qw/-side right -fill x -expand 1/);
     $element_filter_w->bind('<KeyRelease>', $reload_on_key);
 
