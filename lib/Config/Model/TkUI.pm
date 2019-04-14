@@ -759,7 +759,7 @@ sub reload {
     my $scan_root = sub {
         my $opening = shift ;
         $tree->itemConfigure($instance_name, 2, -text => $cw->{root}->fetch_gist);
-        $cw->{scanner}->scan_node( [ $instance_name, $cw, $opening, $actions ], $cw->{root} );
+        $cw->{scanner}->scan_node( [ $instance_name, $cw, $opening, $actions, $force_display_path ], $cw->{root} );
     };
 
     if ($new_drawing) {
@@ -890,7 +890,7 @@ my %elt_mode = (
 
 sub disp_obj_elt {
     my ( $scanner, $data_ref, $node,    @orig_element_list ) = @_;
-    my ( $path,    $cw,       $opening, $actions )      = @$data_ref;
+    my ( $path,    $cw,       $opening, $actions, $force_display_path ) = @$data_ref;
     my $tkt  = $cw->{tktree};
     my $mode = $tkt->getmode($path);
     my $elt_filter = $cw->{elt_filter_value} ;
@@ -915,7 +915,7 @@ sub disp_obj_elt {
     foreach my $elt (@element_list) {
         my $newpath  = "$path." . to_path($elt);
         my $scan_sub = sub {
-            $scanner->scan_element( [ $newpath, $cw,  $opening, $actions ], $node, $elt );
+            $scanner->scan_element( [ $newpath, $cw,  $opening, $actions, $force_display_path ], $node, $elt );
         };
         my @data = ( $scan_sub, $node->fetch_element($elt) );
 
@@ -983,7 +983,7 @@ sub show_single_list_value {
 
 sub disp_hash {
     my ( $scanner, $data_ref, $node, $element_name, @idx ) = @_;
-    my ( $path, $cw, $opening, $actions ) = @$data_ref;
+    my ( $path, $cw, $opening, $actions, $force_display_path ) = @$data_ref;
     my $tkt  = $cw->{tktree};
     my $mode = $tkt->getmode($path);
     $logger->trace("disp_hash    path is $path  mode $mode (@idx)");
@@ -1010,7 +1010,10 @@ sub disp_hash {
     foreach my $idx (@idx) {
         my $newpath  = $path . '.' . to_path($idx);
         my $scan_sub = sub {
-            $scanner->scan_hash( [ $newpath, $cw,  $opening, $actions ], $node, $element_name, $idx );
+            $scanner->scan_hash(
+                [ $newpath, $cw,  $opening, $actions, $force_display_path ],
+                $node, $element_name, $idx
+            );
         };
 
         my $eltmode = $elt_mode{$elt_type};
