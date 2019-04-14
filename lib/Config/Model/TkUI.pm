@@ -772,8 +772,6 @@ sub reload {
 
     # the first parameter indicates that we are opening the root
     $scan_root->( 1 );
-    $tree->see($force_display_path)
-        if ( $force_display_path and $tree->info( exists => $force_display_path ) );
     $cw->{editor}->reload if defined $cw->{editor};
 }
 
@@ -959,8 +957,22 @@ sub disp_obj_elt {
 
         $cw->show_single_list_value ($tkt, $obj, $newpath,  $tkt->getmode($newpath) eq 'open' ? 1 : 0);
 
+        if ( $force_display_path and $force_display_path eq $elt_loc ) {
+            $cw->force_display($newpath, $elt_loc);
+        }
+
         $prevpath = $newpath;
     }
+}
+
+sub force_display {
+    my ($cw, $path, $loc) = @_;
+    $logger->debug("force_display called on $path, location $loc");
+    my $tree = $cw->{tktree};
+    $tree->see($path);
+    $tree->selectionClear();
+    $tree->selectionSet($path, $path);
+    $cw->{location} = $loc;
 }
 
 # show a list like a leaf value when the list contains *one* item
@@ -1068,6 +1080,10 @@ sub disp_hash {
 
         # hide new entry if hash is not yet opened
         $cw->setmode( 'hash', $newpath, $eltmode, $elt_loc, $opening, $actions, $scan_sub );
+
+        if ( $force_display_path and $force_display_path eq $elt_loc ) {
+            $cw->force_display($newpath, $elt_loc)
+        }
 
         $prevpath = $newpath;
     }
