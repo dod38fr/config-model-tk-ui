@@ -1494,7 +1494,11 @@ sub find_item {
     my $find_frame = $cw->Subwidget('find_frame');
 
     # search the tree, store the result
-    @$result = $searcher->search($$search_ref) unless @$result;
+    if (not @$result) {
+        $logger->debug("Running search on $$search_ref");
+        @$result = $searcher->search($$search_ref);
+        $logger->trace("Search on $$search_ref result: @$result");
+    }
 
     # and jump in the list widget any time next is hit.
     if (@$result) {
