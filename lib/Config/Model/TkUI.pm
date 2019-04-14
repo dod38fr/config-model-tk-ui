@@ -1061,12 +1061,7 @@ sub disp_hash {
         my $gist = $elt_type =~ /node/ ? $elt->fetch_with_id($idx)->fetch_gist : '';
         $tkt->itemCreate( $newpath, 2, -text => $gist );
 
-        my $elt_loc = $node_loc;
-        $elt_loc .= ' ' if $elt_loc;
-
-        # need to keep regexp identical to the one from C::M::Anything:composite_name
-        # so that force_display_path (aka force_display_path may work)
-        $elt_loc .= $element_name . ':' . ( $idx =~ /\W/ ? '"' . $idx . '"' : $idx );
+        my $elt_loc = $sub_elt->location;
 
         # hide new entry if hash is not yet opened
         $cw->setmode( 'hash', $newpath, $eltmode, $elt_loc, $opening, $actions, $scan_sub );
