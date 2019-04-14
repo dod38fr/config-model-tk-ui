@@ -756,14 +756,14 @@ sub reload {
 
     my $new_drawing = not $tree->infoExists($instance_name);
 
-    my $sub = sub {
+    my $scan_root = sub {
         my $opening = shift ;
         $tree->itemConfigure($instance_name, 2, -text => $cw->{root}->fetch_gist);
         $cw->{scanner}->scan_node( [ $instance_name, $cw, $opening, $actions ], $cw->{root} );
     };
 
     if ($new_drawing) {
-        $tree->add( $instance_name, -data => [ $sub, $cw->{root} ] );
+        $tree->add( $instance_name, -data => [ $scan_root, $cw->{root} ] );
         $tree->itemCreate( $instance_name, 0, -text => $instance_name, );
         $tree->itemCreate( $instance_name, 2, -text => '' );
         $tree->setmode( $instance_name, 'close' );
@@ -771,7 +771,7 @@ sub reload {
     }
 
     # the first parameter indicates that we are opening the root
-    $sub->( 1 );
+    $scan_root->( 1 );
     $tree->see($force_display_path)
         if ( $force_display_path and $tree->info( exists => $force_display_path ) );
     $cw->{editor}->reload if defined $cw->{editor};
