@@ -1128,6 +1128,9 @@ sub setmode {
         # counter-intuitive: want to display [-] if force opening and not leaf item
         $tkt->setmode( $newpath => 'close' ) if ( $force_open and $eltmode ne 'none' );
     }
+    elsif ($force_close) {
+        $tkt->hide( -entry => $newpath );
+    }
     else {
         $tkt->close($newpath);
     }
