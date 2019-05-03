@@ -1139,7 +1139,9 @@ sub trim_value {
     my $cw    = shift;
     my $value = shift;
 
-    return undef unless defined $value;
+    # undef value required lest Tk dies with:
+    # value for "-text" missing at /usr/lib/x86_64-linux-gnu/perl5/5.28/Tk.pm line 251
+    return undef unless defined $value; ## no critic(Subroutines::ProhibitExplicitReturnUndef)
 
     $value =~ s/\n/ /g;
     $value = substr( $value, 0, 15 ) . '...' if length($value) > 15;
