@@ -673,13 +673,8 @@ sub apply_filter {
         my $obj = $node->fetch_element($element_name);
         my $loc = $obj->location;
 
-        # custom code using $data_ref
-        if ($cw->{hide_empty_values}) {
-            $data_ref->{actions}{$loc} //= 'hide' unless $obj->has_data;
-        }
-
         # resume exploration
-        my $hash_action = '';
+        my $hash_action = $cw->{hide_empty_values} ? 'hide' : '';
         map {
             my $inner_ref = { actions => $data_ref->{actions} };
             $scanner->scan_hash($inner_ref, $node, $element_name, $_);
@@ -693,7 +688,7 @@ sub apply_filter {
         my ($scanner, $data_ref,$node, @element_list) = @_ ;
         my $node_loc = $node->location;
 
-        my $node_action = '';
+        my $node_action = $cw->{hide_empty_values} ? 'hide' : '';
         foreach my $elt ( @element_list ) {
             my $filter_action = '';
             if (length($elt_filter) > 2) {
