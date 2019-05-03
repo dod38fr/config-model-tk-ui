@@ -960,6 +960,9 @@ sub disp_obj_elt {
         if ( $force_display_path and $force_display_path eq $elt_loc ) {
             $cw->force_display($newpath, $elt_loc);
         }
+        if (not $force_display_path and $cw->{location} eq $elt_loc) {
+            $cw->force_display($newpath, $elt_loc);
+        }
 
         $prevpath = $newpath;
     }
