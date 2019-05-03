@@ -11,6 +11,7 @@ use subs qw/menu_struct/;
 use Tk::Dialog;
 use Tk::Photo;
 use Tk::Balloon;
+use List::MoreUtils qw/apply/;
 use Config::Model::Tk::NoteEditor;
 
 Construct Tk::Widget 'ConfigModelHashEditor';
@@ -241,16 +242,14 @@ sub reset_value {
 sub insert {
     my $cw = shift ;
     my $where = shift ;
-    my @what = map { s/\n/\\n/g; $_; }
-        #map { $hash->shorten_idx($_); }
-        @_ ;
+    my @what = apply { s/\n/\\n/g; $_; } @_ ;
     $cw->Subwidget('tklist')->insert($where => @what);
 }
 
 # this function (not a method) restore the LF in a multi line key
 # (reverse the operation done above
 sub restore_keys {
-    return map { s/\\n/\n/g; $_; } @_ ;
+    return apply { s/\\n/\n/g; $_; } @_ ;
 }
 
 sub remove_all_elements {
