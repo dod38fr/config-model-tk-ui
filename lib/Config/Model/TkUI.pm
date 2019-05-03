@@ -649,9 +649,9 @@ sub apply_filter {
         if ( $cw->{show_only_custom} ) {
             $action = $leaf_object->has_data ? 'show' : 'hide';
         }
-        elsif ( $cw->{hide_empty_values} ) {
-            my $v = $leaf_object->fetch(qw/mode user check no/);
-            $action = 'hide' unless (defined $v and length($v));
+        if ( $cw->{hide_empty_values} ) {
+            my $v = $leaf_object->fetch(qw/ check no/);
+            $action = (defined $v and length($v)) ? 'show' : 'hide';
         }
         $action = 'show' if $loc eq $fd_path;
         $data_ref->{return} = $data_ref->{actions}{$loc} = $action ;
