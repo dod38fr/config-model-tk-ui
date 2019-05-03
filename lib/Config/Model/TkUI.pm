@@ -647,7 +647,7 @@ sub apply_filter {
         my $loc = $leaf_object->location;
         my $action = '';
         if ( $cw->{show_only_custom} ) {
-             $action = 'show' if $leaf_object->has_data ;
+            $action = $leaf_object->has_data ? 'show' : 'hide';
         }
         elsif ( $cw->{hide_empty_values} ) {
             my $v = $leaf_object->fetch(qw/mode user check no/);
