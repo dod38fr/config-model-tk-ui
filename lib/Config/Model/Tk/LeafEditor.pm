@@ -336,7 +336,7 @@ sub exec_external_editor {
     die "IO::Handle->new failed." unless defined $h;
 
     my $ed = $ENV{EDITOR} . ' ' . $pt->canonpath;
-    $cw->{ed_pid} = open $h, $ed . ' 2>&1 |';
+    $cw->{ed_pid} = open( $h, '|-', $ed );
 
     if ( not defined $cw->{ed_pid} ) {
         $cw->Dialog(
