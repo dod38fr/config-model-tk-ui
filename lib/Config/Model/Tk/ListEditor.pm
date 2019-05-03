@@ -178,7 +178,6 @@ sub reset_value {
           $cargo_type eq 'leaf'
         ? $list->fetch_all_values( check => 'no' )
         : $list->fetch_all_indexes;
-    map { $_ = '<undef>' unless defined $_ } @insert;
     $cw->{tklist}->insert( end => @insert );
 
     return ( $cargo_type, \@insert );
