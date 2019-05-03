@@ -487,14 +487,8 @@ sub remove_selection {
     $cw->{store_cb}->();
 
     # redraw the list content
-    $tklist->delete( 0, 'end' );
-    my $cargo_type = $list->cargo_type;
-    my @insert =
-          $cargo_type eq 'leaf'
-        ? $list->fetch_all_values( check => 'no' )
-        : $list->fetch_all_indexes;
-    map { $_ = '<undef>' unless defined $_ } @insert;
-    $tklist->insert( end => @insert );
+    $cw->reset_value;
+
     $cw->update_warning($list);
 }
 
