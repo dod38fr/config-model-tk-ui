@@ -132,12 +132,13 @@ sub Populate {
          qw/next previous window-close gtk-execute/;
     }
 
-    foreach my $parm (qw/-root/) {
-        my $attr = $parm;
-        $attr =~ s/^-//;
-        $cw->{$attr} = delete $args->{$parm}
-            or croak "Missing $parm arg\n";
+    if ($args->{-root}) {
+        carp "TkUI: -root parameter is deprecated in favor of -instance";
+        my $root = delete $args->{-root};
+        $cw->{instance} = $root->instance;
     }
+
+    $cw->{instance} //= delete $args->{-instance};
 
     foreach my $parm (qw/-store_sub -quit/) {
         my $attr = $parm;
@@ -148,7 +149,7 @@ sub Populate {
     my $extra_menu = delete $args->{'-extra-menu'} || [];
 
     my $title = delete $args->{'-title'}
-        || $0 . " " . $cw->{root}->config_class_name;
+        || $0 . " " . $cw->{instance}->config_root->config_class_name;
 
     # check unknown parameters
     croak "Unknown parameter ", join( ' ', keys %$args ) if %$args;
@@ -181,7 +182,7 @@ sub Populate {
             command  => 'debug ...',
             -command => sub {
                 require Tk::ObjScanner;
-                Tk::ObjScanner::scan_object( $cw->{root} );
+                Tk::ObjScanner::scan_object( $cw->{instance}->config_root );
                 }
         ],
         [ command => 'quit (Ctrl-q)', -command => sub { $cw->quit } ],
@@ -436,7 +437,7 @@ sub add_help_menu {
         $db->Show;
     };
 
-    my $class   = $cw->{root}->config_class_name;
+    my $class   = $cw->{instance}->config_root->config_class_name;
     my $man_sub = sub {
         $cw->Pod(
             -tree       => 0,
@@ -542,7 +543,7 @@ sub save {
         }
         else {
             $logger->info("Saving data in $trace_dir directory with instance write_back");
-            eval { $cw->{root}->instance->write_back(@wb_args); };
+            eval { $cw->{instance}->write_back(@wb_args); };
         }
 
         if ($@) {
@@ -572,7 +573,7 @@ sub quit {
     my $cw = shift;
     my $text = shift || "Save data ?";
 
-    if ( $cw->{root}->instance->needs_save ) {
+    if ( $cw->{instance}->needs_save ) {
         my $answer = $cw->Dialog(
             -title          => "quit",
             -text           => $text,
@@ -613,7 +614,7 @@ sub show_changes {
     my $cw = shift;
     my $cb = shift;
 
-    my $changes       = $cw->{root}->instance->list_changes;
+    my $changes       = $cw->{instance}->list_changes;
     my $change_widget = $cw->Toplevel;
     $change_widget->Scrolled('ROText')->pack( -expand => 1, -fill => 'both' )
         ->insert( '1.0', $changes );
@@ -723,7 +724,7 @@ sub apply_filter {
     ) ;
 
     my %force_display_path = ();
-    $scan->scan_node(\%force_display_path, $cw->{root}) ;
+    $scan->scan_node(\%force_display_path, $cw->{instance}->config_root) ;
 
     return $force_display_path{actions};
 }
@@ -747,18 +748,19 @@ sub reload {
 
     my $tree = $cw->{tktree};
 
-    my $instance_name = $cw->{root}->instance->name;
+    my $instance_name = $cw->{instance}->name;
+    my $root = $cw->{instance}->config_root;
 
     my $new_drawing = not $tree->infoExists($instance_name);
 
     my $scan_root = sub {
         my $opening = shift ;
-        $tree->itemConfigure($instance_name, 2, -text => $cw->{root}->fetch_gist);
-        $cw->{scanner}->scan_node( [ $instance_name, $cw, $opening, $actions, $force_display_path ], $cw->{root} );
+        $tree->itemConfigure($instance_name, 2, -text => $root->fetch_gist);
+        $cw->{scanner}->scan_node( [ $instance_name, $cw, $opening, $actions, $force_display_path ], $root );
     };
 
     if ($new_drawing) {
-        $tree->add( $instance_name, -data => [ $scan_root, $cw->{root} ] );
+        $tree->add( $instance_name, -data => [ $scan_root, $root ] );
         $tree->itemCreate( $instance_name, 0, -text => $instance_name, );
         $tree->itemCreate( $instance_name, 2, -text => '' );
         $tree->setmode( $instance_name, 'close' );
@@ -1299,7 +1301,7 @@ sub create_element_widget {
 
         #my $loc = $data_ref->[1]->location;
 
-        #$obj = $cw->{root}->grab($loc);
+        #$obj = $cw->{instance}->config_root->grab($loc);
     }
 
     my $loc  = $obj->location;
@@ -1429,7 +1431,7 @@ sub setup_wizard {
     # main widget
     my $tk_font = $cw->cget('-font');
     return $cw->ConfigModelWizard(
-        -root   => $cw->{root},
+        -root   => $cw->{instance}->config_root,
         -end_cb => $end_sub,
         -font => $tk_font,
     );
@@ -1453,7 +1455,7 @@ sub create_find_widget {
         -relief  => 'flat',
     )->pack( -side => 'left' );
 
-    my $searcher = $cw->{root}->tree_searcher( type => 'all' );
+    my $searcher = $cw->{instance}->config_root->tree_searcher( type => 'all' );
 
     my $search = '';
     my @result;
@@ -1514,7 +1516,7 @@ sub find_item {
         my $path = $result->[0];
         $cw->{old_path} = $path;
 
-        $cw->force_element_display( $cw->{root}->grab($path) );
+        $cw->force_element_display( $cw->{instance}->config_root->grab($path) );
     }
 }
 1;
@@ -1536,12 +1538,11 @@ Config::Model::TkUI - Tk GUI to edit config data through Config::Model
  my $model = Config::Model -> new ;
  my $inst = $model->instance (root_class_name => 'a_config_class',
                               instance_name   => 'test');
- my $root = $inst -> config_root ;
 
  # Tk part
  my $mw = MainWindow-> new ;
  $mw->withdraw ;
- $mw->ConfigModelUI (-root => $root) ;
+ $mw->ConfigModelUI (-instance => $inst) ;
 
  MainLoop ;
 
