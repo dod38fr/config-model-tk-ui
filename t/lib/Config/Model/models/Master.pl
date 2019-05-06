@@ -1,9 +1,11 @@
 # -*- cperl -*-
 use utf8;
+use strict;
+use warnings;
 
 # this file is used by test script
 
-[
+return [
     [
         name    => 'SubSlave2',
         gist => 'subslave2 with aa2:{aa2}',
