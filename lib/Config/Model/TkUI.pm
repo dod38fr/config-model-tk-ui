@@ -1215,15 +1215,15 @@ sub disp_leaf {
     my $value = $leaf_object->fetch( check => 'no', silent => 1 );
     my $tkt   = $cw->{tktree};
 
-    my ( $is_customised, $img, $has_error, $has_warning );
-    {
-        no warnings qw/uninitialized/;
-        $is_customised = !!( defined $value and ( $std_v ne $value ) );
-        $img         = $cust_img if $is_customised;
-        $has_warning = !!$leaf_object->warning_msg;
-        $img         = $warn_img if $has_warning;
-        $has_error   = !!$leaf_object->error_msg;
-        $img         = $error_img if $has_error;
+    my $img;
+    if (!!$leaf_object->error_msg) {
+        $img = $error_img;
+    }
+    elsif (!!$leaf_object->warning_msg) {
+        $img = $warn_img;
+    }
+    elsif ($leaf_object->has_data) {
+        $img = $cust_img;
     }
 
     if ( defined $img ) {
