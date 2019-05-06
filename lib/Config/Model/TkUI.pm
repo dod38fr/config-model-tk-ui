@@ -31,7 +31,7 @@ use Tk::FontDialog;
 use Tk::Pod;
 use Tk::Pod::Text;    # for findpod
 
-use Config::Model 2.123; # New style of backend
+use Config::Model 2.134; # reset config
 
 use Config::Model::Tk::LeafEditor;
 use Config::Model::Tk::CheckListEditor;
