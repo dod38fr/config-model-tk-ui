@@ -1197,7 +1197,7 @@ sub disp_check_list {
     my $std_v = $leaf_object->fetch('standard');
     $tkt->itemCreate( $path, 3, -text => $cw->trim_value($std_v) );
 
-    if ( $std_v ne $value ) {
+    if ( $leaf_object->has_data ) {
         $tkt->itemCreate( $path, 1, -itemtype => 'image', -image => $cust_img );
     }
     else {
