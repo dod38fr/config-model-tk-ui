@@ -168,7 +168,8 @@ sub Populate {
 
     my $file_items = [
         [ qw/command wizard -command/, sub { $cw->wizard } ],
-        [ qw/command reload -command/, sub { $cw->reload } ],
+        [ command => 'redraw tree', -command => sub { $cw->reload } ],
+        [ command => 'reload from file', -command => sub { $cw->ask_reset; } ],
         [ command => 'check for errors',     -command => sub { $cw->check(1) } ],
         [ command => 'check for warnings',   -command => sub { $cw->check( 1, 1 ) } ],
         [ command => 'show unsaved changes', -command => sub { $cw->show_changes; } ],
@@ -567,6 +568,40 @@ sub save {
     # use a short delay to let tk show the message above and then save
     $cw->after(100, $save_job) ;
 
+}
+
+sub ask_reset {
+    my $text = "Discard changes and reload from file ?";
+    my $cw = shift;
+
+    if ( $cw->{instance}->needs_save ) {
+        my $answer = $cw->Dialog(
+            -title          => "reload from file",
+            -text           => $text,
+            -buttons        => [ qw/yes cancel/, 'show changes' ],
+            -default_button => 'yes',
+        )->Show;
+
+        if ( $answer eq 'yes' ) {
+            $cw->do_reset;
+        }
+        elsif ( $answer =~ /show/ ) {
+            $cw->show_changes( sub { $cw->ask_reset } );
+        }
+    }
+    else {
+        $cw->do_reset;
+    }
+}
+
+sub do_reset {
+    my $cw = shift;
+    $cw->{instance}->reset_config;
+
+    # this line can be removed after Config::Model 2.135
+    $cw->{instance}->clear_changes;
+
+    $cw->reload;
 }
 
 sub quit {
