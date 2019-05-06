@@ -594,7 +594,6 @@ sub quit {
     else {
         $cw->self_destroy;
     }
-
 }
 
 
@@ -1199,9 +1198,9 @@ sub disp_leaf {
             -image    => $img
         );
     }
-    else {
-        # remove image when value is identical to standard value
-        $tkt->itemDelete( $path, 1 ) if $tkt->itemExists( $path, 1 );
+    elsif ($tkt->itemExists( $path, 1 )) {
+        # remove image
+        $tkt->itemDelete( $path, 1 ) ;
     }
 
     $tkt->itemCreate( $path, 2, -text => $cw->trim_value($value) );
