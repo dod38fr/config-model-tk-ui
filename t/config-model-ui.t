@@ -94,7 +94,7 @@ SKIP: {
 
     $mw->withdraw ;
 
-    $cmu = $mw->ConfigModelUI (-root => $root, ) ;
+    $cmu = $mw->ConfigModelUI (-instance => $inst ) ;
 
     my $delay = 200 ;
 
