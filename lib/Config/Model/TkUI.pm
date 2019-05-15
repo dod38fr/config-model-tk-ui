@@ -124,8 +124,7 @@ sub Populate {
         $warn_img = $cw->Photo( -file => $icon_path . 'dialog-warning.png' );
 
         # snatched from openclipart-png
-        $tool_img            = $cw->Photo( -file => $icon_path . 'tools_nicu_buculei_01.png' );
-
+        $tool_img = $cw->Photo( -file => $icon_path . 'tools_nicu_buculei_01.png' );
 
         # snatched from gnome gnome-icon-theme package
         map {$gnome_img{$_}     = $cw->Photo( -file => $icon_path . "gnome-$_.png"); }
