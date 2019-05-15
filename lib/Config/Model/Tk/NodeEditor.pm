@@ -172,7 +172,7 @@ sub fill_pane {
 
     # destroy leftover widgets (may occur with warp mechanism)
     foreach my $widget ( keys %is_elt_drawn) {
-        my $w = delete $cw->{elt_widgets}{$_};
+        my $w = delete $cw->{elt_widgets}{$widget};
         $w->destroy;
     }
 }
