@@ -74,7 +74,8 @@ sub Populate {
     # setup item help change when mouse hovers listbox items
     my $b_sub = sub {
         my $index = $lb->nearest($lb->pointery - $lb->rooty);
-        state $selected //= '';
+        state $selected;
+        $selected //= '';
         if ($selected ne $choice[$index]) {
             $selected = $choice[$index];
             $cw->set_value_help($selected);

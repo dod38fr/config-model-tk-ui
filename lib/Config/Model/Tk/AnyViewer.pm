@@ -215,7 +215,7 @@ sub update_warning {
     my $err = $elt_obj->error_msg || '';
     $ww->insert( 'end', $err, 'error' ) if $err;
 
-    my $msg .= $elt_obj->warning_msg || '';
+    my $msg = $elt_obj->warning_msg || '';
     if ( ref($msg) eq 'HASH' ) {
         $msg = join( '', map { join( "\n\t", @{ $msg->{$_} } ) } sort keys %$msg );
     }
