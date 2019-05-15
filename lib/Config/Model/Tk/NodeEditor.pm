@@ -89,8 +89,6 @@ sub fill_pane {
 
     my %is_elt_drawn = map { ( $_ => 1 ) } keys %{ $cw->{elt_widgets} || {} };
 
-    my %values;
-    my %modified;
     my $prev_elt;
     my $font = $cw->{my_font}; #cget('-font');
 

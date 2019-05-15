@@ -224,7 +224,6 @@ sub start_wizard {
         } );
     $forw->pack(qw/-side right -fill x -expand 1/);
 
-    my ( $sort_element, $sort_idx );
     $cw->{keep_wiz_editor} = 1;
 
     my %cb_table;

@@ -23,7 +23,7 @@ my $logger = Log::Log4perl::get_logger("Tk::HashEditor");
 
 my $entry_width = 15;
 
-my ( $up_img, $down_img, $add_img, $rm_img, $eraser_img, $remove_img, $rename_img, $copy_img );
+my ( $up_img, $down_img, $add_img, $eraser_img, $remove_img, $rename_img, $copy_img );
 *icon_path = *Config::Model::TkUI::icon_path;
 
 sub ClassInit {

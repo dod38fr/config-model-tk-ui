@@ -18,7 +18,7 @@ my @fxe1   = qw/-fill x    -expand 1/;
 my @fx     = qw/-fill    x /;
 my $logger = Log::Log4perl::get_logger("Tk::ListEditor");
 
-my ( $up_img, $down_img, $rm_img, $eraser_img, $remove_img, $sort_img );
+my ( $up_img, $down_img, $eraser_img, $remove_img, $sort_img );
 *icon_path = *Config::Model::TkUI::icon_path;
 
 my $entry_width = 20;

@@ -64,9 +64,6 @@ ok( $root->load( step => $step ), "set up data in tree");
 
 # use Tk::ObjScanner; Tk::ObjScanner::scan_object($root) ;
 
-my $toto ;
-
-
 # TBD eval this and skip test in case of failure.
 SKIP: {
 

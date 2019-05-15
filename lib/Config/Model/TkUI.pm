@@ -402,7 +402,6 @@ my $pom = $parser->parse_file(__FILE__)
     || die $parser->error();
 
 my $help_text;
-my $todo_text;
 my $info_text;
 foreach my $head1 ( $pom->head1() ) {
     $help_text = Pod::POM::View::Text->view_head1($head1)
