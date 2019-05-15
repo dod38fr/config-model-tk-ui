@@ -213,14 +213,14 @@ sub store {
     my %set = map { $_ => 1; } map { $choice[$_] } $lb->curselection;
     my $cl = $cw->{leaf};
 
-    map {
-        if ( $set{$_} and not $cl->is_checked($_) ) {
-            $cl->check($_);
+    foreach my $c (@choice) {
+        if ( $set{$c} and not $cl->is_checked($c) ) {
+            $cl->check($c);
         }
-        elsif ( not $set{$_} and $cl->is_checked($_) ) {
-            $cl->uncheck($_);
+        elsif ( not $set{$c} and $cl->is_checked($c) ) {
+            $cl->uncheck($c);
         }
-    } @choice;
+    }
 
     $cw->{store_cb}->();
 }

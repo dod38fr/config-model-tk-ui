@@ -102,7 +102,10 @@ sub Populate {
         $lb->insert( 'end', $leaf->get_choice );
         my $idx = 0;
         if ( defined $$vref ) {
-            map { $lb->selectionSet($idx) if $_ eq $$vref; $idx++ } @choice;
+            foreach my $c (@choice) {
+                $lb->selectionSet($idx) if $c eq $$vref;
+                $idx++;
+            }
         }
         $lb->bind( '<Button-1>', sub { $cw->try( $lb->get( $lb->curselection() ) ) } );
         $cw->add_buttons($ed_frame);
