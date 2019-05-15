@@ -1,6 +1,7 @@
 # -*- cperl -*-
 
 use strict;
+use warnings;
 use Test::More;
 use Test::Pod 1.00;
 
