@@ -1316,7 +1316,6 @@ sub create_element_widget {
     my $tree = $cw->{tktree};
 
     unless ( defined $tree_path ) {
-
         # pointery and rooty are common widget method and must called on
         # the right widget to give accurate results
         $tree_path = $tree->nearest( $tree->pointery - $tree->rooty );
@@ -1332,10 +1331,6 @@ sub create_element_widget {
         }
         $obj = $data_ref->[1];
         weaken($obj);
-
-        #my $loc = $data_ref->[1]->location;
-
-        #$obj = $cw->{instance}->config_root->grab($loc);
     }
 
     my $loc  = $obj->location;
