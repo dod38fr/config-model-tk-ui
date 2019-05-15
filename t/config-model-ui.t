@@ -192,7 +192,7 @@ SKIP: {
      (
          # test behavior when pasting data in tktree
          # the 3 first items show an error message in TkUI message widget (bottom of widget)
-         map {
+         map { ## no critic (ProhibitComplexMappings)
              my $elt = $_;
              sub {
                  $cmu->on_cut_buffer_dump("test1.$elt", "test cut buffer dump string");
