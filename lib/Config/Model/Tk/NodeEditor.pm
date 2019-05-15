@@ -171,7 +171,10 @@ sub fill_pane {
     }
 
     # destroy leftover widgets (may occur with warp mechanism)
-    map { my $w = delete $cw->{elt_widgets}{$_}; $w->destroy } keys %is_elt_drawn;
+    foreach my $widget ( keys %is_elt_drawn) {
+        my $w = delete $cw->{elt_widgets}{$_};
+        $w->destroy;
+    }
 }
 
 sub add_accept_entry {

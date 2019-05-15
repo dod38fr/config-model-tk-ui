@@ -127,8 +127,11 @@ sub Populate {
         $tool_img = $cw->Photo( -file => $icon_path . 'tools_nicu_buculei_01.png' );
 
         # snatched from gnome gnome-icon-theme package
-        map {$gnome_img{$_}     = $cw->Photo( -file => $icon_path . "gnome-$_.png"); }
-         qw/next previous window-close gtk-execute/;
+        foreach my $img_name (qw/next previous window-close gtk-execute/) {
+            $gnome_img{$img_name} = $cw->Photo(
+                -file => $icon_path . "gnome-$img_name.png"
+            );
+        }
     }
 
     if ($args->{-root}) {
@@ -708,11 +711,11 @@ sub apply_filter {
 
         # resume exploration
         my $hash_action = $cw->{hide_empty_values} ? 'hide' : '';
-        map {
+        foreach my $key (@keys) {
             my $inner_ref = { actions => $data_ref->{actions} };
-            $scanner->scan_hash($inner_ref, $node, $element_name, $_);
+            $scanner->scan_hash($inner_ref, $node, $element_name, $key);
             $hash_action = $combine_hash{$hash_action}{$inner_ref->{return}};
-        } @keys ;
+        }
         $hash_action = 'show' if $loc eq $fd_path;
         $data_ref->{return} = $data_ref->{actions}{$loc} = $hash_action;
     };
@@ -847,7 +850,9 @@ sub on_cut_buffer_dump {
 
         # if hash create keys
         my @keys = ( $sel =~ /\n/m ) ? split( /\n/, $sel ) : ($sel);
-        map { $obj->fetch_with_id($_) } @keys;
+        foreach my $key (@keys) {
+            $obj->fetch_with_id($key);
+        };
     }
     elsif ( $type eq 'list') {
         if ( $obj->get_cargo_type =~ /node/ ) {
@@ -1021,7 +1026,9 @@ sub show_single_list_value {
         disp_leaf(undef,[ $path, $cw ], $obj->parent, $obj->element_name, 0, $obj->fetch_with_id(0));
     }
     else {
-        map {$tkt->itemDelete( $path, $_ ) if $tkt->itemExists($path, $_);} qw/1 2 3/;
+        foreach my $column (qw/1 2 3/) {
+            $tkt->itemDelete( $path, $column ) if $tkt->itemExists($path, $column);
+        };
     }
 }
 
