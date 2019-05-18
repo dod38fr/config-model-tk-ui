@@ -201,6 +201,11 @@ SKIP: {
          } qw/a_uniline olist ordered_checklist a_uniline lista/
      ),
 
+     sub { $cmu->{hide_empty_values} = 1 ; ok(1,"test hide empty value ".$idx++); },
+     sub { $cmu->{show_only_custom}  = 1 ; ok(1,"test show only custom and hide empty value ".$idx++); },
+     sub { $cmu->{hide_empty_values} = 0 ; ok(1,"show empty value ".$idx++); },
+     sub { $cmu->{show_only_custom}  = 0 ; ok(1,"disable show only custom values ".$idx++); },
+
 	 sub { $mw->destroy; },
         unless $args->{show};
 
