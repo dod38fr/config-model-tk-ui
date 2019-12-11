@@ -2,7 +2,7 @@
 
 use ExtUtils::testlib;
 use Test::More ;
-use Test::Warn 0.11;
+use Test::Log::Log4perl;
 use Tk;
 use Config::Model::TkUI;
 use Config::Model ;
@@ -12,6 +12,8 @@ use strict;
 use warnings;
 
 use lib 't/lib';
+
+$::_use_log4perl_to_warn = 1;
 
 sub test_all {
     my ($mw, $delay,$test_ref) = @_ ;
@@ -83,6 +85,8 @@ my $load_fix = "a_mandatory_string=foo1 another_mandatory_string=foo2
 $root->fetch_element('ordered_hash_of_mandatory')->fetch_with_id('foo') ;
 
 # use Tk::ObjScanner; Tk::ObjScanner::scan_object($root) ;
+
+my $log_tester = Test::Log::Log4perl->get_logger("User");
 
 # eval this and skip test in case of failure.
 SKIP: {
@@ -183,10 +187,11 @@ SKIP: {
 
         # warn test, 3 warnings: load, fetch for hlist, fetch for editor
         push @test, sub {
-            warnings_like {
-                $root->load("always_warn=foo") ;
-                $cmu->reload ;
-            } ([ ( qr/always/ ) x 2 ] , "warn test always_warn 2 ".$idx++) ;
+            Test::Log::Log4perl->start(ignore_priority => "info");
+            $log_tester->warn(qr/always/);
+            $root->load("always_warn=foo") ;
+            $cmu->reload ;
+            Test::Log::Log4perl->end("always_warn logged a warning".$idx++) ;
         };
 
         push @test, sub {
@@ -202,8 +207,11 @@ SKIP: {
         };
 
         push @test, sub {
-            warnings_like { $root->load("warn_unless=bar") ; $cmu->reload ;}
-                [ ( qr/warn_unless/ ) x 2 ] ,"warn test warn_unless ".$idx++ ;
+            Test::Log::Log4perl->start(ignore_priority => "info");
+            $log_tester->warn(qr/warn_unless/);
+            $root->load("warn_unless=bar") ;
+            $cmu->reload ;
+            Test::Log::Log4perl->end("warn_unless logged a warning".$idx++) ;
         };
 
         push @test,
