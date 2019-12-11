@@ -86,8 +86,6 @@ $root->fetch_element('ordered_hash_of_mandatory')->fetch_with_id('foo') ;
 
 # use Tk::ObjScanner; Tk::ObjScanner::scan_object($root) ;
 
-my $log_tester = Test::Log::Log4perl->get_logger("User");
-
 # eval this and skip test in case of failure.
 SKIP: {
 
@@ -111,7 +109,9 @@ SKIP: {
 	 sub { $cmu->reload ; ok(1,"forced test: reload") } ,
 	) ;
 
-    if (not  $args->{show}) {
+    if (not $args->{show}) {
+        my $log_tester = Test::Log::Log4perl->get_logger("User");
+
         push @test,
             sub { $cmu->{elt_filter_value} = 'aa2'; $cmu->reload ;},
             sub { $cmu->{elt_filter_value} = 'bb2'; $cmu->reload ;},
