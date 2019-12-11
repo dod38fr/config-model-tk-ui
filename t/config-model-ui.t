@@ -5,7 +5,7 @@ use Test::More ;
 use Test::Log::Log4perl;
 use Tk;
 use Config::Model::TkUI;
-use Config::Model ;
+use Config::Model 2.137;
 use Config::Model::Tester::Setup qw/init_test setup_test_dir/;
 
 use strict;
