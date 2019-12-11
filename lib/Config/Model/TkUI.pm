@@ -1555,6 +1555,8 @@ sub find_item {
 }
 1;
 
+# ABSTRACT: a GUI to edit configuration data with Config::Model framework
+
 __END__
 
 =head1 NAME
