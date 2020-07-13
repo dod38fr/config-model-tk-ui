@@ -141,6 +141,11 @@ sub get_info {
 
     my $node = $cw->{node};
 
+    if ($node->can('get_info')) {
+        warn "Obsolete NodeViewer::get_info called";
+        return ($node->element_name, $node->get_info);
+    }
+
     my @items = ( 'type : ' . $node->get_type, 'class name : ' . $node->config_class_name, );
 
     my @rexp = $node->accept_regexp;

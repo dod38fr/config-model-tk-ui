@@ -101,6 +101,12 @@ sub get_info {
 
     my @items = ();
     my $leaf  = $cw->{leaf};
+
+    if ($leaf->can('get_info')) {
+        warn "Obsolete CheckLeafViewer::get_info called";
+        return ($leaf->element_name, $leaf->get_info);
+    }
+
     if ( defined $leaf->refer_to ) {
         push @items, "refer_to: " . $leaf->refer_to;
     }

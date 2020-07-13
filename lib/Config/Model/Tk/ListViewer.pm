@@ -64,9 +64,13 @@ sub Populate {
 
 sub get_info {
     my $cw         = shift;
-    my $info_frame = shift;
 
     my $list = $cw->{list};
+
+    if ($list->can('get_info')) {
+        warn "Obsolete ListViewer::get_info called";
+        return ($list->element_name, $list->get_info);
+    }
 
     my @items = (
         'type : ' . $list->get_type,

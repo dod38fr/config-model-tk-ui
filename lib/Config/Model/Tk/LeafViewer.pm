@@ -106,6 +106,11 @@ sub get_info {
 
     my $leaf = $cw->{leaf};
 
+    if ($leaf->can('get_info')) {
+        warn "Obsolete LeafViewer::get_info called";
+        return ($leaf->element_name, $leaf->get_info);
+    }
+
     my $type       = $leaf->value_type;
     my @choice     = $type eq 'enum' ? $leaf->get_choice : ();
     my $choice_str = @choice ? ' (' . join( ',', @choice ) . ')' : '';

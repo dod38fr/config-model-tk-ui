@@ -66,6 +66,11 @@ sub get_info {
 
     my $hash = $cw->{hash};
 
+    if ($hash->can('get_info')) {
+        warn "Obsolete HashViewer::get_info called";
+        return ($hash->element_name, $hash->get_info);
+    }
+
     my @items = (
         'type : ' . $hash->get_type . ( $hash->ordered ? '(ordered)' : '' ),
         'index : ' . $hash->index_type,
