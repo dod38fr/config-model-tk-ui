@@ -61,34 +61,9 @@ sub Populate {
     $cw->SUPER::Populate($args);
 }
 
-sub get_info {
+sub cme_object {
     my $cw = shift;
-
-    my $hash = $cw->{hash};
-
-    if ($hash->can('get_info')) {
-        warn "Obsolete HashViewer::get_info called";
-        return ($hash->element_name, $hash->get_info);
-    }
-
-    my @items = (
-        'type : ' . $hash->get_type . ( $hash->ordered ? '(ordered)' : '' ),
-        'index : ' . $hash->index_type,
-        'cargo : ' . $hash->cargo_type,
-    );
-
-    if ( $hash->cargo_type eq 'node' ) {
-        push @items, "cargo class: " . $hash->config_class_name;
-    }
-
-    foreach my $what (qw/min_index max_index max_nb warn_if_key_match warn_unless_key_match/) {
-        my $v   = $hash->$what();
-        my $str = $what;
-        $str =~ s/_/ /g;
-        push @items, "$str: $v" if defined $v;
-    }
-
-    return ( $hash->element_name, @items );
+    return $cw->{hash};
 }
 
 1;

@@ -96,22 +96,9 @@ sub set_value_help {
     $cw->update_help($cw->{value_help_widget}, join("\n\n", @help));
 }
 
-sub get_info {
+sub cme_object {
     my $cw = shift;
-
-    my @items = ();
-    my $leaf  = $cw->{leaf};
-
-    if ($leaf->can('get_info')) {
-        warn "Obsolete CheckLeafViewer::get_info called";
-        return ($leaf->element_name, $leaf->get_info);
-    }
-
-    if ( defined $leaf->refer_to ) {
-        push @items, "refer_to: " . $leaf->refer_to;
-    }
-    push @items, "ordered: " . ( $leaf->ordered ? 'yes' : 'no' );
-    return $leaf->element_name, @items;
+    return $cw->{leaf};
 }
 
 1;

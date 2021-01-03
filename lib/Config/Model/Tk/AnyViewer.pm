@@ -7,6 +7,7 @@ use Carp;
 use Tk::Photo;
 use Tk::ROText;
 use Tk::Dialog;
+use Config::Model 2.139;
 use Config::Model::TkUI;
 use Log::Log4perl qw(get_logger :levels);
 use Tk::Pod::Text;
@@ -63,7 +64,8 @@ sub add_info_button {
     my $cw = shift;
     my $frame = shift || $cw;
 
-    my ( $elt_name, @items ) = $cw->get_info;
+    my $elt_name = $cw->cme_object->element_name;
+    my @items = $cw->cme_object->get_info;
 
     my $title = "Info on " . $cw->{config_class_name};
     $title .= ':' . $elt_name if $elt_name;

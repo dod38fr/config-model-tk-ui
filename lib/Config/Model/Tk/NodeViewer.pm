@@ -136,24 +136,9 @@ sub reload {
     map { $hl->delete( entry => $_ ); } keys %old_elt;
 }
 
-sub get_info {
+sub cme_object {
     my $cw = shift;
-
-    my $node = $cw->{node};
-
-    if ($node->can('get_info')) {
-        warn "Obsolete NodeViewer::get_info called";
-        return ($node->element_name, $node->get_info);
-    }
-
-    my @items = ( 'type : ' . $node->get_type, 'class name : ' . $node->config_class_name, );
-
-    my @rexp = $node->accept_regexp;
-    if (@rexp) {
-        push @items, 'accept : /^' . join( '$/, /^', @rexp ) . '$/';
-    }
-
-    return $node->element_name, @items;
+    return $cw->{node};
 }
 
 1;
