@@ -194,14 +194,16 @@ sub try {
         my $e_w = $cw->{e_widget};
 
         # tk widget use a reference
-        $v =
-            defined $e_w
-            ? $e_w->get( '1.0', 'end' )
-            : $cw->{value};
+        if (defined $e_w) {
+            $v = $e_w->get( '1.0', 'end' );
+            chomp $v;
+        }
+        else {
+            $v = $cw->{value};
+        }
     }
 
     $v = '' unless defined $v;
-    chomp $v;
 
     $logger->debug("try: value $v");
     require Tk::Dialog;
@@ -249,15 +251,23 @@ sub store {
     my $e_w = $cw->{e_widget};
 
     # tk widget use a reference
-    my $v = defined $arg ? $arg
-          : defined $e_w ? $e_w->get( '1.0', 'end' )
-          :                $cw->{value};
+    my $v;
+    if (defined $arg) {
+        $v = $arg;
+    }
+    elsif (defined $e_w) {
+        $v = $e_w->get( '1.0', 'end' );
+        chomp $v; # Tk::Text::get always add a "\n";
+    }
+    else {
+        $v = $cw->{value};
+    }
 
     $v = '' unless defined $v;
-    chomp $v;
+
+    my $leaf = $cw->{leaf};
 
     print "Storing '$v'\n";
-    my $leaf = $cw->{leaf};
 
     eval { $leaf->store($v); };
 
@@ -332,7 +342,9 @@ sub exec_external_editor {
     my $pt = Path::Tiny->tempfile(@pt_args);
 
     die "Can't create Path::Tiny:$!" unless defined $pt;
-    $pt->spew_utf8( $cw->{e_widget}->get( '1.0', 'end' ) );
+    my $orig_data = $cw->{e_widget}->get( '1.0', 'end' );
+    chomp $orig_data; # Tk::Text::get always add a "\n";
+    $pt->spew_utf8( $orig_data );
 
     # See mastering Perl/Tk p382
     my $h = $cw->{ed_handle} = IO::Handle->new;
