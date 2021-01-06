@@ -24,7 +24,6 @@ use Tk::DoubleClick;
 use Tk::Balloon;
 use Tk::Photo;
 use Tk::PNG;    # required for Tk::Photo to be able to load pngs
-use Tk::DialogBox;
 use Tk::Adjuster;
 use Tk::FontDialog;
 
@@ -427,17 +426,17 @@ sub add_help_menu {
     };
 
     my $info_sub = sub {
-        my $db = $cw->DialogBox( -title => 'TODO' );
-        my $text = $db->add( 'Scrolled', 'ROText' )->pack;
-        $text->insert( 'end', $info_text );
-        $db->Show;
+        $cw->CmeDialog(
+            -title => 'TODO',
+            -text =>  $info_text
+        )->Show;
     };
 
     my $help_sub = sub {
-        my $db = $cw->DialogBox( -title => 'help' );
-        my $text = $db->add( 'Scrolled', 'ROText' )->pack;
-        $text->insert( 'end', $help_text );
-        $db->Show;
+        $cw->CmeDialog(
+            -title => 'help',
+            -text => $help_text
+        )->Show;
     };
 
     my $class   = $cw->{instance}->config_root->config_class_name;
