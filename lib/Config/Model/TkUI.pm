@@ -49,6 +49,7 @@ use Config::Model::Tk::NodeViewer;
 use Config::Model::Tk::NodeEditor;
 
 use Config::Model::Tk::Wizard;
+use Config::Model::Tk::CmeDialog;
 
 Construct Tk::Widget 'ConfigModelUI';
 
@@ -70,7 +71,7 @@ sub Tk::Error {
     my $msg = ( ref($error) && $error->can('as_string') ) ? $error->as_string : $error;
     warn $msg;
     $msg .= "Tk stack: \n@locations\n";
-    $cw->Dialog(
+    $cw->CmeDialog(
         -title => 'Config::Model error',
         -text  => $msg,
     )->Show;
@@ -549,13 +550,13 @@ sub save {
         }
 
         if ($@) {
-            my $answer = $cw->Dialog(
+            my $err = $@ ;
+            my $answer = $cw->CmeDialog(
                 -title => 'Save error',
-                -text  => "Cannot save: " . (ref($@) ? $@->as_string : $@),
+                -text  => "Cannot save: $err",
                 -buttons        => [ qw/quit cancel/ ],
                 -default_button => 'cancel',
             )->Show;
-            my $err = $@ ;
             $cb->($err) if $answer eq 'quit'; # indicate failure
         }
         else {
