@@ -11,7 +11,7 @@ Construct Tk::Widget 'CmeDialog';
 sub Populate {
     my($cw, $args) = @_;
 
-    my $msg_arg = delete $args->{-message};
+    my $msg_arg = delete $args->{-text};
     my $msg = ref $msg_arg eq 'ARRAY' ? join( "\n", @$msg_arg )
         : $msg_arg;
 

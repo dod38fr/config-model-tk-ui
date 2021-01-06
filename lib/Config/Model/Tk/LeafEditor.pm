@@ -184,6 +184,10 @@ sub add_buttons {
     return $bframe;
 }
 
+# Try is invoked for enum and boolean, where the possible value are
+# set in the widget. Hence the user cannot enter a wrong
+# value. However there may be side effects (like warp) that trigger
+# and error, hence this check.
 sub try {
     my $cw = shift;
     my $v  = shift;
@@ -212,10 +216,9 @@ sub try {
     my @errors = $cw->{leaf}->check( value => $v, quiet => 1 );
 
     if (@errors) {
-        $cw->Dialog(
-            -title => 'Value error',
-            -text  => join( "\n", @errors ),
-            -font => scalar $cw->cget('-font'),
+        $cw->CmeDialog(
+            -title => 'Check value error',
+            -text => \@errors,
         )->Show;
         $cw->reset_value;
         return;
@@ -275,7 +278,7 @@ sub store {
     if ($@) {
         $cw->CmeDialog(
             -title => 'Failed to store value',
-            -message => "$@",
+            -text => "$@",
         )->Show;
         $cw->reset_value;
     }
