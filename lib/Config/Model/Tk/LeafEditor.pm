@@ -5,6 +5,7 @@ use warnings;
 use Carp;
 use Log::Log4perl;
 use Config::Model::Tk::NoteEditor;
+use Config::Model::Tk::CmeDialog;
 use Path::Tiny;
 use Tk::Balloon;
 
@@ -272,10 +273,9 @@ sub store {
     eval { $leaf->store($v); };
 
     if ($@) {
-        $cw->Dialog (
-            -title => 'Value error',
-            -text  => $@->as_string,
-            -font => scalar $cw->cget('-font'),
+        $cw->CmeDialog(
+            -title => 'Failed to store value',
+            -message => "$@",
         )->Show;
         $cw->reset_value;
     }
