@@ -8,8 +8,8 @@ use Log::Log4perl;
 use base qw/Config::Model::Tk::ListViewer/;
 use subs qw/menu_struct/;
 use vars qw/$icon_path/;
-use Tk::Dialog;
 use Config::Model::Tk::NoteEditor;
+use Config::Model::Tk::CmeDialog;
 
 Construct Tk::Widget 'ConfigModelListEditor';
 
@@ -236,7 +236,7 @@ sub push_entry {
     eval { $list->fetch_with_id( scalar @idx ) };
 
     if ($@) {
-        $cw->Dialog(
+        $cw->CmeDialog(
             -title => "List index error",
             -text  => $@->as_string,
         )->Show;
@@ -341,7 +341,7 @@ sub try_and_redraw {
     eval { $to_try->(); };
 
     if ($@) {
-        $cw->Dialog(
+        $cw->CmeDialog(
             -title => "List index error",
             -text  => $@->as_string,
         )->Show;
