@@ -8,7 +8,6 @@ use Log::Log4perl;
 use base qw/Tk::Frame/;
 use vars qw/$icon_path/;
 use subs qw/menu_struct/;
-use Tk::Dialog;
 use Tk::Photo;
 use Tk::Balloon;
 use Tk;    # Needed to import Ev function
