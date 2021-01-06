@@ -420,7 +420,7 @@ sub add_help_menu {
         $cw->Dialog(
             -title => 'About',
             -text  => "Config::Model::TkUI \n"
-                . "(c) 2008-2012 Dominique Dumont \n"
+                . "(c) 2008-2021 Dominique Dumont \n"
                 . "Licensed under LGPLv2\n"
         )->Show;
     };
