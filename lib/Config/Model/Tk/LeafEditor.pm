@@ -211,7 +211,6 @@ sub try {
     $v = '' unless defined $v;
 
     $logger->debug("try: value $v");
-    require Tk::Dialog;
 
     my @errors = $cw->{leaf}->check( value => $v, quiet => 1 );
 
@@ -235,9 +234,9 @@ sub delete {
     eval { $cw->{leaf}->store(undef); };
 
     if ($@) {
-        $cw->Dialog(
+        $cw->CmeDialog(
             -title => 'Delete error',
-            -text  => ref($@) ? $@->as_string : $@,
+            -text  => "$@",
         )->Show;
     }
     else {
@@ -283,10 +282,9 @@ sub store {
         $cw->reset_value;
     }
     elsif ($leaf->has_error) {
-        $cw->Dialog (
+        $cw->CmeDialog (
             -title => 'Value error',
             -text  => "Cannot store the value:\n* ".join("\n* ",$leaf->all_errors),
-            -font => scalar $cw->cget('-font'),
         )->Show;
         $cw->reset_value;
     }
@@ -357,10 +355,9 @@ sub exec_external_editor {
     $cw->{ed_pid} = open( $h, '|-', $ed );
 
     if ( not defined $cw->{ed_pid} ) {
-        $cw->Dialog(
+        $cw->CmeDialog(
             -title => 'External editor error',
             -text  => "'$ed' : $!",
-            -font => scalar $cw->cget('-font'),
         )->Show;
         return;
     }
