@@ -925,7 +925,6 @@ sub disp_obj_elt {
     my ( $path,    $cw,       $opening, $actions, $force_display_path ) = @$data_ref;
     my $tkt  = $cw->{tktree};
     my $mode = $tkt->getmode($path);
-    my $elt_filter = $cw->{elt_filter_value} ;
 
     my @element_list;
     foreach my $elt (@orig_element_list) {
