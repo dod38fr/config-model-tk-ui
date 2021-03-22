@@ -52,7 +52,7 @@ sub apply_filter {
     my $leaf_cb = sub {
         my ($scanner, $data_ref, $node,$element_name,$index, $leaf_object) = @_ ;
         my $loc = $leaf_object->location;
-        my $action = '';
+        my $action = _get_filter_action($element_name,$elt_filter,'show','hide');
         if ( $show_only_custom ) {
             $action = $leaf_object->has_data ? 'show' : 'hide';
         }
@@ -67,7 +67,7 @@ sub apply_filter {
     my $check_list_cb = sub {
         my ($scanner, $data_ref,$node,$element_name,undef, $obj) = @_;
         my $loc = $obj->location;
-        my $action = '';
+        my $action = _get_filter_action($element_name,$elt_filter ,'show','hide');
         if ( $hide_empty_values ) {
              $action = 'hide' unless $obj->fetch(mode => 'user');
         }
@@ -97,15 +97,7 @@ sub apply_filter {
 
         my $node_action = $hide_empty_values ? 'hide' : '';
         foreach my $elt ( @element_list ) {
-            my $filter_action = '';
-            if (length($elt_filter) > 2) {
-                if ($elt =~ /$elt_filter/) {
-                    $filter_action = 'show' ;
-                }
-                else {
-                    $filter_action = 'hide';
-                }
-            }
+            my $filter_action = _get_filter_action($elt,$elt_filter,'show','hide');
             my $obj = $node->fetch_element($elt);
             my $loc = $obj->location;
             # make sure that the hash ref stays attached to $data_ref
