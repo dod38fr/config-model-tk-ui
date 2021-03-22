@@ -4,10 +4,28 @@ use 5.10.1;
 use strict;
 use warnings;
 use Carp;
+use Log::Log4perl 1.11;
 
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw/apply_filter/;
+
+my $logger = Log::Log4perl::get_logger('Tk::Filter');
+
+sub _get_filter_action {
+    my ($elt, $elt_filter, $filtered_state, $unfiltered_state) = @_;
+
+    my $action = 'show';
+    if (length($elt_filter) > 2) {
+        if ($elt =~ /$elt_filter/) {
+            $action = $filtered_state ;
+        }
+        else {
+            $action = $unfiltered_state;
+        }
+    }
+    return $action;
+}
 
 # scan a tree and return a hash where each found path is the key and the
 # value is either hide, show or an empty string.
