@@ -13,9 +13,9 @@ our @EXPORT_OK = qw/apply_filter/;
 my $logger = Log::Log4perl::get_logger('Tk::Filter');
 
 sub _get_filter_action {
-    my ($elt, $elt_filter, $filtered_state, $unfiltered_state) = @_;
+    my ($elt, $elt_filter, $filtered_state, $unfiltered_state, $default_state) = @_;
 
-    my $action = '';
+    my $action = $default_state;
     if (length($elt_filter) > 2) {
         if ($elt =~ /$elt_filter/) {
             $action = $filtered_state ;
@@ -110,7 +110,7 @@ sub apply_filter {
 
         my $node_action = $hide_empty_values || $show_only_custom ? 'hide' : '';
         foreach my $elt ( @element_list ) {
-            my $filter_action = _get_filter_action($elt,$elt_filter,'show','hide');
+            my $filter_action = _get_filter_action($elt,$elt_filter,'show','hide','');
             my $obj = $node->fetch_element($elt);
             my $loc = $obj->location;
             # make sure that the hash ref stays attached to $data_ref
