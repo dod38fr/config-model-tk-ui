@@ -115,7 +115,13 @@ sub apply_filter {
             my $loc = $obj->location;
             # make sure that the hash ref stays attached to $data_ref
             $data_ref->{actions} //= {};
-            my $inner_ref = { actions => $data_ref->{actions}, filter => $data_ref->{filter} };
+            my $inner_ref = {
+                actions => $data_ref->{actions},
+                # stop filter propagation when current element is
+                # shown so all elements below can be shown or hidden
+                # at user's choice
+                filter => $filter_action eq 'show' ? '' : $data_ref->{filter}
+            };
             $scanner->scan_element($inner_ref, $node,$elt);
             my $elt_action = $combine_hide_over_as_is{$filter_action}{$inner_ref->{return}};
             $logger->trace("'$loc' node elt filter is '$elt_action'");
