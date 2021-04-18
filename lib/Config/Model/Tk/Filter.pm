@@ -136,10 +136,10 @@ sub apply_filter {
         node_content_cb => $node_cb,
     ) ;
 
-    my %force_display_path = ();
-    $scan->scan_node(\%force_display_path, $instance->config_root) ;
+    my $data_ref = {};
+    $scan->scan_node($data_ref, $instance->config_root) ;
 
-    return $force_display_path{actions};
+    return $data_ref->{actions};
 }
 
 1;
