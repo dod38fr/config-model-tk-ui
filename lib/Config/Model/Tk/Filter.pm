@@ -36,7 +36,6 @@ sub apply_filter {
     # call back so that the 'show' action can be propagated from the
     # shown leaf up to the root of the tree.
 
-    my $elt_filter = $args{elt_filter_value} // '';
     my $show_only_custom = $args{show_only_custom} // 0;
     my $hide_empty_values = $args{hide_empty_values} // 0;
     my $instance = $args{instance} // carp "missing instance" ;
@@ -95,7 +94,7 @@ sub apply_filter {
         # resume exploration
         my $hash_action = $hide_empty_values || $show_only_custom ? 'hide' : '';
         foreach my $key (@keys) {
-            my $inner_ref = { actions => $data_ref->{actions} };
+            my $inner_ref = { actions => $data_ref->{actions}, filter => $data_ref->{filter} };
             $scanner->scan_hash($inner_ref, $node, $element_name, $key);
             $hash_action = $combine_as_is_over_hide{$hash_action}{$inner_ref->{return}};
         }
@@ -107,15 +106,16 @@ sub apply_filter {
     my $node_cb = sub {
         my ($scanner, $data_ref,$node, @element_list) = @_ ;
         my $node_loc = $node->location;
+        my $elt_filter = $data_ref->{filter};
 
         my $node_action = $hide_empty_values || $show_only_custom ? 'hide' : '';
         foreach my $elt ( @element_list ) {
-            my $filter_action = _get_filter_action($elt,$elt_filter,'show','');
+            my $filter_action = _get_filter_action($elt,$elt_filter,'show','hide');
             my $obj = $node->fetch_element($elt);
             my $loc = $obj->location;
             # make sure that the hash ref stays attached to $data_ref
             $data_ref->{actions} //= {};
-            my $inner_ref = { actions => $data_ref->{actions} };
+            my $inner_ref = { actions => $data_ref->{actions}, filter => $data_ref->{filter} };
             $scanner->scan_element($inner_ref, $node,$elt);
             my $elt_action = $combine_hide_over_as_is{$filter_action}{$inner_ref->{return}};
             $logger->trace("'$loc' node elt filter is '$elt_action'");
@@ -136,7 +136,7 @@ sub apply_filter {
         node_content_cb => $node_cb,
     ) ;
 
-    my $data_ref = {};
+    my $data_ref = { filter => $args{elt_filter_value} // '' };
     $scan->scan_node($data_ref, $instance->config_root) ;
 
     return $data_ref->{actions};
