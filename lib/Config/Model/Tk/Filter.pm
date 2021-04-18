@@ -117,10 +117,10 @@ sub apply_filter {
             $data_ref->{actions} //= {};
             my $inner_ref = { actions => $data_ref->{actions} };
             $scanner->scan_element($inner_ref, $node,$elt);
-            my $action = $combine_hide_over_as_is{$filter_action}{$inner_ref->{return}};
-            $logger->trace("'$loc' node elt filter is '$action'");
-            $data_ref->{actions}{$loc} = $action;
-            $node_action = $combine_as_is_over_hide{$node_action}{$action};
+            my $elt_action = $combine_hide_over_as_is{$filter_action}{$inner_ref->{return}};
+            $logger->trace("'$loc' node elt filter is '$elt_action'");
+            $data_ref->{actions}{$loc} = $elt_action;
+            $node_action = $combine_as_is_over_hide{$node_action}{$elt_action};
         }
 
         $node_action = 'show' if $node_loc eq $fd_path;
