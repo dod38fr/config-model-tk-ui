@@ -51,11 +51,11 @@ sub apply_filter {
         hide => { show => 'show', '' => ''    , hide => 'hide'},
     );
 
-    # 'show' trumps 'hide' which trumps ''
-    my %combine_hide_over_as_is = (
-        show => { show => 'show', hide => 'show', '' => 'show'},
-        hide => { show => 'show', hide => 'hide', '' => 'hide'},
+    # inner hide or show wins
+    my %combine_for_node = (
+        show => { show => 'show', hide => 'hide', '' => 'show'},
         ''   => { show => 'show', hide => 'hide', '' => ''    },
+        hide => { show => 'show', hide => 'hide', '' => 'hide'},
     );
 
     my $leaf_cb = sub {
@@ -123,7 +123,7 @@ sub apply_filter {
                 filter => $filter_action eq 'show' ? '' : $data_ref->{filter}
             };
             $scanner->scan_element($inner_ref, $node,$elt);
-            my $elt_action = $combine_hide_over_as_is{$filter_action}{$inner_ref->{return}};
+            my $elt_action = $combine_for_node{$filter_action}{$inner_ref->{return}};
             $logger->trace("'$loc' node elt filter is '$elt_action'");
             $data_ref->{actions}{$loc} = $elt_action;
             $node_action = $combine_as_is_over_hide{$node_action}{$elt_action};
