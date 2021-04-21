@@ -936,18 +936,27 @@ sub show_single_list_value {
 }
 
 sub disp_hash {
-    my ( $scanner, $data_ref, $node, $element_name, @idx ) = @_;
+    my ( $scanner, $data_ref, $node, $element_name, @all_idx ) = @_;
     my ( $path, $cw, $opening, $actions, $force_display_path ) = @$data_ref;
     my $tkt  = $cw->{tktree};
     my $mode = $tkt->getmode($path);
-    $logger->trace("disp_hash    path is $path  mode $mode (@idx)");
 
+    my @idx;
+    my $hash = $node->fetch_element($element_name);
+    foreach my $id (@all_idx) {
+        my $loc = $hash->fetch_with_id($id)->location;
+        my $action = $actions->{$loc} // '';
+        if ($action ne 'hide') {
+            push @idx, $id;
+        }
+    }
+
+    $logger->trace("disp_hash    path is $path  mode $mode (@idx)");
     $cw->prune( $path, @idx );
 
     my $elt      = $node->fetch_element($element_name);
     my $elt_type = $elt->get_cargo_type();
 
-    my $node_loc = $node->location;
 
     # need to keep track myself of previous sibling as
     # $tkt->entrycget($path,'-after') dies
