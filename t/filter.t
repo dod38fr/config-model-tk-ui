@@ -97,9 +97,13 @@ foreach my $test (@{$test_data->{tests}}) {
     ok($inst,"created test instance for ". $test->{label}) ;
 
     my %args = %{ $test->{input} // {}};
-    my $res = apply_filter(instance => $inst, %args);
-    YYY $res if $trace;
-    is_deeply( $res, $test->{output}, $test->{label});
+    my $actions = { "__is_kept" => 1 };
+    my $ref = \$actions;
+    apply_filter(actions => $actions, instance => $inst, %args);
+    YYY $actions if $trace;
+    ok(! $actions->{__is_kept},"old entries are deleted");
+    ok($$ref eq $actions, "ref is kept through when filtering");
+    is_deeply( $actions, $test->{output}, $test->{label});
 }
 
 done_testing;

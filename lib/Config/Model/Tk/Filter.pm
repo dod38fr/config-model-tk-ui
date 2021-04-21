@@ -39,7 +39,11 @@ sub apply_filter {
     my $show_only_custom = $args{show_only_custom} // 0;
     my $hide_empty_values = $args{hide_empty_values} // 0;
     my $instance = $args{instance} // carp "missing instance" ;
+    my $actions = $args{actions} // carp "missing actions ref" ;
     my $fd_path = $args{fd_path} // '';
+
+    # flush the hash, but keep the ref
+    %$actions = ();
 
     # need 3 state logic. '' means that tree node is left as is,
     # either closed or opened, depending on user choice.
@@ -142,10 +146,11 @@ sub apply_filter {
         node_content_cb => $node_cb,
     ) ;
 
-    my $data_ref = { filter => $args{elt_filter_value} // '' };
+    my $data_ref = {
+        filter => $args{elt_filter_value} // '',
+        actions => $actions,
+    };
     $scan->scan_node($data_ref, $instance->config_root) ;
-
-    return $data_ref->{actions};
 }
 
 1;

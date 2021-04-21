@@ -669,13 +669,14 @@ sub reload {
     $logger->trace( "reloading tk tree"
             . ( defined $force_display_path ? " (force display $force_display_path)" : '' ) );
 
-    my $actions = {};
+    my $actions = $cw->{cm_actions} //= {};
+
     # eval is required to trap bad regexp entered in filter widget
     my %filter_args = map { ($_ => $cw->{$_} // '') }
             qw/elt_filter_value show_only_custom hide_empty_values instance/ ;
 
-    $actions = eval {
-        apply_filter(fd_path => $force_display_path, %filter_args);
+    eval {
+        apply_filter(actions => $actions, fd_path => $force_display_path, %filter_args);
     };
     if ($@) {
         my $msg = $@;
