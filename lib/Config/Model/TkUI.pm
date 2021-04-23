@@ -85,7 +85,8 @@ my $default_config = {
 };
 
 my $main_window;
-my $config_path = path(File::HomeDir->my_home)->child('.cme/config/');
+my $home_str = File::HomeDir->my_home || '/tmp/';
+my $config_path = path($home_str)->child('.cme/config/');
 my $config_file = $config_path->child('tkui.yml');
 
 $config_path -> mkpath;
