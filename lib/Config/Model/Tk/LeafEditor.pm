@@ -78,6 +78,9 @@ sub Populate {
         $balloon->attach( $ext_ed_b,
             -msg => "Run external editor (if EDITOR environment variable is set" );
     }
+    elsif ( $vt eq 'boolean' and $leaf->write_as) {
+        $cw->add_written_as_boolean_editor($leaf, $ed_frame);
+    }
     elsif ( $vt eq 'boolean' ) {
         $ed_frame->Checkbutton(
             -text     => $leaf->element_name,
@@ -138,6 +141,23 @@ sub Populate {
 
     # don't call directly SUPER::Populate as it's LeafViewer's populate
     $cw->Tk::Frame::Populate($args);
+}
+
+sub add_written_as_boolean_editor {
+    my ($cw, $leaf, $ed_frame) = @_;
+
+    my $vref = \$cw->{value};
+
+    my $rb_frame = $ed_frame->Frame->pack();
+    foreach my $value (@{$leaf->write_as}) {
+        $rb_frame->Radiobutton(
+            -text     => $value,
+            -value    => $value,
+            -variable => $vref,
+            -command  => sub { $cw->try },
+        )->pack(-side => 'left');
+    }
+    $cw->add_buttons($ed_frame);
 }
 
 sub cleanup {
