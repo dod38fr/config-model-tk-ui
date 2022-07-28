@@ -262,7 +262,7 @@ sub try {
 sub delete {
     my $cw = shift;
 
-    eval { $cw->{leaf}->store(undef); };
+    eval { $cw->{leaf}->clear; };
 
     if ($@) {
         $cw->CmeDialog(
