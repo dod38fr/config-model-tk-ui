@@ -1,4 +1,3 @@
-
 package Config::Model::Tk::Wizard;
 
 use strict;
@@ -190,7 +189,6 @@ sub start_wizard {
         -font => $cw->{font},
         -command => sub {
             $cw->{keep_wiz_editor} = 0;
-            $cw->{ed_w}->store if $cw->{ed_w}->can('store');
             $cw->{wizard}->go_backward;
         } );
     $back->pack(qw/-side left -fill x -expand 1/);
@@ -219,7 +217,6 @@ sub start_wizard {
         -font => $cw->{font},
         -command => sub {
             $cw->{keep_wiz_editor} = 0;
-            $cw->{ed_w}->store if $cw->{ed_w}->can('store');
             $cw->{wizard}->go_forward;
         } );
     $forw->pack(qw/-side right -fill x -expand 1/);
