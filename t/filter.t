@@ -2,7 +2,7 @@ use Test::More ;
 use Test::Log::Log4perl;
 use Config::Model 2.137;
 use Config::Model::Tester::Setup qw/init_test setup_test_dir/;
-use YAML::XS qw/LoadFile/;
+use YAML::PP qw/LoadFile/;
 
 use Config::Model::Tk::Filter qw/apply_filter/;
 
