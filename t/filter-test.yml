@@ -55,13 +55,13 @@ tests:
       hcld1 hash_a: hide
       hcld1 hash_b: 'hide'
   - label: checklist and no filter at all
-    load: 
+    load:
       hcl1:
         hash_a:
           foo: bar
-        check_list: [ A, D ]
+        check_list: [A, D]
       hcl2:
-        check_list: [ B, C ]
+        check_list: [B, C]
     output:
       '': show
       hcl1: ''
