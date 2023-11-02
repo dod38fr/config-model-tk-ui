@@ -13,7 +13,7 @@ use subs qw/menu_struct/;
 use Scalar::Util qw/weaken/;
 use Log::Log4perl 1.11;
 use Path::Tiny;
-use YAML qw/LoadFile DumpFile/;
+use YAML::PP;
 use File::HomeDir;
 
 use Pod::POM;
@@ -88,10 +88,11 @@ my $main_window;
 my $home_str = File::HomeDir->my_home || '/tmp/';
 my $config_path = path($home_str)->child('.cme/config/');
 my $config_file = $config_path->child('tkui.yml');
+my $ypp = YAML::PP->new;
 
 $config_path -> mkpath;
 
-my $config = $config_file->is_file ? LoadFile($config_file) : $default_config ;
+my $config = $config_file->is_file ? $ypp->load_file($config_file) : $default_config ;
 
 # Tk::CmdLine::SetArguments( -font => $config->{font} ) ;
 
@@ -112,7 +113,7 @@ sub set_font {
         $main_window->RefontTree(-font => $tk_font);
         $config->{font} = {$tk_font->actual} ;
         $cw->ConfigSpecs( -font => ['DESCENDANTS', 'font','Font', $tk_font ]);
-        DumpFile($config_file->stringify, $config);
+        $ypp->dump_file($config_file->stringify, $config);
     }
 }
 
