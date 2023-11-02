@@ -179,10 +179,6 @@ sub Populate {
         [ command => 'check for warnings',   -command => sub { $cw->check( 1, 1 ) } ],
         [ command => 'show unsaved changes', -command => sub { $cw->show_changes; } ],
         [ command => 'save (Ctrl-s)', -command => sub { $cw->save } ],
-        [
-            command  => 'save in dir ...',
-            -command => sub { $cw->save_in_dir; }
-        ],
         @$extra_menu,
         [
             command  => 'debug ...',
@@ -495,16 +491,6 @@ sub close_item {
     my @children = $tktree->infoChildren($path);
     $logger->trace("close_item hide @children");
     map { $tktree->hide( -entry => $_ ); } @children;
-}
-
-sub save_in_dir {
-    my $cw = shift;
-    require Tk::DirSelect;
-    $cw->{save_dir} = $cw->DirSelect()->Show;
-
-    # chooseDirectory does not work correctly.
-    #$cw->{save_dir} = $cw->chooseDirectory(-mustexist => 'no') ;
-    $cw->save();
 }
 
 sub check {
