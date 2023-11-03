@@ -53,6 +53,11 @@ $model->create_config_class(
             index_type  => 'string',
             @element
         },
+        a_string => {
+            type => 'leaf',
+            value_type => "uniline",
+            default => "blah",
+        },
         check_list => {
             type       => 'check_list',
             choice  => [qw/A B C D/],

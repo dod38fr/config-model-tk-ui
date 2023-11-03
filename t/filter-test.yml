@@ -15,6 +15,7 @@ tests:
       hcl2 check_list: ''
       hcl2 hash_a: ''
       hcld1: ''
+      hcld1 a_string: ''
       hcld1 check_list: ''
       hcld1 hash_a: ''
       hcld1 hash_b: ''
@@ -32,6 +33,7 @@ tests:
       hcl2 check_list: hide
       hcl2 hash_a: 'hide'
       hcld1: ''
+      hcld1 a_string: ''
       # contains default -> not hidden
       hcld1 check_list: ''
       hcld1 hash_a: hide
@@ -50,6 +52,7 @@ tests:
       hcl2 check_list: hide
       hcl2 hash_a: 'hide'
       hcld1: hide
+      hcld1 a_string: hide
       # contains default but no custom values -> hidden
       hcld1 check_list: hide
       hcld1 hash_a: hide
@@ -72,6 +75,7 @@ tests:
       hcl2 check_list: ''
       hcl2 hash_a: ''
       hcld1: ''
+      hcld1 a_string: ''
       hcld1 check_list: ''
       hcld1 hash_a: ''
       hcld1 hash_b: ''
@@ -89,6 +93,7 @@ tests:
       hcl2 check_list: hide
       hcl2 hash_a: hide
       hcld1: hide
+      hcld1 a_string: hide
       hcld1 check_list: hide
       hcld1 hash_a: hide
       hcld1 hash_b: hide
@@ -106,6 +111,7 @@ tests:
       hcl2 check_list: hide
       hcl2 hash_a: 'show'
       hcld1: 'show'
+      hcld1 a_string: hide
       hcld1 check_list: hide
       hcld1 hash_a: 'show'
       hcld1 hash_b: hide
@@ -123,6 +129,7 @@ tests:
       hcl2 check_list: hide
       hcl2 hash_a: hide
       hcld1: 'show'
+      hcld1 a_string: hide
       hcld1 check_list: hide
       hcld1 hash_a: hide
       hcld1 hash_b: 'show'
@@ -141,6 +148,7 @@ tests:
       hcl2 check_list: 'hide'
       hcl2 hash_a: 'hide'
       hcld1: 'hide'
+      hcld1 a_string: hide
       hcld1 check_list: hide
       hcld1 hash_a: 'hide'
       hcld1 hash_b: 'hide'
@@ -159,6 +167,7 @@ tests:
       hcl2 check_list: hide
       hcl2 hash_a: hide
       hcld1: hide
+      hcld1 a_string: hide
       hcld1 check_list: hide
       hcld1 hash_a: hide
       hcld1 hash_b: hide
@@ -177,6 +186,7 @@ tests:
       hcl2 check_list: hide
       hcl2 hash_a: hide
       hcld1: hide
+      hcld1 a_string: hide
       hcld1 check_list: hide
       hcld1 hash_a: hide
       hcld1 hash_b: hide
