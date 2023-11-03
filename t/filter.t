@@ -12,8 +12,6 @@ use warnings;
 
 my ($model, $trace, $args) = init_test('show','filter=s');
 
-note("You can play with the widget if you run this test with '--show' option");
-
 my $wr_root = setup_test_dir;
 my $cmu ;
 
