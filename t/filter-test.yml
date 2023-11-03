@@ -44,10 +44,10 @@ tests:
       show_only_custom: 1
     output:
       '': show
-      hcl1: ''
+      hcl1: show
       hcl1 check_list: hide
-      hcl1 hash_a: ''
-      hcl1 hash_a:foo: ''
+      hcl1 hash_a: show
+      hcl1 hash_a:foo: show
       hcl2: 'hide'
       hcl2 check_list: hide
       hcl2 hash_a: 'hide'

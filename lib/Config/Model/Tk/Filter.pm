@@ -66,8 +66,8 @@ sub apply_filter {
         my ($scanner, $data_ref, $node,$element_name,$index, $leaf_object) = @_ ;
         my $loc = $leaf_object->location;
         my $action = '';
-        if ( $show_only_custom and not $leaf_object->has_data) {
-            $action = 'hide';
+        if ($show_only_custom) {
+            $action = $leaf_object->has_data ? 'show' : 'hide';
         }
         if ( $hide_empty_values ) {
             my $v = $leaf_object->fetch(qw/check no/);
