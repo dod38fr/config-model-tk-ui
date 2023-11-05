@@ -16,6 +16,7 @@ sub _get_filter_action {
     my ($elt, $elt_filter, $filtered_state, $unfiltered_state, $default_state) = @_;
 
     my $action = $default_state;
+    # filter is active only when the filter string is 3 or more chars long
     if (length($elt_filter) > 2) {
         if ($elt =~ /$elt_filter/) {
             $action = $filtered_state ;
@@ -55,8 +56,11 @@ sub apply_filter {
         hide => { show => 'show', '' => ''    , hide => 'hide'},
     );
 
+    # filter acts only on node elements. A filter can be applied on
+    # top node or on any node below. So a filter cannot hide what's
+    # coming from below if this element is marked 'show'.
     # inner hide or show wins
-    my %combine_for_node = (
+    my %combine_filter_with_below = (
         show => { show => 'show', hide => 'hide', '' => 'show'},
         ''   => { show => 'show', hide => 'hide', '' => ''    },
         hide => { show => 'show', hide => 'hide', '' => 'hide'},
@@ -127,8 +131,9 @@ sub apply_filter {
                 filter => $filter_action eq 'show' ? '' : $data_ref->{filter}
             };
             $scanner->scan_element($inner_ref, $node,$elt);
-            my $elt_action = $combine_for_node{$filter_action}{$inner_ref->{return}};
+            my $elt_action = $combine_filter_with_below{$filter_action}{$inner_ref->{return}};
             $logger->trace("'$loc' node elt filter is '$elt_action'");
+            # this clobbers the elt_action computed in leaf
             $data_ref->{actions}{$loc} = $elt_action;
             $node_action = $combine_as_is_over_hide{$node_action}{$elt_action};
         }
