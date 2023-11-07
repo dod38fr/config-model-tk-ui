@@ -78,7 +78,7 @@ sub apply_filter {
             $action = 'hide' unless (defined $v and length($v)) ;
         }
         $action = 'show' if $loc eq $fd_path;
-        $logger->trace("'$loc' leaf filter is '$action'");
+        $logger->trace("leaf '$loc' filter is '$action'");
         $data_ref->{return} = $data_ref->{actions}{$loc} = $action ;
     };
 
@@ -90,7 +90,7 @@ sub apply_filter {
              $action = 'hide';
         }
         $action = 'show' if $loc eq $fd_path;
-        $logger->trace("'$loc' check_list filter is '$action'");
+        $logger->trace("check_list '$loc' filter is '$action'");
         $data_ref->{return} = $data_ref->{actions}{$loc} = $action ;
     };
 
@@ -107,7 +107,7 @@ sub apply_filter {
             $hash_action = $combine_as_is_over_hide{$hash_action}{$inner_ref->{return}};
         }
         $hash_action = 'show' if $loc eq $fd_path;
-        $logger->trace("'$loc' hash filter is '$hash_action'");
+        $logger->trace("hash '$loc' filter is '$hash_action'");
         $data_ref->{return} = $data_ref->{actions}{$loc} = $hash_action;
     };
 
@@ -140,7 +140,7 @@ sub apply_filter {
 
         $node_action = 'show' if $node_loc eq $fd_path;
 
-        $logger->trace("'$node_loc' node filter is '$node_action'");
+        $logger->trace("node '$node_loc' filter is '$node_action'");
         $data_ref->{return} = $data_ref->{actions}{$node_loc} = $node_action;
     };
 
