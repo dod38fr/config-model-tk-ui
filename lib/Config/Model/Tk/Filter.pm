@@ -46,30 +46,14 @@ sub apply_filter {
     # flush the hash, but keep the ref
     %$actions = ();
 
-    # need 3 state logic. '' means that tree node is left as is,
-    # either closed or opened, depending on user choice.
+    # actions need 3 state logic. '' means that tree node is left as
+    # is, either closed or opened, depending on user's choice.
 
     # 'show' trumps '' which trumps 'hide'
-    my %combine_as_is_over_hide = (
+    my %combine_actions = (
         show => { show => 'show', '' => 'show', hide => 'show'},
         ''   => { show => 'show', '' => ''    , hide => ''    },
         hide => { show => 'show', '' => ''    , hide => 'hide'},
-    );
-
-    # filter acts only on node elements. A filter can be applied on
-    # top node or on any node below. So a filter cannot hide what's
-    # coming from below if this element is marked 'show'.
-    # inner hide or show wins
-    my %combine_filter_with_below = (
-        show => { show => 'show', '' => 'show', hide => 'hide'},
-        ''   => { show => 'show', '' => ''    , hide => 'hide'},
-        hide => { show => 'show', '' => 'hide', hide => 'hide'},
-    );
-
-    my %combine_between_node_elements = (
-        show => { show => 'show', '' => 'show', hide => 'show'},
-        ''   => { show => 'show', '' => ''    , hide => ''},
-        hide => { show => 'show', '' => '', hide => 'hide'},
     );
 
     my $leaf_cb = sub {
@@ -110,7 +94,7 @@ sub apply_filter {
         foreach my $key (@keys) {
             my $inner_ref = { actions => $data_ref->{actions}, filter => $data_ref->{filter} };
             $scanner->scan_hash($inner_ref, $node, $element_name, $key);
-            $hash_action = $combine_as_is_over_hide{$hash_action}{$inner_ref->{return}};
+            $hash_action = $combine_actions{$hash_action}{$inner_ref->{return}};
         }
         $hash_action = 'show' if $loc eq $fd_path;
         $logger->trace("hash '$loc' filter is '$hash_action'");
@@ -125,8 +109,8 @@ sub apply_filter {
         # check if filter is active on any element. If yes, not
         # matching elements are hidden
         my $filter_active = scalar grep {_get_filter_action($_,$elt_filter,'show','hide','') eq 'show'} @element_list;
-        my $default_node_action = '';
         my $all_elt_action = $show_only_custom ? 'hide' : '';
+
         foreach my $elt ( @element_list ) {
             my $filter_action = _get_filter_action($elt,$elt_filter,'show','hide','');
             my $obj = $node->fetch_element($elt);
@@ -134,6 +118,7 @@ sub apply_filter {
             # make sure that the hash ref stays attached to $data_ref
             $data_ref->{actions} //= {};
             my $elt_action;
+
             if ($filter_active) {
                 my $inner_ref = {
                     actions => $data_ref->{actions},
@@ -143,18 +128,17 @@ sub apply_filter {
                     filter => ''
                 };
                 $scanner->scan_element($inner_ref, $node,$elt);
-                $logger->trace("node '$loc' elt $elt filter is active '$filter_action'");
                 # this clobbers the elt_action computed in leaf
                 $elt_action = $data_ref->{actions}{$loc} = $filter_action;
+                $logger->trace("node '$loc' elt $elt filter is active '$elt_action'");
             } else {
                 my $inner_ref = { actions => $data_ref->{actions}, filter => $data_ref->{filter} };
                 $scanner->scan_element($inner_ref, $node,$elt);
                 $elt_action = $inner_ref->{return};
                 $logger->trace("node '$loc' elt $elt filter is not active '$elt_action'");
             }
-            my $node_elt_action = $combine_filter_with_below{$default_node_action}{$elt_action};
-            $logger->trace("node '$loc' elt $elt node_elt_action is '$node_elt_action'");
-            $all_elt_action = $combine_between_node_elements{$all_elt_action}{$node_elt_action};
+
+            $all_elt_action = $combine_actions{$all_elt_action}{$elt_action};
             $logger->trace("node '$loc' elt $elt all_elt_action is '$all_elt_action'");
         }
 
