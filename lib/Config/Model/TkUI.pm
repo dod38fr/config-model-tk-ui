@@ -224,7 +224,7 @@ sub Populate {
     $cw->{show_only_custom} = 0;
     $loc_frame->Checkbutton(
         -variable => \$cw->{show_only_custom},
-        -command  => sub { $cw->reload },
+        -command  => sub { $cw->reload($cw->{location}) },
     )->pack( -side => 'right' );
     $loc_frame->Label( -text => 'show only custom values' )->pack( -side => 'right' );
 
@@ -232,7 +232,7 @@ sub Populate {
     $cw->{hide_empty_values} = 0;
     $loc_frame->Checkbutton(
         -variable => \$cw->{hide_empty_values},
-        -command  => sub { $cw->reload },
+        -command  => sub { $cw->reload($cw->{location}) },
     )->pack( -side => 'right' );
     $loc_frame->Label( -text => 'hide empty values' )->pack( -side => 'right' );
 
