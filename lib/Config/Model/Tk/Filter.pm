@@ -61,9 +61,15 @@ sub apply_filter {
     # coming from below if this element is marked 'show'.
     # inner hide or show wins
     my %combine_filter_with_below = (
-        show => { show => 'show', hide => 'hide', '' => 'show'},
-        ''   => { show => 'show', hide => 'hide', '' => ''    },
-        hide => { show => 'show', hide => 'hide', '' => 'hide'},
+        show => { show => 'show', '' => 'show', hide => 'hide'},
+        ''   => { show => 'show', '' => ''    , hide => 'hide'},
+        hide => { show => 'show', '' => 'hide', hide => 'hide'},
+    );
+
+    my %combine_between_node_elements = (
+        show => { show => 'show', '' => 'show', hide => 'show'},
+        ''   => { show => 'show', '' => ''    , hide => ''},
+        hide => { show => 'show', '' => '', hide => 'hide'},
     );
 
     my $leaf_cb = sub {
@@ -86,7 +92,7 @@ sub apply_filter {
         my ($scanner, $data_ref,$node,$element_name,undef, $obj) = @_;
         my $loc = $obj->location;
         my $action = '';
-        if ( $hide_empty_values and not $obj->fetch(mode => 'user')) {
+        if ( $hide_empty_values and not $obj->fetch()) {
              $action = 'hide';
         }
         $action = 'show' if $loc eq $fd_path;
@@ -116,29 +122,43 @@ sub apply_filter {
         my $node_loc = $node->location;
         my $elt_filter = $data_ref->{filter};
 
-        my $node_action = $hide_empty_values || $show_only_custom ? 'hide' : '';
+        # check if filter is active on any element. If yes, not
+        # matching elements are hidden
+        my $filter_active = scalar grep {_get_filter_action($_,$elt_filter,'show','hide','') eq 'show'} @element_list;
+        my $default_node_action = '';
+        my $all_elt_action = $show_only_custom ? 'hide' : '';
         foreach my $elt ( @element_list ) {
             my $filter_action = _get_filter_action($elt,$elt_filter,'show','hide','');
             my $obj = $node->fetch_element($elt);
             my $loc = $obj->location;
             # make sure that the hash ref stays attached to $data_ref
             $data_ref->{actions} //= {};
-            my $inner_ref = {
-                actions => $data_ref->{actions},
-                # stop filter propagation when current element is
-                # shown so all elements below can be shown or hidden
-                # at user's choice
-                filter => $filter_action eq 'show' ? '' : $data_ref->{filter}
-            };
-            $scanner->scan_element($inner_ref, $node,$elt);
-            my $elt_action = $combine_filter_with_below{$filter_action}{$inner_ref->{return}};
-            $logger->trace("'$loc' node elt filter is '$elt_action'");
-            # this clobbers the elt_action computed in leaf
-            $data_ref->{actions}{$loc} = $elt_action;
-            $node_action = $combine_as_is_over_hide{$node_action}{$elt_action};
+            my $elt_action;
+            if ($filter_active) {
+                my $inner_ref = {
+                    actions => $data_ref->{actions},
+                    # stop filter propagation when current element is
+                    # shown so all elements below can be shown or hidden
+                    # at user's choice
+                    filter => ''
+                };
+                $scanner->scan_element($inner_ref, $node,$elt);
+                $logger->trace("node '$loc' elt $elt filter is active '$filter_action'");
+                # this clobbers the elt_action computed in leaf
+                $elt_action = $data_ref->{actions}{$loc} = $filter_action;
+            } else {
+                my $inner_ref = { actions => $data_ref->{actions}, filter => $data_ref->{filter} };
+                $scanner->scan_element($inner_ref, $node,$elt);
+                $elt_action = $inner_ref->{return};
+                $logger->trace("node '$loc' elt $elt filter is not active '$elt_action'");
+            }
+            my $node_elt_action = $combine_filter_with_below{$default_node_action}{$elt_action};
+            $logger->trace("node '$loc' elt $elt node_elt_action is '$node_elt_action'");
+            $all_elt_action = $combine_between_node_elements{$all_elt_action}{$node_elt_action};
+            $logger->trace("node '$loc' elt $elt all_elt_action is '$all_elt_action'");
         }
 
-        $node_action = 'show' if $node_loc eq $fd_path;
+        my $node_action = $node_loc eq $fd_path ? 'show' : $all_elt_action;
 
         $logger->trace("node '$node_loc' filter is '$node_action'");
         $data_ref->{return} = $data_ref->{actions}{$node_loc} = $node_action;
