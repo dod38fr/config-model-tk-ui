@@ -209,10 +209,8 @@ sub Populate {
     ];
     $menubar->cascade( -label => 'Edit', -menuitems => $edit_items );
 
-    my $option_items = [
-        [ command => 'Font',  '-command', sub { $cw->set_font(); } ],
-    ];
-    $menubar->cascade( -label => 'Options', -menuitems => $option_items );
+    my $option_menu = $menubar->cascade( -label => 'Options');
+    $option_menu->command( -label => 'Font', -command => sub { $cw->set_font(); });
 
     # create frame for location entry
     my $loc_frame =
