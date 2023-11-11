@@ -212,6 +212,14 @@ sub Populate {
     my $option_menu = $menubar->cascade( -label => 'Options');
     $option_menu->command( -label => 'Font', -command => sub { $cw->set_font(); });
 
+    # create 'hide empty values'
+    $cw->{hide_empty_values} = 0;
+    $option_menu->checkbutton(
+        -label  => "Hide empty values",
+        -variable => \$cw->{hide_empty_values},
+        -command  => sub { $cw->reload($cw->{location}) },
+    );
+
     # create frame for location entry
     my $loc_frame =
         $cw->Frame( -relief => 'sunken', -borderwidth => 1 )->pack( -pady => 0, -fill => 'x' );
@@ -225,14 +233,6 @@ sub Populate {
         -command  => sub { $cw->reload($cw->{location}) },
     )->pack( -side => 'right' );
     $loc_frame->Label( -text => 'show only custom values' )->pack( -side => 'right' );
-
-    # create 'hide empty values'
-    $cw->{hide_empty_values} = 0;
-    $loc_frame->Checkbutton(
-        -variable => \$cw->{hide_empty_values},
-        -command  => sub { $cw->reload($cw->{location}) },
-    )->pack( -side => 'right' );
-    $loc_frame->Label( -text => 'hide empty values' )->pack( -side => 'right' );
 
     # add bottom frame
     my $bottom_frame = $cw->Frame->pack(qw/-pady 0 -fill both -expand 1/);
