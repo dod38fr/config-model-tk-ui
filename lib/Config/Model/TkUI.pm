@@ -228,6 +228,17 @@ sub Populate {
         -command  => sub { $cw->reload($cw->{location}) },
     );
 
+    # create 'show only custom values'
+    $cw->{auto_save_mode} = 0;
+    $option_menu->checkbutton(
+        -label => 'Auto save',
+        -variable => \$cw->{auto_save_mode},
+    );
+
+    $cw->{instance}->on_change_cb( sub {
+        $cw->save if $cw->{auto_save_mode};;
+    });
+
     # create frame for location entry
     my $loc_frame =
         $cw->Frame( -relief => 'sunken', -borderwidth => 1 )->pack( -pady => 0, -fill => 'x' );
