@@ -1,5 +1,3 @@
-# copyright at the end of the file in the pod section
-
 package Config::Model::TkUI;
 
 use 5.10.1;
