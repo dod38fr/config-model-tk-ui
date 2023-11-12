@@ -220,19 +220,19 @@ sub Populate {
         -command  => sub { $cw->reload($cw->{location}) },
     );
 
+    # create 'show only custom values'
+    $cw->{show_only_custom} = 0;
+    $option_menu->checkbutton(
+        -label => 'Show only custom values',
+        -variable => \$cw->{show_only_custom},
+        -command  => sub { $cw->reload($cw->{location}) },
+    );
+
     # create frame for location entry
     my $loc_frame =
         $cw->Frame( -relief => 'sunken', -borderwidth => 1 )->pack( -pady => 0, -fill => 'x' );
     $loc_frame->Label( -text => 'location :' )->pack( -side => 'left' );
     $loc_frame->Label( -textvariable => \$cw->{location} )->pack( -side => 'left' );
-
-    # create 'show only custom values'
-    $cw->{show_only_custom} = 0;
-    $loc_frame->Checkbutton(
-        -variable => \$cw->{show_only_custom},
-        -command  => sub { $cw->reload($cw->{location}) },
-    )->pack( -side => 'right' );
-    $loc_frame->Label( -text => 'show only custom values' )->pack( -side => 'right' );
 
     # add bottom frame
     my $bottom_frame = $cw->Frame->pack(qw/-pady 0 -fill both -expand 1/);
