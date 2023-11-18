@@ -81,7 +81,7 @@ SKIP: {
     unless ($args->{show}) {
         my $delay = 1000 ;
 
-        sub inc_d { $delay += 500 } ;
+        sub inc_d { $delay += 800 } ;
 
         my @test ;
         foreach (1 .. 4 ) {
