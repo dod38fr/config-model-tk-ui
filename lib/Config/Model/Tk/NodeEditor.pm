@@ -52,10 +52,6 @@ sub Populate {
         $cw->add_accept_entry(@rexp);
     }
 
-    # add adjuster
-    #require Tk::Adjuster;
-    #$cw -> Adjuster()->pack(-fill => 'x' , -side => 'top') ;
-
     $cw->ConfigModelNoteEditor( -object => $node )->pack;
     $cw->add_info_button()->pack( @fxe1, qw/-anchor n/ );
 

@@ -74,11 +74,6 @@ sub Populate {
     $cw->SUPER::Populate($args);
 }
 
-#sub DESTROY {
-#    my $cw = shift ;
-#    $cw->{adjust}->packForget(1);
-#}
-
 sub reload {
     my $cw = shift;
 
