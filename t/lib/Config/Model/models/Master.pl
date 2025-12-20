@@ -346,7 +346,7 @@ things.
                     AE => 'AE help',
                 },
                 description =>
-                  'my_plain_check_list nto so helpfull description',
+                  'my_plain_check_list nto so helpful description',
             },
             enum_with_help => {
                 type   => 'leaf',
@@ -354,7 +354,7 @@ things.
                 choice => [ 'AA' .. 'AE' ],
                 help   => { map { ( $_ => "$_ help with utf8 ßé²") ;} ('AA' .. 'AE') },
                 description =>
-                  'my_plain_check_list nto so helpfull description',
+                  'my_plain_check_list not so helpful description',
             },
             enum_with_help_and_long_desc => {
                 type   => 'leaf',
