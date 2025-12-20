@@ -51,7 +51,7 @@ sub Populate {
     $cw->add_annotation($leaf)->pack(@fx);
     $cw->add_summary($leaf)->pack(@fx);
 
-    my ( $help_frame, $help_widget ) = $cw->add_help( value => '', 1 );
+    my ( $help_frame, $help_widget ) = $cw->add_help( "Value help" => '', 1 );
     $help_frame->pack(@fx);
     $cw->{value_help_widget} = $help_widget;
     $cw->set_value_help( $leaf->get_checked_list );
