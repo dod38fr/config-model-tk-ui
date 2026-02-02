@@ -281,7 +281,7 @@ sub update_state {
             $new &&= $wat->{$button}{$c} || $content{$c};
         }
         my $subwidget = $cw->Subwidget($button) || next;
-        $subwidget->configure( -state => $new ? 'normal' : 'disabled' );
+        $subwidget->configure( -state => length($new) > 0 ? 'normal' : 'disabled' );
     }
 }
 
