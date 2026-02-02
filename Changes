@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+1.380 2026-02-02
+
+  Bug fixes:
+  * HashEditor: allow setting '0' as key in a hash
+  * CheckList: fix value help label
+
 1.379 2023-12-03
 
   Bug fixes:
