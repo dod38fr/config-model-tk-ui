@@ -1174,8 +1174,6 @@ sub setup_scanner {
     require Config::Model::ObjTreeScanner;
 
     my $scanner = Config::Model::ObjTreeScanner->new(
-
-        fallback => 'node',
         check    => 'no',
 
         # node callback
@@ -1189,16 +1187,6 @@ sub setup_scanner {
 
         # leaf callback
         leaf_cb            => \&disp_leaf,
-        enum_value_cb      => \&disp_leaf,
-        integer_value_cb   => \&disp_leaf,
-        number_value_cb    => \&disp_leaf,
-        boolean_value_cb   => \&disp_leaf,
-        string_value_cb    => \&disp_leaf,
-        uniline_value_cb   => \&disp_leaf,
-        reference_value_cb => \&disp_leaf,
-
-        # call-back when going up the tree
-        up_cb => sub { },
     );
 
     $cw->{scanner} = $scanner;
