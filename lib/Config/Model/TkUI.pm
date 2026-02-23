@@ -31,7 +31,7 @@ use Tk::FontDialog;
 use Tk::Pod;
 use Tk::Pod::Text;    # for findpod
 
-use Config::Model 2.134; # reset config
+use Config::Model 2.135; # reset config clears changes
 
 use Config::Model::Tk::Filter qw/apply_filter/;
 
@@ -620,10 +620,6 @@ sub ask_reset {
 sub do_reset {
     my $cw = shift;
     $cw->{instance}->reset_config;
-
-    # this line can be removed after Config::Model 2.135
-    $cw->{instance}->clear_changes;
-
     $cw->reload;
 }
 
