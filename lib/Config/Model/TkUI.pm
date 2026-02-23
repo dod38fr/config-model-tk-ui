@@ -1,9 +1,12 @@
 package Config::Model::TkUI;
 
-use 5.10.1;
+use 5.20.1;
 use strict;
 use warnings;
 use Carp;
+
+use feature qw/postderef signatures/;
+no warnings qw/experimental::postderef experimental::signatures/;
 
 use base qw/Tk::Toplevel/;
 use vars qw/$icon_path $error_img $warn_img/;
@@ -240,8 +243,25 @@ sub Populate {
     });
 
     # create frame for location entry
-    my $loc_frame =
-        $cw->Frame( -relief => 'sunken', -borderwidth => 1 )->pack( -pady => 0, -fill => 'x' );
+    my $loc_frame = $cw->Frame( -relief => 'sunken', -borderwidth => 1 )
+        ->pack( -pady => 0, -fill => 'x' );
+    $cw->{path_history} = [];
+    $cw->{path_index} = 0;
+
+    # add button
+    my $previous_btn = $loc_frame->Button (
+        -image => $gnome_img{'previous'},
+        -state => 'disabled',
+        -command => sub { $cw->go_to_previous();},
+    );
+    $previous_btn->pack(-side => 'left');
+    my $next_btn = $loc_frame->Button (
+        -image => $gnome_img{'next'},
+        -state => 'disabled',
+        -command => sub { $cw->go_to_next();},
+    );
+    $next_btn->pack(-side => 'left');
+
     $loc_frame->Label( -text => 'location :' )->pack( -side => 'left' );
     $loc_frame->Label( -textvariable => \$cw->{location} )->pack( -side => 'left' );
 
@@ -375,6 +395,8 @@ sub Populate {
     $cw->Advertise( ed_frame    => $e_frame );
     $cw->Advertise( find_frame  => $find_frame );
     $cw->Advertise( msg_label   => $msg_label );
+    $cw->Advertise( prev_btn    => $previous_btn );
+    $cw->Advertise( next_btn    => $next_btn );
 
     $cw->OnDestroy(sub {$cw->Parent->destroy if ref($cw->Parent) eq 'MainWindow'} );
 
@@ -713,6 +735,7 @@ sub reload {
 sub on_browse {
     my ( $cw, $path ) = @_;
     $cw->update_loc_bar($path);
+    $cw->update_history($path);
     $cw->create_element_widget('view');
 }
 
@@ -722,18 +745,51 @@ sub update_loc_bar {
     #$cw->{path}=$path ;
     my $datar = $cw->{tktree}->infoData($path);
     my $obj   = $datar->[1];
-    $cw->{location} = $obj->location_short;
+    my $loc = $cw->{location} = $obj->location_short;
+    return $loc;
+}
+
+sub update_history ($cw, $loc) {
+    my $history = $cw->{path_history};
+    push $history->@*, $loc;
+    my $path_idx = $cw->{path_index} = $history->$#*;
+
+    $cw->Subwidget('prev_btn')->configure(-state => $path_idx > 0 ? 'normal' : 'disabled');
+}
+
+sub go_to_previous ($cw) {
+    my $idx = --$cw->{path_index};
+    my $path = $cw->{path_history}[$idx];
+    my $loc = $cw->update_loc_bar($path);
+    $cw->Subwidget('prev_btn')->configure(-state => $idx > 0 ? 'normal' : 'disabled');
+    $cw->Subwidget('next_btn')->configure(-state => 'normal');
+    $cw->force_display($path, $loc);
+    $cw->create_element_widget('view', $path);
+}
+
+sub go_to_next ($cw) {
+    my $idx = ++$cw->{path_index};
+    my $path = $cw->{path_history}[$idx];
+    my $history_last_idx = $cw->{path_history}->$#*;
+
+    my $loc = $cw->update_loc_bar($path);
+    $cw->Subwidget('prev_btn')->configure(-state => 'normal');
+    $cw->Subwidget('next_btn')->configure(-state => $idx < $history_last_idx ? 'normal' : 'disabled');
+    $cw->force_display($path, $loc);
+    $cw->create_element_widget('view', $path);
 }
 
 sub on_select {
     my ( $cw, $path ) = @_;
     $cw->update_loc_bar($path);
+    $cw->update_history($path);
     $cw->create_element_widget('edit');
 }
 
 sub on_cut_buffer_dump {
     my ( $cw, $tree_path, $selection_for_test ) = @_;
     $cw->update_loc_bar($tree_path);
+    $cw->update_history($tree_path);
 
     # get cut buffer content, See Perl/Tk book p297
     my $sel = $selection_for_test // eval { $cw->SelectionGet; };
