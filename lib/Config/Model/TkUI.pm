@@ -869,7 +869,7 @@ sub prune {
 
 # Beware: TkTree items store tree object and not tree cds path. These
 # object might become irrelevant when warp master values are
-# modified. So the whole Tk Tree layout must be redone very time a
+# modified. So the whole Tk Tree layout must be redone every time a
 # config value is modified. This is a bit heavy, but a smarter
 # alternative would need hooks in the configuration tree to
 # synchronise the Tk Tree with the configuration tree :-p
