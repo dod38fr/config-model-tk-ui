@@ -173,26 +173,7 @@ sub Populate {
     $cw->configure( -menu => $menubar );
     $cw->{my_menu} = $menubar;
 
-    my $file_items = [
-        [ qw/command wizard -command/, sub { $cw->wizard } ],
-        [ command => 'redraw tree', -command => sub { $cw->reload } ],
-        [ command => 'reload from file', -command => sub { $cw->ask_reset; } ],
-        [ command => 'check for errors',     -command => sub { $cw->check(1) } ],
-        [ command => 'check for warnings',   -command => sub { $cw->check( 1, 1 ) } ],
-        [ command => 'show unsaved changes', -command => sub { $cw->show_changes; } ],
-        [ command => 'save (Ctrl-s)', -command => sub { $cw->save } ],
-        @$extra_menu,
-        [
-            command  => 'debug ...',
-            -command => sub {
-                require Tk::ObjScanner;
-                Tk::ObjScanner::scan_object( $cw->{instance}->config_root );
-                }
-        ],
-        [ command => 'quit (Ctrl-q)', -command => sub { $cw->quit } ],
-    ];
-    $menubar->cascade( -label => 'File', -menuitems => $file_items );
-
+    $cw->add_file_menu($menubar, $extra_menu);
     $cw->add_help_menu($menubar);
 
     $cw->bind( '<Control-s>', sub { $cw->save } );
@@ -443,6 +424,30 @@ foreach my $head1 ( $pom->head1() ) {
     $info_text = Pod::POM::View::Text->view_head1($head1)
         if $head1->title =~ /more information/i;
 
+}
+
+sub add_file_menu($cw, $menubar, $extra_menu) {
+    my $file_items = [
+        [ qw/command wizard -command/, sub { $cw->wizard } ],
+        [ command => 'redraw tree', -command => sub { $cw->reload } ],
+        [ command => 'reload from file', -command => sub { $cw->ask_reset; } ],
+        [ command => 'check for errors',     -command => sub { $cw->check(1) } ],
+        [ command => 'check for warnings',   -command => sub { $cw->check( 1, 1 ) } ],
+        [ command => 'show unsaved changes', -command => sub { $cw->show_changes; } ],
+        [ command => 'save (Ctrl-s)', -command => sub { $cw->save } ],
+        @$extra_menu,
+        [
+            command  => 'debug ...',
+            -command => sub {
+                require Tk::ObjScanner;
+                Tk::ObjScanner::scan_object( $cw->{instance}->config_root );
+            }
+        ],
+        [ command => 'quit (Ctrl-q)', -command => sub { $cw->quit } ],
+    ];
+    $menubar->cascade( -label => 'File', -menuitems => $file_items );
+
+    return;
 }
 
 sub add_help_menu {
