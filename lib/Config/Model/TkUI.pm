@@ -182,14 +182,7 @@ sub Populate {
     $cw->bind( '<Control-v>', sub { $cw->edit_paste } );
     $cw->bind( '<Control-f>', sub { $cw->pack_find_widget } );
 
-    my $edit_items = [
-
-        # [ qw/command cut   -command/, sub{ $cw->edit_cut }],
-        [ command => 'copy (Ctrl-c)',  '-command', sub { $cw->edit_copy } ],
-        [ command => 'paste (Ctrl-v)', '-command', sub { $cw->edit_paste } ],
-        [ command => 'find (Ctrl-f)',  '-command', sub { $cw->pack_find_widget; } ],
-    ];
-    $menubar->cascade( -label => 'Edit', -menuitems => $edit_items );
+    $cw->add_edit_menu($menubar);
 
     my $option_menu = $menubar->cascade( -label => 'Options');
     $option_menu->command( -label => 'Font', -command => sub { $cw->set_font(); });
@@ -493,6 +486,17 @@ sub add_help_menu {
         [ command => "$class help", -command => $man_sub ],
     ];
     $menubar->cascade( -label => 'Help', -menuitems => $help_items );
+}
+
+sub add_edit_menu($cw, $menubar) {
+    my $edit_items = [
+        # [ qw/command cut   -command/, sub{ $cw->edit_cut }],
+        [ command => 'copy (Ctrl-c)',  '-command', sub { $cw->edit_copy } ],
+        [ command => 'paste (Ctrl-v)', '-command', sub { $cw->edit_paste } ],
+        [ command => 'find (Ctrl-f)',  '-command', sub { $cw->pack_find_widget; } ],
+    ];
+    $menubar->cascade( -label => 'Edit', -menuitems => $edit_items );
+    return;
 }
 
 # Note: this callback is called by Tk::Tree *before* changing the
