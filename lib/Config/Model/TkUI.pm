@@ -968,9 +968,10 @@ sub force_display {
     my ($cw, $path, $loc) = @_;
     $logger->debug("force_display called on $path, location $loc");
     my $tree = $cw->{tktree};
-    $tree->see($path);
     $tree->selectionClear();
-    $tree->selectionSet($path, $path);
+    $tree->anchorClear();
+    $tree->see($path);
+    $tree->anchorSet($path);
     $cw->{location} = $loc;
 }
 
