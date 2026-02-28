@@ -184,6 +184,8 @@ sub Populate {
 
     $cw->add_edit_menu($menubar);
 
+    my $history_menu = $menubar->cascade(-label => 'History');
+
     my $option_menu = $menubar->cascade( -label => 'Options');
     $option_menu->command( -label => 'Font', -command => sub { $cw->set_font(); });
 
@@ -365,6 +367,7 @@ sub Populate {
 
     $cw->Advertise( tree        => $tree );
     $cw->Advertise( menubar     => $menubar );
+    $cw->Advertise( history     => $history_menu );
     $cw->Advertise( right_frame => $eh_frame );
     $cw->Advertise( ed_frame    => $e_frame );
     $cw->Advertise( find_frame  => $find_frame );
@@ -756,10 +759,58 @@ sub update_loc_bar {
 
 sub update_history ($cw, $loc) {
     my $history = $cw->{path_history};
+
+    # avoid consecutive duplicated entries
+    if ($history->@* > 1 and $loc eq $history->[-1]) {
+        return;
+    }
+
     push $history->@*, $loc;
     my $path_idx = $cw->{path_index} = $history->$#*;
 
+    # enable previous button when history has more than one item
     $cw->Subwidget('prev_btn')->configure(-state => $path_idx > 0 ? 'normal' : 'disabled');
+
+    my $h_cascade = $cw->Subwidget('history');
+
+    my $max_count = 20;
+    $cw->{history_count} //= 0;
+
+    if ($cw->{history_count}++ > $max_count) {
+        # delete all history entries from the menu
+        $h_cascade->menu->delete(0, 'end');
+
+        # Add the last $max_count history entries to the menu
+        for (my $i = 0; $i <= $max_count; $i++) {
+            my $entry_idx = $path_idx - $i;
+            $h_cascade->menu->add(
+                'command',
+                -label => $history->[$entry_idx],
+                -command =>sub { $cw->go_to_loc($path_idx); }
+            );
+        }
+    }
+    else {
+        # add a menu entry
+        $h_cascade->command(
+            -label => $loc,
+            -command => sub { $cw->go_to_loc($path_idx); }
+        );
+    }
+
+    return;
+}
+
+sub go_to_loc ($cw, $idx) {
+    my $path = $cw->{path_history}[$idx];
+    my $loc = $cw->update_loc_bar($path);
+    # enable previous button when history has more than one item
+    $cw->Subwidget('prev_btn')->configure(-state => $idx > 0 ? 'normal' : 'disabled');
+    # when jumping into history, the next location does not make
+    # sense, hence next button is disabled
+    $cw->Subwidget('next_btn')->configure(-state => 'disabled');
+    $cw->force_display($path, $loc);
+    $cw->create_element_widget('view', $path);
 }
 
 sub go_to_previous ($cw) {
