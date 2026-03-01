@@ -776,27 +776,16 @@ sub update_history ($cw, $loc) {
     my $max_count = 20;
     $cw->{history_count} //= 0;
 
+    # remove oldest entry
     if ($cw->{history_count}++ > $max_count) {
-        # delete all history entries from the menu
-        $h_cascade->menu->delete(0, 'end');
+        $h_cascade->menu->delete('end');
+    }
 
-        # Add the last $max_count history entries to the menu
-        for (my $i = 0; $i <= $max_count; $i++) {
-            my $entry_idx = $path_idx - $i;
-            $h_cascade->menu->add(
-                'command',
-                -label => $history->[$entry_idx],
-                -command =>sub { $cw->go_to_loc($path_idx); }
-            );
-        }
-    }
-    else {
-        # add a menu entry
-        $h_cascade->command(
-            -label => $loc,
-            -command => sub { $cw->go_to_loc($path_idx); }
-        );
-    }
+    # add newest entry
+    $h_cascade->command(
+        -label => $loc,
+        -command => sub { $cw->go_to_loc($path_idx); }
+    );
 
     return;
 }
