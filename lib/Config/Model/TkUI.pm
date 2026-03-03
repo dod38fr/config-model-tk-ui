@@ -757,15 +757,15 @@ sub update_loc_bar {
     return $loc;
 }
 
-sub update_history ($cw, $loc) {
+sub update_history ($cw, $path) {
     my $history = $cw->{path_history};
 
     # avoid consecutive duplicated entries
-    if ($history->@* > 1 and $loc eq $history->[-1]) {
+    if ($history->@* > 1 and $path eq $history->[-1]) {
         return;
     }
 
-    push $history->@*, $loc;
+    push $history->@*, $path;
     my $path_idx = $cw->{path_index} = $history->$#*;
 
     # enable previous button when history has more than one item
@@ -783,7 +783,7 @@ sub update_history ($cw, $loc) {
 
     # add newest entry
     $h_cascade->command(
-        -label => $loc,
+        -label => $path,
         -command => sub { $cw->go_to_loc($path_idx); }
     );
 
