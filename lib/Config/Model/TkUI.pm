@@ -783,7 +783,7 @@ sub update_history ($cw, $path) {
 
     # add newest entry
     $h_cascade->command(
-        -label => $path,
+        -label => $cw->{tktree}->infoData($path)->[1]->location_short,
         -command => sub { $cw->go_to_loc($path_idx); }
     );
 
