@@ -153,7 +153,7 @@
     * use init_test in t/config-model-*.t
       (build requires Config::Model::Tester 3.006)
     * Fix test model that broke with Config::Model 2.123
-    
+
 1.365 2017-11-19
 
     * display node gist in tree widget (req Config::Model 2.114)
@@ -260,10 +260,10 @@
     compared to standard value (only for value_type string).
     This will be useful with "cme edit dpkg-copyright) to check
     the difference of license text. This requires Text::Diff
-  
+
   Important bug fix:
   * TkUI: Let <return> reach the text editor (Closes github #2).
-    This avoids loosing data: hitting return no longer closes 
+    This avoids loosing data: hitting return no longer closes
     the text editor.
 
 1.350 2015-10-25
@@ -289,9 +289,9 @@
 1.348 2015-06-27
 
   Important bug fix release:
-  
+
   * Data was not saved when quitting with version 1.347.
-    (e.g. menu: quit -> save changed data? -> yes -> oops, sorry, not done ) 
+    (e.g. menu: quit -> save changed data? -> yes -> oops, sorry, not done )
     This is now fixed, data is saved *then* cme exits
 
   * fixed home page in dist.ini and META (Thanks Axel)
@@ -345,9 +345,9 @@
 
 1.341 2014-03-02
 
-    * annotation editor: 
+    * annotation editor:
       + add save/del button (requires Config::Model 2.050)
-    * TkUI: 
+    * TkUI:
       * removed experimental given/when
       * also show items with warning or error when showing only customized items.
 
@@ -376,17 +376,17 @@
 
 1.337 2012-05-29
 
-  * TkUI: 
+  * TkUI:
     * added 'show only custom values' check button in main panel
     * Bound 'Return' (aka Enter) key to begin search in the find widget
       (the one in 'Edit -> Find' menu)
 
 1.336 2012-05-29
 
-  * replace deprecated get_all_indexes with fetch_all_indexes 
+  * replace deprecated get_all_indexes with fetch_all_indexes
     (requires Config::Model 2.017)
   * view_unsaved_change widget can now be expanded
-  * fix dependency on Test::Memory::Cycle 
+  * fix dependency on Test::Memory::Cycle
     (with '::' between Memory and Cycle)
 
 1.335 2012-05-06
@@ -429,10 +429,10 @@
 
     * dist.ini (hence Build.PL): added Tk::Pod dependency
       (Fix RT# 72229)
-    + NodeEditor: Added widget to add element when node has 
-      an accept clause 
-    * TkUI: trim also default value displayed in tk tree 
-    * ListEditor: do not update list widget when modif was 
+    + NodeEditor: Added widget to add element when node has
+      an accept clause
+    * TkUI: trim also default value displayed in tk tree
+    * ListEditor: do not update list widget when modif was
       refused by Config::Model
 
 1.329 2011-10-10
@@ -496,7 +496,7 @@
 
 1.320 2011-01-11
 
-        * LeafViewer: removed 'apply fix' button. This one is reserved for 
+        * LeafViewer: removed 'apply fix' button. This one is reserved for
         LeafEditor
 
 1.319 2011-01-09
@@ -535,12 +535,12 @@
 1.313 2010-10-08
 
 	* Added display of configuration warnings provided by
-	Config::Model 1.211 
+	Config::Model 1.211
 	* Depends on Config::Model >= 1.211
 
 1.312 2010-10-04
 
-	* lib/Config/Model/TkUI.pm (disp_hash): Fixed the synchronize ordered 
+	* lib/Config/Model/TkUI.pm (disp_hash): Fixed the synchronize ordered
 	hash display. It used to close displayed hash elements when modifying a value
 	well below the hash :-( .
 
@@ -553,7 +553,7 @@
 
 1.310 2010-09-10
 
-	* lib/Config/Model/Tk/HashEditor.pm (Populate): Fix bug that messed up 
+	* lib/Config/Model/Tk/HashEditor.pm (Populate): Fix bug that messed up
 	  effects of 'add' and 'move_down' buttons.
 
 1.309 2010-08-08
@@ -583,7 +583,7 @@
 
 
 	* Added annotations viewer and editor for Leaf, List, CheckList, Node,
-	and Hash. This enable to view and edit comments in configuration files when 
+	and Hash. This enable to view and edit comments in configuration files when
 	the backend support reading and writing comments into Config::Model annotations
 
 1.306 2010-03-29
@@ -810,4 +810,3 @@
 	* TkUI.pm (Populate): added -store_sub option
 	* all: Moved to svn
 	* all: Changed keywords substitution to fit svn
-
