@@ -243,14 +243,26 @@ sub reset_value {
 sub insert {
     my $cw = shift ;
     my $where = shift ;
-    my @what = apply { s/\n/\\n/g; $_; } @_ ;
+    my @what = escape_keys(@_);
     $cw->Subwidget('tklist')->insert($where => @what);
+}
+
+sub escape_keys {
+    return apply {
+        s/\\n/\\\\n/g; # literal \n -> \\n
+        s/\n/\\n/g;  # LF -> \n
+        $_;
+    } @_ ;
 }
 
 # this function (not a method) restore the LF in a multi line key
 # (reverse the operation done above
 sub restore_keys {
-    return apply { s/\\n/\n/g; $_; } @_ ;
+    return apply {
+        s/(?<!\\)\\n/\n/g; # \n -> LF, leave \\n alone
+        s/\\\\n/\\n/g;     # \\n -> literal \n
+        $_;
+    } @_ ;
 }
 
 sub remove_all_elements {
