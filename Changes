@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+1.382 2026-08-28
+
+  Bug fixes:
+    * HashEditor: fix handling of keys containing literal \n
+    * TkUI: fix garbled path in history
+
 1.381 2026-02-28
 
   Main UI changes:
