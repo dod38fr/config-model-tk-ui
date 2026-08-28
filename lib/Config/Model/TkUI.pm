@@ -1621,8 +1621,8 @@ configuration tree. Beware, there's no "undo" operation.
 
 =item *
 
-Before saving your modifications, you can review the change list with the 
-menu entry C<< File -> show unsaved changes >>. This list is cleared after 
+Before saving your modifications, you can review the change list with the
+menu entry C<< File -> show unsaved changes >>. This list is cleared after
 performing a C<< File -> save >>.
 
 =item *
@@ -1639,13 +1639,13 @@ buffer into the element.
 =item *
 
 a list element will split the content of the
-buffer with /\n/ or /,/ and push the resulting array at the 
-end of the list element. 
+buffer with /\n/ or /,/ and push the resulting array at the
+end of the list element.
 
 =item *
 
-a hash element will use the content of the cut buffer to create a new key 
-in the hash element. 
+a hash element will use the content of the cut buffer to create a new key
+in the hash element.
 
 =back
 
@@ -1658,12 +1658,12 @@ C<~/.cme/config/tkui.yml>.
 
 =head2 Search
 
-Hit C<Ctrl-F> or use menu C<< Edit -> Search >> to open a search widget at the bottom 
+Hit C<Ctrl-F> or use menu C<< Edit -> Search >> to open a search widget at the bottom
 of the window.
 
 Enter a keyword in the entry widget and click on C<Next> button.
 
-The keyword will be searched in the configuration tree, in element name, in element value and 
+The keyword will be searched in the configuration tree, in element name, in element value and
 in documentation.
 
 =head2 Editor widget
@@ -1751,6 +1751,3 @@ L<Config::Model>, L<cme>
 https://github.com/dod38fr/config-model-tkui/wiki
 
 =back
-
-
-
